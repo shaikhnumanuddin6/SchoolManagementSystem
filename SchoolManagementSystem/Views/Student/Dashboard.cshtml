@@ -1,0 +1,216 @@
+@model SchoolManagementSystem.Application.ViewModels.StudentDashboardViewModel
+
+@{
+    ViewData["Title"] = "Student Portal";
+}
+
+<!-- ============================================================
+     STUDENT PORTAL HEADER
+     ============================================================ -->
+<div class="dashboard-header mb-4">
+    <div>
+        <div class="d-flex align-items-center gap-2 mb-1">
+            <span class="badge bg-success-subtle text-success px-3 py-1 rounded-pill fw-semibold">
+                <i class="bi bi-person-badge me-1"></i> Student Portal
+            </span>
+            <span class="text-muted small">Admission No: <strong>@Model.AdmissionNumber</strong></span>
+        </div>
+        <h1 class="fw-bold mb-1">Welcome back, @Model.StudentName! 👋</h1>
+        <p class="text-muted mb-0">
+            Class: <strong>@Model.ClassName</strong> (@Model.Section) &bull; Class Teacher: <strong>@Model.TeacherName</strong>
+        </p>
+    </div>
+
+    <div class="dashboard-date">
+        <i class="bi bi-calendar3"></i>
+        @DateTime.Now.ToString("dddd, dd MMMM yyyy")
+    </div>
+</div>
+
+<!-- ============================================================
+     STUDENT KPI STATS
+     ============================================================ -->
+<div class="row g-4 mb-4">
+    <!-- Attendance Rate -->
+    <div class="col-xl-3 col-md-6">
+        <div class="dashboard-card stat-card">
+            <div class="stat-card-content">
+                <div>
+                    <span class="stat-label">Attendance Rate</span>
+                    <h2>@Model.AttendancePercentage%</h2>
+                    <span class="stat-description text-success">
+                        <i class="bi bi-check-circle-fill"></i> @Model.PresentDays of @Model.TotalAttendanceDays days present
+                    </span>
+                </div>
+                <div class="stat-icon students-icon">
+                    <i class="bi bi-calendar-check-fill"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Average Marks -->
+    <div class="col-xl-3 col-md-6">
+        <div class="dashboard-card stat-card">
+            <div class="stat-card-content">
+                <div>
+                    <span class="stat-label">Average Score</span>
+                    <h2>@Model.AverageGradePercentage%</h2>
+                    <span class="stat-description text-primary">
+                        <i class="bi bi-award-fill"></i> Overall performance
+                    </span>
+                </div>
+                <div class="stat-icon classes-icon">
+                    <i class="bi bi-trophy-fill"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Absent Days -->
+    <div class="col-xl-3 col-md-6">
+        <div class="dashboard-card stat-card">
+            <div class="stat-card-content">
+                <div>
+                    <span class="stat-label">Days Absent</span>
+                    <h2>@Model.AbsentDays</h2>
+                    <span class="stat-description @(Model.AbsentDays > 3 ? "text-danger" : "text-muted")">
+                        <i class="bi bi-exclamation-circle"></i> Unexcused absences
+                    </span>
+                </div>
+                <div class="stat-icon attendance-icon">
+                    <i class="bi bi-person-x-fill"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Assessments -->
+    <div class="col-xl-3 col-md-6">
+        <div class="dashboard-card stat-card">
+            <div class="stat-card-content">
+                <div>
+                    <span class="stat-label">Assessments Graded</span>
+                    <h2>@Model.Grades.Count</h2>
+                    <span class="stat-description text-info">
+                        <i class="bi bi-journal-check"></i> Recorded exams/tests
+                    </span>
+                </div>
+                <div class="stat-icon teachers-icon">
+                    <i class="bi bi-journal-text"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================
+     DETAILED SECTIONS: GRADES & ATTENDANCE
+     ============================================================ -->
+<div class="row g-4">
+    <!-- Academic Grades Table -->
+    <div class="col-lg-8">
+        <div class="dashboard-card p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-bold mb-0">
+                    <i class="bi bi-bar-chart-line-fill text-primary me-2"></i>Academic Grades & Assessments
+                </h5>
+                <span class="badge bg-primary-subtle text-primary px-3 py-1 rounded-pill">
+                    Latest Results
+                </span>
+            </div>
+
+            @if (!Model.Grades.Any())
+            {
+                <div class="text-center py-4 text-muted">
+                    <i class="bi bi-clipboard2-x fs-1 d-block mb-2"></i>
+                    No grades or assessments recorded yet.
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Subject</th>
+                                <th>Assessment</th>
+                                <th>Score</th>
+                                <th>Percentage</th>
+                                <th>Grade</th>
+                                <th>Feedback</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var grade in Model.Grades)
+                            {
+                                <tr>
+                                    <td><strong>@grade.SubjectName</strong></td>
+                                    <td class="text-muted">@grade.AssessmentName</td>
+                                    <td>@grade.MarksObtained.ToString("0.##") / @grade.MaxMarks.ToString("0.##")</td>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="progress flex-grow-1" style="height: 6px; width: 60px;">
+                                                <div class="progress-bar @(grade.Percentage >= 80 ? "bg-success" : grade.Percentage >= 60 ? "bg-warning" : "bg-danger")"
+                                                     style="width: @grade.Percentage%"></div>
+                                            </div>
+                                            <span class="small fw-semibold">@grade.Percentage.ToString("0.0")%</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge @(grade.GradeLetter?.StartsWith("A") == true ? "bg-success" : "bg-primary") px-2 py-1">
+                                            @(grade.GradeLetter ?? "-")
+                                        </span>
+                                    </td>
+                                    <td class="small text-muted">@(grade.Feedback ?? "None")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Recent Attendance Log -->
+    <div class="col-lg-4">
+        <div class="dashboard-card p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-bold mb-0">
+                    <i class="bi bi-clock-history text-success me-2"></i>Attendance Log
+                </h5>
+                <span class="badge bg-secondary-subtle text-secondary px-2 py-1 rounded-pill small">
+                    Recent
+                </span>
+            </div>
+
+            @if (!Model.RecentAttendances.Any())
+            {
+                <div class="text-center py-4 text-muted">
+                    <i class="bi bi-calendar-x fs-1 d-block mb-2"></i>
+                    No attendance records found.
+                </div>
+            }
+            else
+            {
+                <ul class="list-group list-group-flush">
+                    @foreach (var att in Model.RecentAttendances)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2">
+                            <div>
+                                <div class="fw-semibold small">@att.Date.ToString("ddd, dd MMM yyyy")</div>
+                                @if (!string.IsNullOrEmpty(att.Remarks))
+                                {
+                                    <span class="text-muted" style="font-size: 0.75rem;">@att.Remarks</span>
+                                }
+                            </div>
+                            <span class="badge @(att.Status == "Present" ? "bg-success" : att.Status == "Late" ? "bg-warning text-dark" : "bg-danger") rounded-pill">
+                                @att.Status
+                            </span>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+</div>

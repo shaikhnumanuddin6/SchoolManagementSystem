@@ -1,0 +1,361 @@
+﻿
+@model SchoolManagementSystem.Application.ViewModels.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<!-- ============================================================
+     DASHBOARD HEADER
+     ============================================================ -->
+
+<div class="dashboard-header">
+
+    <div>
+        <h1>Welcome back! 👋</h1>
+
+        <p>
+            Here's what's happening at your school today.
+        </p>
+    </div>
+
+    <div class="dashboard-date">
+        <i class="bi bi-calendar3"></i>
+
+        @DateTime.Now.ToString("dddd, dd MMMM yyyy")
+    </div>
+
+</div>
+
+
+<!-- ============================================================
+     KPI CARDS
+     ============================================================ -->
+
+<div class="row g-4 mb-4">
+
+    <!-- Students -->
+    <div class="col-xl-3 col-md-6">
+
+        <div class="dashboard-card stat-card">
+
+            <div class="stat-card-content">
+
+                <div>
+                    <span class="stat-label">
+                        Total Students
+                    </span>
+
+                    <h2>
+                        @Model.TotalStudents.ToString("N0")
+                    </h2>
+
+                    <span class="stat-description">
+                        <i class="bi bi-people-fill"></i>
+                        Active students
+                    </span>
+                </div>
+
+                <div class="stat-icon students-icon">
+                    <i class="bi bi-people-fill"></i>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Teachers -->
+    <div class="col-xl-3 col-md-6">
+
+        <div class="dashboard-card stat-card">
+
+            <div class="stat-card-content">
+
+                <div>
+                    <span class="stat-label">
+                        Total Teachers
+                    </span>
+
+                    <h2>
+                        @Model.TotalTeachers.ToString("N0")
+                    </h2>
+
+                    <span class="stat-description">
+                        <i class="bi bi-person-workspace"></i>
+                        Teaching staff
+                    </span>
+                </div>
+
+                <div class="stat-icon teachers-icon">
+                    <i class="bi bi-person-workspace"></i>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Classes -->
+    <div class="col-xl-3 col-md-6">
+
+        <div class="dashboard-card stat-card">
+
+            <div class="stat-card-content">
+
+                <div>
+                    <span class="stat-label">
+                        Total Classes
+                    </span>
+
+                    <h2>
+                        @Model.TotalClasses.ToString("N0")
+                    </h2>
+
+                    <span class="stat-description">
+                        <i class="bi bi-building"></i>
+                        Active classes
+                    </span>
+                </div>
+
+                <div class="stat-icon classes-icon">
+                    <i class="bi bi-building"></i>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Attendance -->
+    <div class="col-xl-3 col-md-6">
+
+        <div class="dashboard-card stat-card">
+
+            <div class="stat-card-content">
+
+                <div>
+                    <span class="stat-label">
+                        Today's Attendance
+                    </span>
+
+                    <h2>
+                        @Model.AttendancePercentage%
+                    </h2>
+
+                    <span class="stat-description">
+                        <i class="bi bi-calendar-check"></i>
+                        School attendance
+                    </span>
+                </div>
+
+                <div class="stat-icon attendance-icon">
+                    <i class="bi bi-calendar-check-fill"></i>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ============================================================
+     MAIN DASHBOARD ROW
+     ============================================================ -->
+
+<div class="row g-4 mb-4">
+
+    <!-- Performance -->
+    <div class="col-xl-8">
+
+        <div class="dashboard-card chart-card">
+
+            <div class="card-header-custom">
+
+                <div>
+                    <h5>Student Performance</h5>
+
+                    <p>
+                        Average performance by subject
+                    </p>
+                </div>
+
+                <button class="card-menu-btn">
+                    <i class="bi bi-three-dots"></i>
+                </button>
+
+            </div>
+
+            <div class="performance-chart">
+
+                @if (Model.PerformanceData.Any())
+                {
+                    foreach (var item in Model.PerformanceData)
+                    {
+                        <div class="performance-item">
+
+                            <div class="performance-label">
+                                <span>
+                                    @item.Label
+                                </span>
+
+                                <strong>
+                                    @item.Value.ToString("0.0")%
+                                </strong>
+                            </div>
+
+                            <div class="progress">
+
+                                <div class="progress-bar"
+                                     role="progressbar"
+                                     style="width: @item.Value%">
+                                </div>
+
+                            </div>
+
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="empty-state">
+
+                        <i class="bi bi-bar-chart"></i>
+
+                        <h6>No performance data yet</h6>
+
+                        <p>
+                            Grade information will appear here
+                            once assessments are recorded.
+                        </p>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Attendance Overview -->
+    <div class="col-xl-4">
+
+        <div class="dashboard-card">
+
+            <div class="card-header-custom">
+
+                <div>
+                    <h5>Today's Attendance</h5>
+
+                    <p>
+                        Student attendance overview
+                    </p>
+                </div>
+
+                <i class="bi bi-calendar-check dashboard-header-icon"></i>
+
+            </div>
+
+
+            <div class="attendance-summary">
+
+                <div class="attendance-circle">
+
+                    <div>
+
+                        <strong>
+                            @Model.AttendancePercentage%
+                        </strong>
+
+                        <span>
+                            Present
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="attendance-stats">
+
+                    <div class="attendance-stat">
+
+                        <span class="attendance-dot present"></span>
+
+                        <div>
+                            <strong>
+                                @Model.PresentToday
+                            </strong>
+
+                            <small>Present</small>
+                        </div>
+
+                    </div>
+
+
+                    <div class="attendance-stat">
+
+                        <span class="attendance-dot absent"></span>
+
+                        <div>
+                            <strong>
+                                @Model.AbsentToday
+                            </strong>
+
+                            <small>Absent</small>
+                        </div>
+
+                    </div>
+
+
+                    <div class="attendance-stat">
+
+                        <span class="attendance-dot late"></span>
+
+                        <div>
+                            <strong>
+                                @Model.LateToday
+                            </strong>
+
+                            <small>Late</small>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ============================================================
+     BOTTOM DASHBOARD
+     ============================================================ -->
+
+<div class="row g-4">
+
+    <!-- Recent Activities -->
+    <div class="col-xl-7">
+
+        <div class="dashboard-card">
+
+            <div class="card-header-custom">
+
+                <div>
+
