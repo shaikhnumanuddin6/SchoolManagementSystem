@@ -1,0 +1,1001 @@
+
+@model SchoolManagementSystem.Application.ViewModels.StudentDashboardViewModel
+
+@{
+    ViewData["Title"] = "Student Portal";
+
+
+
+    var attendanceProgress =
+
+        Math.Clamp(Model.AttendancePercentage, 0, 100);
+
+
+
+    var academicProgress =
+
+        Math.Clamp(Model.AverageGradePercentage, 0, 100);
+
+
+
+    var attendanceStatus =
+
+        Model.AttendancePercentage >= 90
+
+            ? "Excellent"
+
+            : Model.AttendancePercentage >= 75
+
+                ? "Good"
+
+                : "Needs Attention";
+
+
+
+    var academicStatus =
+
+        Model.AverageGradePercentage >= 80
+
+            ? "Excellent"
+
+            : Model.AverageGradePercentage >= 60
+
+                ? "Good"
+
+                : "Needs Improvement";
+
+
+
+    // Get latest grade once.
+
+    var latestGrade = Model.Grades
+
+        .OrderByDescending(g => g.ExamDate)
+
+        .FirstOrDefault();
+
+
+
+    var latestGradePercentage =
+
+        latestGrade != null
+
+            ? latestGrade.Percentage
+
+            : 0;
+}
+
+<!-- ============================================================
+     STUDENT PORTAL HEADER
+     ============================================================ -->
+
+<div class="dashboard-header mb-4">
+
+    <div>
+
+        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+
+            <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill fw-semibold">
+                <i class="bi bi-mortarboard-fill me-1"></i>
+                Student Portal
+            </span>
+
+            <span class="text-muted small">
+                Admission No:
+                <strong>@Model.AdmissionNumber</strong>
+            </span>
+
+        </div>
+
+        <h1 class="fw-bold mb-1">
+            Welcome back, @Model.StudentName! 👋
+        </h1>
+
+        <p class="text-muted mb-0">
+
+            <i class="bi bi-building me-1"></i>
+
+            Class:
+            <strong>@Model.ClassName</strong>
+
+            <span class="mx-1">•</span>
+
+            Section:
+            <strong>@Model.Section</strong>
+
+            <span class="mx-1">•</span>
+
+            Class Teacher:
+            <strong>@Model.TeacherName</strong>
+
+        </p>
+
+    </div>
+
+
+    <div class="dashboard-date">
+
+        <i class="bi bi-calendar3 me-1"></i>
+
+        @DateTime.Now.ToString("dddd, dd MMMM yyyy")
+
+    </div>
+
+</div>
+
+
+<!-- ============================================================
+     STUDENT KPI CARDS
+     ============================================================ -->
+
+<div class="row g-4 mb-4">
+
+    <!-- Attendance -->
+    <div class="col-xl-3 col-md-6">
+
+        <div class="dashboard-card stat-card h-100">
+
+            <div class="stat-card-content">
+
+                <div>
+
+                    <span class="stat-label">
+                        Attendance Rate
+                    </span>
+
+                    <h2 class="mb-1">
+                        @Model.AttendancePercentage.ToString("0.0")%
+                    </h2>
+
+                    <span class="stat-description
+                        @(Model.AttendancePercentage >= 75
+                            ? "text-success"
+                            : "text-danger")">
+
+                        <i class="bi bi-calendar-check-fill me-1"></i>
+
+                        @Model.PresentDays
+                        of
+                        @Model.TotalAttendanceDays
+                        days present
+
+                    </span>
+
+                </div>
+
+                <div class="stat-icon students-icon">
+                    <i class="bi bi-calendar-check-fill"></i>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Academic Performance -->
+    <div class="col-xl-3 col-md-6">
+
+        <div class="dashboard-card stat-card h-100">
+
+            <div class="stat-card-content">
+
+                <div>
+
+                    <span class="stat-label">
+                        Average Score
+                    </span>
+
+                    <h2 class="mb-1">
+                        @Model.AverageGradePercentage.ToString("0.0")%
+                    </h2>
+
+                    <span class="stat-description
+                        @(Model.AverageGradePercentage >= 60
+                            ? "text-primary"
+                            : "text-danger")">
+
+                        <i class="bi bi-award-fill me-1"></i>
+
+                        @academicStatus
+
+                    </span>
+
+                </div>
+
+                <div class="stat-icon classes-icon">
+                    <i class="bi bi-trophy-fill"></i>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Absences -->
+    <div class="col-xl-3 col-md-6">
+
+        <div class="dashboard-card stat-card h-100">
+
+            <div class="stat-card-content">
+
+                <div>
+
+                    <span class="stat-label">
+                        Days Absent
+                    </span>
+
+                    <h2 class="mb-1">
+                        @Model.AbsentDays
+                    </h2>
+
+                    <span class="stat-description
+                        @(Model.AbsentDays > 3
+                            ? "text-danger"
+                            : "text-muted")">
+
+                        <i class="bi bi-person-x-fill me-1"></i>
+
+                        @if (Model.AbsentDays > 3)
+
+                        {
+                            <span>Needs attention</span>
+                        }
+
+                        else
+
+                        {
+                            <span>Within normal range</span>
+                        }
+
+                    </span>
+
+                </div>
+
+                <div class="stat-icon attendance-icon">
+                    <i class="bi bi-person-x-fill"></i>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Assessments -->
+    <div class="col-xl-3 col-md-6">
+
+        <div class="dashboard-card stat-card h-100">
+
+            <div class="stat-card-content">
+
+                <div>
+
+                    <span class="stat-label">
+                        Assessments
+                    </span>
+
+                    <h2 class="mb-1">
+                        @Model.Grades.Count
+                    </h2>
+
+                    <span class="stat-description text-info">
+
+                        <i class="bi bi-journal-check me-1"></i>
+
+                        Recorded results
+
+                    </span>
+
+                </div>
+
+                <div class="stat-icon teachers-icon">
+
+                    <i class="bi bi-journal-text"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ============================================================
+     PERFORMANCE OVERVIEW
+     ============================================================ -->
+
+<div class="row g-4 mb-4">
+
+    <!-- Attendance Overview -->
+    <div class="col-lg-6">
+
+        <div class="dashboard-card p-4 h-100">
+
+            <div class="d-flex justify-content-between align-items-start mb-3">
+
+                <div>
+
+                    <h5 class="fw-bold mb-1">
+
+                        <i class="bi bi-calendar2-check text-success me-2"></i>
+
+                        Attendance Overview
+
+                    </h5>
+
+                    <p class="text-muted small mb-0">
+                        Your overall attendance performance
+                    </p>
+
+                </div>
+
+                <span class="badge
+                    @(Model.AttendancePercentage >= 90
+                        ? "bg-success-subtle text-success"
+                        : Model.AttendancePercentage >= 75
+                            ? "bg-primary-subtle text-primary"
+                            : "bg-danger-subtle text-danger")
+                    rounded-pill px-3 py-2">
+
+                    @attendanceStatus
+
+                </span>
+
+            </div>
+
+
+            <div class="d-flex align-items-center gap-4">
+
+                <div class="position-relative"
+                     style="width: 110px; height: 110px;">
+
+                    <svg width="110"
+                         height="110"
+                         viewBox="0 0 110 110"
+                         style="transform: rotate(-90deg);">
+
+                        <circle cx="55"
+                                cy="55"
+                                r="45"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="10"
+                                class="text-light" />
+
+                        <circle cx="55"
+                                cy="55"
+                                r="45"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="10"
+                                stroke-linecap="round"
+                                class="text-success"
+                                stroke-dasharray="282.74"
+                                stroke-dashoffset="@((282.74 * (1 - attendanceProgress / 100)).ToString("0.##"))" />
+
+                    </svg>
+
+                    <div class="position-absolute top-50 start-50 translate-middle text-center">
+
+                        <div class="fw-bold fs-5">
+
+                            @attendanceProgress.ToString("0")%
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="flex-grow-1">
+
+                    <div class="d-flex justify-content-between mb-2">
+
+                        <span class="text-muted">
+                            Present
+                        </span>
+
+                        <strong class="text-success">
+                            @Model.PresentDays
+                        </strong>
+
+                    </div>
+
+                    <div class="d-flex justify-content-between mb-2">
+
+                        <span class="text-muted">
+                            Absent
+                        </span>
+
+                        <strong class="text-danger">
+                            @Model.AbsentDays
+                        </strong>
+
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+
+                        <span class="text-muted">
+                            Late
+                        </span>
+
+                        <strong class="text-warning">
+                            @Model.LateDays
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Academic Overview -->
+    <div class="col-lg-6">
+
+        <div class="dashboard-card p-4 h-100">
+
+            <div class="d-flex justify-content-between align-items-start mb-3">
+
+                <div>
+
+                    <h5 class="fw-bold mb-1">
+
+                        <i class="bi bi-graph-up-arrow text-primary me-2"></i>
+
+                        Academic Performance
+
+                    </h5>
+
+                    <p class="text-muted small mb-0">
+                        Average performance across assessments
+                    </p>
+
+                </div>
+
+                <span class="badge
+                    @(Model.AverageGradePercentage >= 80
+                        ? "bg-success-subtle text-success"
+                        : Model.AverageGradePercentage >= 60
+                            ? "bg-primary-subtle text-primary"
+                            : "bg-warning-subtle text-warning")
+                    rounded-pill px-3 py-2">
+
+                    @academicStatus
+
+                </span>
+
+            </div>
+
+
+            <div class="mb-3">
+
+                <div class="d-flex justify-content-between mb-2">
+
+                    <span class="text-muted">
+                        Overall Score
+                    </span>
+
+                    <strong>
+                        @Model.AverageGradePercentage.ToString("0.0")%
+                    </strong>
+
+                </div>
+
+
+                <div class="progress"
+                     style="height: 10px;">
+
+                    <div class="progress-bar
+                        @(Model.AverageGradePercentage >= 80
+                            ? "bg-success"
+                            : Model.AverageGradePercentage >= 60
+                                ? "bg-primary"
+                                : "bg-warning")"
+                         role="progressbar"
+                         style="width: @academicProgress%;"
+                         aria-valuenow="@academicProgress"
+                         aria-valuemin="0"
+                         aria-valuemax="100">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="row g-3">
+
+                <div class="col-6">
+
+                    <div class="border rounded-3 p-3">
+
+                        <div class="text-muted small mb-1">
+                            Assessments
+                        </div>
+
+                        <div class="fw-bold fs-5">
+                            @Model.Grades.Count
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-6">
+
+                    <div class="border rounded-3 p-3">
+
+                        <div class="text-muted small mb-1">
+                            Latest Score
+                        </div>
+
+                        <div class="fw-bold fs-5">
+
+                            @if (latestGrade != null)
+
+                            {
+                                @latestGradePercentage.ToString("0.0")
+                                <span>%</span>
+                            }
+
+                            else
+
+                            {
+                                <span>—</span>
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ============================================================
+     GRADES + ATTENDANCE
+     ============================================================ -->
+
+<div class="row g-4">
+
+    <!-- ========================================================
+         ACADEMIC GRADES
+         ======================================================== -->
+
+    <div class="col-xl-8">
+
+        <div class="dashboard-card p-4 h-100">
+
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+
+                <div>
+
+                    <h5 class="fw-bold mb-1">
+
+                        <i class="bi bi-bar-chart-line-fill text-primary me-2"></i>
+
+                        Academic Grades
+
+                    </h5>
+
+                    <p class="text-muted small mb-0">
+                        Your latest examination and assessment results
+                    </p>
+
+                </div>
+
+                <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill">
+
+                    @Model.Grades.Count
+
+                    @(Model.Grades.Count == 1
+                        ? "Assessment"
+                        : "Assessments")
+
+                </span>
+
+            </div>
+
+
+            @if (!Model.Grades.Any())
+            {
+                <div class="text-center py-5 text-muted">
+
+                    <div class="mb-3">
+
+                        <i class="bi bi-clipboard2-x"
+                           style="font-size: 3rem;"></i>
+
+                    </div>
+
+                    <h6 class="fw-semibold">
+                        No grades available
+                    </h6>
+
+                    <p class="small mb-0">
+                        Your assessment results will appear here once they are published.
+                    </p>
+
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle mb-0">
+
+                        <thead>
+
+                            <tr>
+
+                                <th class="border-0">
+                                    Subject
+                                </th>
+
+                                <th class="border-0">
+                                    Assessment
+                                </th>
+
+                                <th class="border-0">
+                                    Score
+                                </th>
+
+                                <th class="border-0"
+                                    style="min-width: 150px;">
+                                    Performance
+                                </th>
+
+                                <th class="border-0">
+                                    Grade
+                                </th>
+
+                                <th class="border-0">
+                                    Date
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var grade in Model.Grades)
+
+                            {
+
+                                var percentage =
+
+                                Math.Clamp(
+
+                                grade.Percentage,
+
+                                0,
+
+                                100);
+
+
+
+                                var progressClass =
+
+                                percentage >= 80
+
+                                ? "bg-success"
+
+                                : percentage >= 60
+
+                                ? "bg-warning"
+
+                                : "bg-danger";
+
+
+
+                                var gradeClass =
+
+                                percentage >= 80
+
+                                ? "bg-success-subtle text-success"
+
+                                : percentage >= 60
+
+                                ? "bg-warning-subtle text-warning"
+
+                                : "bg-danger-subtle text-danger";
+
+                                <tr>
+
+                                    <td>
+
+                                        <div class="fw-semibold">
+                                            @grade.SubjectName
+                                        </div>
+
+                                    </td>
+
+                                    <td>
+
+                                        <div class="small text-muted">
+                                            @grade.AssessmentName
+                                        </div>
+
+                                    </td>
+
+                                    <td>
+
+                                        <span class="fw-semibold">
+                                            @grade.MarksObtained.ToString("0.##")
+                                        </span>
+
+                                        <span class="text-muted">
+                                            /
+                                            @grade.MaxMarks.ToString("0.##")
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+
+                                        <div class="d-flex align-items-center gap-2">
+
+                                            <div class="progress flex-grow-1"
+                                                 style="height: 7px; min-width: 70px;">
+
+                                                <div class="progress-bar @progressClass"
+                                                     role="progressbar"
+                                                     style="width: @percentage%;"
+                                                     aria-valuenow="@percentage"
+                                                     aria-valuemin="0"
+                                                     aria-valuemax="100">
+                                                </div>
+
+                                            </div>
+
+                                            <span class="small fw-semibold text-nowrap">
+                                                @percentage.ToString("0.0")%
+                                            </span>
+
+                                        </div>
+
+                                    </td>
+
+                                    <td>
+
+                                        <span class="badge @gradeClass rounded-pill px-3 py-2">
+
+                                            @(grade.GradeLetter ?? "-")
+
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+
+                                        <span class="small text-muted text-nowrap">
+
+                                            @grade.ExamDate.ToString("dd MMM yyyy")
+
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================================
+         RECENT ATTENDANCE
+         ======================================================== -->
+
+    <div class="col-xl-4">
+
+        <div class="dashboard-card p-4 h-100">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                <div>
+
+                    <h5 class="fw-bold mb-1">
+
+                        <i class="bi bi-clock-history text-success me-2"></i>
+
+                        Attendance
+
+                    </h5>
+
+                    <p class="text-muted small mb-0">
+                        Your latest attendance records
+                    </p>
+
+                </div>
+
+                <span class="badge bg-secondary-subtle text-secondary px-2 py-2 rounded-pill">
+
+                    Recent
+
+                </span>
+
+            </div>
+
+
+            @if (!Model.RecentAttendances.Any())
+            {
+                <div class="text-center py-5 text-muted">
+
+                    <i class="bi bi-calendar-x"
+                       style="font-size: 3rem;"></i>
+
+                    <h6 class="fw-semibold mt-3">
+                        No attendance records
+                    </h6>
+
+                    <p class="small mb-0">
+                        Attendance information will appear here.
+                    </p>
+
+                </div>
+            }
+            else
+            {
+                <div class="list-group list-group-flush">
+
+                    @foreach (var attendance in Model.RecentAttendances)
+                    {
+
+                        var statusClass =
+
+                        attendance.Status == "Present"
+
+                        ? "bg-success-subtle text-success"
+
+                        : attendance.Status == "Late"
+
+                        ? "bg-warning-subtle text-warning"
+
+                        : "bg-danger-subtle text-danger";
+
+
+
+                        var statusIcon =
+
+                        attendance.Status == "Present"
+
+                        ? "bi-check-circle-fill"
+
+                        : attendance.Status == "Late"
+
+                        ? "bi-clock-fill"
+
+                        : "bi-x-circle-fill";
+
+                        <div class="list-group-item px-0 py-3 border-bottom">
+
+                            <div class="d-flex justify-content-between align-items-center gap-2">
+
+                                <div class="d-flex align-items-center gap-3">
+
+                                    <div class="rounded-circle
+                                                d-flex
+                                                align-items-center
+                                                justify-content-center
+                                                bg-light"
+                                         style="width: 40px; height: 40px;">
+
+                                        <i class="bi bi-calendar-event text-muted"></i>
+
+                                    </div>
+
+                                    <div>
+
+                                        <div class="fw-semibold small">
+
+                                            @attendance.Date.ToString("ddd, dd MMM yyyy")
+
+                                        </div>
+
+                                        @if (!string.IsNullOrWhiteSpace(attendance.Remarks))
+
+                                        {
+                                            <div class="text-muted"
+                                                 style="font-size: 0.75rem;">
+
+                                                @attendance.Remarks
+
+                                            </div>
+                                        }
+
+                                    </div>
+
+                                </div>
+
+
+                                <span class="badge @statusClass rounded-pill px-2 py-2 text-nowrap">
+
+                                    <i class="bi @statusIcon me-1"></i>
+
+                                    @attendance.Status
+
+                                </span>
+
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ============================================================
+     AI STUDENT INSIGHTS
+     ============================================================ -->
+
+<div class="dashboard-card p-4 mt-4">
+
+    <div class="d-flex align-items-center gap-3">
+
+        <div class="rounded-3 bg-primary-subtle text-primary
+                    d-flex align-items-center justify-content-center"
+             style="width: 48px; height: 48px;">
+
+            <i class="bi bi-stars fs-4"></i>
+
+        </div>
+
+        <div class="flex-grow-1">
+
+            <h5 class="fw-bold mb-1">
+                AI Student Insights
+            </h5>
+
+            <p class="text-muted small mb-0">
+                Personalized academic insights, study recommendations,
+                and performance analysis will appear here.
+            </p>
+
+        </div>
+
+        <span class="badge bg-secondary-subtle text-secondary rounded-pill px-3 py-2">
+            Coming Soon
+        </span>
+
+    </div>
+
+</div>

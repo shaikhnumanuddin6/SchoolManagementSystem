@@ -1,0 +1,207 @@
+﻿@model SchoolManagementSystem.Application.ViewModels.Students.StudentDetailsViewModel
+
+@{
+    ViewData["Title"] = "Student Details";
+
+    var dateOfBirthText = Model.DateOfBirth.HasValue && Model.DateOfBirth.Value != DateTime.MinValue
+        ? Model.DateOfBirth.Value.ToString("dd MMM yyyy")
+        : "Not provided";
+
+    var emailText = string.IsNullOrWhiteSpace(Model.Email) ? "Not provided" : Model.Email;
+    var genderText = string.IsNullOrWhiteSpace(Model.Gender) ? "Not provided" : Model.Gender;
+    var emergencyContactText = string.IsNullOrWhiteSpace(Model.EmergencyContact) ? "Not provided" : Model.EmergencyContact;
+    var classText = string.IsNullOrWhiteSpace(Model.ClassName) ? "Not assigned" : Model.ClassName;
+    var sectionText = string.IsNullOrWhiteSpace(Model.Section) ? "Not assigned" : Model.Section;
+    var academicYearText = string.IsNullOrWhiteSpace(Model.AcademicYear) ? "Not assigned" : Model.AcademicYear;
+    var addressText = string.IsNullOrWhiteSpace(Model.Address) ? "Not provided" : Model.Address;
+
+    var statusText = Model.IsActive ? "Active" : Model.Status;
+    var statusClass = Model.IsActive ? "bg-success" : "bg-secondary";
+
+    var averageGradeText = $"{Model.AverageGradePercentage:0.0}%";
+    var attendanceText = $"{Model.AttendancePercentage:0.0}%";
+
+    var gradeProgress = Math.Min(Model.AverageGradePercentage, 100d);
+    var gradeProgressStyle = $"width:{gradeProgress:0.0}%;";
+}
+
+<div class="container-fluid py-4">
+
+    <!-- PAGE HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Student Details</h2>
+            <p class="text-muted mb-0">View student profile, enrollment and academic information.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a asp-controller="Students" asp-action="Index" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-2"></i>Back to Students
+            </a>
+            <a asp-controller="Students" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">
+                <i class="bi bi-pencil-square me-2"></i>Edit Student
+            </a>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="row g-4">
+
+        <!-- STUDENT PROFILE -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0 py-3">
+                    <div class="d-flex align-items-center">
+                        <div class="rounded-circle bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center me-3" style="width:56px;height:56px;">
+                            <i class="bi bi-person-fill fs-3"></i>
+                        </div>
+                        <div>
+                            <h4 class="mb-1 fw-bold">@Model.FullName</h4>
+                            <div class="text-muted">
+                                Admission No: <strong>@Model.AdmissionNumber</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="row g-4">
+
+                        <!-- EMAIL -->
+                        <div class="col-md-6">
+                            <label class="text-muted small">Email</label>
+                            <div class="fw-semibold">@emailText</div>
+                        </div>
+
+                        <!-- ADMISSION NUMBER -->
+                        <div class="col-md-6">
+                            <label class="text-muted small">Admission Number</label>
+                            <div class="fw-semibold">@Model.AdmissionNumber</div>
+                        </div>
+
+                        <!-- DATE OF BIRTH -->
+                        <div class="col-md-6">
+                            <label class="text-muted small">Date of Birth</label>
+                            <div class="fw-semibold">@dateOfBirthText</div>
+                        </div>
+
+                        <!-- GENDER -->
+                        <div class="col-md-6">
+                            <label class="text-muted small">Gender</label>
+                            <div class="fw-semibold">@genderText</div>
+                        </div>
+
+                        <!-- EMERGENCY CONTACT -->
+                        <div class="col-md-6">
+                            <label class="text-muted small">Emergency Contact</label>
+                            <div class="fw-semibold">@emergencyContactText</div>
+                        </div>
+
+                        <!-- CLASS -->
+                        <div class="col-md-6">
+                            <label class="text-muted small">Class</label>
+                            <div class="fw-semibold">@classText</div>
+                        </div>
+
+                        <!-- SECTION -->
+                        <div class="col-md-6">
+                            <label class="text-muted small">Section</label>
+                            <div class="fw-semibold">@sectionText</div>
+                        </div>
+
+                        <!-- ACADEMIC YEAR -->
+                        <div class="col-md-6">
+                            <label class="text-muted small">Academic Year</label>
+                            <div class="fw-semibold">@academicYearText</div>
+                        </div>
+
+                        <!-- ENROLLMENT DATE -->
+                        <div class="col-md-6">
+                            <label class="text-muted small">Enrollment Date</label>
+                            <div class="fw-semibold">@Model.EnrollmentDate.ToString("dd MMM yyyy")</div>
+                        </div>
+
+                        <!-- STATUS -->
+                        <div class="col-md-6">
+                            <label class="text-muted small">Status</label>
+                            <div>
+                                <span class="badge @statusClass">@statusText</span>
+                            </div>
+                        </div>
+
+                        <!-- ADDRESS -->
+                        <div class="col-12">
+                            <label class="text-muted small">Address</label>
+                            <div class="fw-semibold">@addressText</div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ACADEMIC SUMMARY -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-0">
+                    <h5 class="fw-bold mb-0">Academic Summary</h5>
+                </div>
+                <div class="card-body">
+
+                    <!-- TOTAL GRADES -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Total Grades</span>
+                        <strong class="fs-5">@Model.GradeCount</strong>
+                    </div>
+
+                    <!-- AVERAGE GRADE -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Average Grade</span>
+                        <strong class="fs-5">@averageGradeText</strong>
+                    </div>
+
+                    <!-- GRADE PROGRESS -->
+                    <div class="progress mb-4" style="height:8px;">
+                        <div class="progress-bar" role="progressbar" style="@gradeProgressStyle" aria-valuenow="@Model.AverageGradePercentage" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+
+                    <hr />
+
+                    <!-- ATTENDANCE DAYS -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Attendance Days</span>
+                        <strong class="fs-5">@Model.AttendanceCount</strong>
+                    </div>
+
+                    <!-- PRESENT DAYS -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Present Days</span>
+                        <strong class="fs-5">@Model.PresentCount</strong>
+                    </div>
+
+                    <!-- ATTENDANCE RATE -->
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-muted">Attendance Rate</span>
+                        <strong class="fs-5">@attendanceText</strong>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- QUICK ACTIONS -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0">
+                    <h5 class="fw-bold mb-0">Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <a asp-controller="Students" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary w-100 mb-2">
+                        <i class="bi bi-pencil-square me-2"></i>Edit Student
+                    </a>
+                    <a asp-controller="Students" asp-action="Index" class="btn btn-outline-secondary w-100">
+                        <i class="bi bi-people me-2"></i>All Students
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

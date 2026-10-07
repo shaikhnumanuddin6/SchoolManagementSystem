@@ -1,9 +1,10 @@
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using SchoolManagementSystem.Domain.Entities;
-using SchoolManagementSystem.Infrastructure.Data;
 using SchoolManagementSystem.Application.Interfaces;
 using SchoolManagementSystem.Application.Services;
+using SchoolManagementSystem.Domain.Entities;
+using SchoolManagementSystem.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,9 +18,37 @@ var connectionString =
         "DefaultConnection connection string was not found.");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+{
+    options.UseSqlServer(connectionString, sqlOptions =>
+    {
+        sqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorNumbersToAdd: null);
+    });
+});
 
+
+// ============================================================
+// APPLICATION SERVICES
+// ============================================================
+
+// Dashboard
 builder.Services.AddScoped<IDashboardService, DashboardService>();
+
+// Students
+builder.Services.AddScoped<IStudentService, StudentService>();
+
+//Teacher
+builder.Services.AddScoped<ITeacherService, TeacherService>();
+
+// Future services can be registered here.
+// Example:
+//
+// builder.Services.AddScoped<ITeacherService, TeacherService>();
+// builder.Services.AddScoped<IAttendanceService, AttendanceService>();
+// builder.Services.AddScoped<IGradeService, GradeService>();
+// builder.Services.AddScoped<IAIService, AIService>();
 
 
 // ============================================================
@@ -29,63 +58,135 @@ builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services
     .AddIdentity<ApplicationUser, IdentityRole>(options =>
     {
+        // --------------------------------------------------------
         // Password settings
+        // --------------------------------------------------------
+
         options.Password.RequireDigit = true;
         options.Password.RequireLowercase = true;
         options.Password.RequireUppercase = true;
         options.Password.RequireNonAlphanumeric = false;
         options.Password.RequiredLength = 8;
 
-        // User settings
-        options.User.RequireUniqueEmail = true;
 
+        // --------------------------------------------------------
+        // User settings
+        // --------------------------------------------------------
+
+        options.User.RequireUniqueEmail = true;
+        options.User.AllowedUserNameCharacters =
+            "abcdefghijklmnopqrstuvwxyz" +
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
+            "0123456789-._@";
+
+
+        // --------------------------------------------------------
         // Account lockout
+        // --------------------------------------------------------
+
+        options.Lockout.AllowedForNewUsers = true;
         options.Lockout.MaxFailedAccessAttempts = 5;
-        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+        options.Lockout.DefaultLockoutTimeSpan =
+            TimeSpan.FromMinutes(15);
+
+
+        // --------------------------------------------------------
+        // Sign-in settings
+        // --------------------------------------------------------
+
+        options.SignIn.RequireConfirmedAccount = false;
+        options.SignIn.RequireConfirmedEmail = false;
     })
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
-// Configure Application Cookie & Authentication Paths
+
+// ============================================================
+// APPLICATION COOKIE
+// ============================================================
+
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Account/Login";
     options.LogoutPath = "/Account/Logout";
     options.AccessDeniedPath = "/Account/AccessDenied";
+
     options.ExpireTimeSpan = TimeSpan.FromHours(8);
     options.SlidingExpiration = true;
+
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SameSite = SameSiteMode.Lax;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 });
 
 
 // ============================================================
-// MVC
+// MVC + REST API
 // ============================================================
 
 builder.Services.AddControllersWithViews();
 
 
-var app = builder.Build();
+// ============================================================
+// HTTP CLIENT
+// ============================================================
+// Required later for:
+// - OpenAI
+// - Azure OpenAI
+// - Gemini
+// - Other external APIs
+//
+// Keeping HttpClient available now makes the application
+// ready for the future AI infrastructure.
+
+builder.Services.AddHttpClient();
+
 
 // ============================================================
-// DATABASE AUTO-MIGRATION & SEEDING ON STARTUP
+// BUILD APPLICATION
+// ============================================================
+
+var app = builder.Build();
+
+
+// ============================================================
+// DATABASE MIGRATION + SEEDING
 // ============================================================
 
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
+
     try
     {
-        var context = services.GetRequiredService<ApplicationDbContext>();
-        // 1. Auto-migrate database schema on startup
-        context.Database.Migrate();
+        var context =
+            services.GetRequiredService<ApplicationDbContext>();
 
-        // 2. Automatically seed default roles, credentials & sample data
+        // --------------------------------------------------------
+        // Apply pending EF Core migrations
+        // --------------------------------------------------------
+
+        await context.Database.MigrateAsync();
+
+
+        // --------------------------------------------------------
+        // Seed:
+        // - Roles
+        // - Default users
+        // - Sample data
+        // --------------------------------------------------------
+
         await DbInitializer.SeedAsync(services);
     }
     catch (Exception ex)
     {
-        var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred while migrating and seeding the database.");
+        var logger =
+            services.GetRequiredService<ILogger<Program>>();
+
+        logger.LogError(
+            ex,
+            "An error occurred while migrating and seeding the database.");
+
         throw;
     }
 }
@@ -101,26 +202,61 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+
+// ------------------------------------------------------------
+// HTTPS
+// ------------------------------------------------------------
+
 app.UseHttpsRedirection();
 
+
+// ------------------------------------------------------------
+// Static files
+// ------------------------------------------------------------
+
 app.UseStaticFiles();
+
+
+// ------------------------------------------------------------
+// Routing
+// ------------------------------------------------------------
 
 app.UseRouting();
 
 
-// IMPORTANT:
-// Authentication must come BEFORE Authorization.
+// ------------------------------------------------------------
+// Authentication
+// ------------------------------------------------------------
+
 app.UseAuthentication();
+
+
+// ------------------------------------------------------------
+// Authorization
+// ------------------------------------------------------------
+
 app.UseAuthorization();
 
 
 // ============================================================
-// ROUTING
-// Default routing leads to /Account/Login when app starts
+// MVC ROUTING
 // ============================================================
+
+// Application starts at:
+//
+// /Account/Login
+//
+// After login, controllers can redirect users according
+// to their roles.
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Login}/{id?}");
 
+
+// ============================================================
+// START APPLICATION
+// ============================================================
+
 app.Run();
+
