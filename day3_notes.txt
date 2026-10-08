@@ -1,0 +1,502 @@
+============================================================
+SCHOOL MANAGEMENT SYSTEM
+DAILY DEVELOPMENT NOTE
+============================================================
+
+Date:
+08 October 2026
+
+Project:
+AI-Enabled School Management System
+
+Technology:
+ASP.NET Core 8 MVC
+Entity Framework Core 8
+SQL Server LocalDB
+ASP.NET Core Identity
+Bootstrap / Razor
+Clean Architecture Structure
+
+
+============================================================
+TODAY'S WORK COMPLETED
+============================================================
+
+1. ADMIN DASHBOARD COMPLETED
+------------------------------------------------------------
+
+The Admin Dashboard was upgraded from a basic statistics page
+to a real database-driven dashboard.
+
+The dashboard now displays:
+
+- Total Students
+- Total Teachers
+- Total Classes
+- Today's Attendance Percentage
+- Present Today
+- Absent Today
+- Late Today
+- Total Attendance Records Today
+- Average Grade Percentage
+- Total Grades
+- Student Performance by Subject
+- Class-wise Attendance
+- Teacher assigned to each class
+- Number of students in each class
+- Present / Absent / Late count for each class
+- Attendance percentage for each class
+- Recent Attendance Records
+- Recent Grades / Activities
+
+The dashboard is dynamic and reads information directly from
+the database.
+
+Classes are NOT hard-coded.
+
+The system automatically supports:
+
+- 10 classes
+- 20 classes
+- 50 classes
+- 100+ classes
+
+The same dynamic approach is used for students and teachers.
+
+
+============================================================
+2. ADMIN DASHBOARD ATTENDANCE
+============================================================
+
+Attendance is now connected to the real Attendance table.
+
+The dashboard calculates:
+
+Present
+Absent
+Late
+Attendance Percentage
+
+using today's attendance records.
+
+Attendance is also displayed class-wise.
+
+Class-wise dashboard data includes:
+
+- Class
+- Section
+- Academic Year
+- Teacher
+- Student Count
+- Present Count
+- Absent Count
+- Late Count
+- Attendance Percentage
+
+
+============================================================
+3. ADMIN DASHBOARD PERFORMANCE
+============================================================
+
+Grade information is connected to the real Grades table.
+
+The dashboard calculates:
+
+- Total Grades
+- Average Grade Percentage
+- Subject-wise Performance
+
+Percentage calculation uses:
+
+Marks Obtained / Maximum Marks * 100
+
+
+============================================================
+4. ADMIN DASHBOARD VIEW MODEL UPDATED
+============================================================
+
+Updated:
+
+Application/ViewModels/DashboardViewModel.cs
+
+Added support for:
+
+- Attendance records count
+- Class-wise attendance
+- Recent attendance
+- Existing performance information
+- Recent activities
+
+
+============================================================
+5. ADMIN DASHBOARD SERVICE UPDATED
+============================================================
+
+Updated:
+
+Application/Services/DashboardService.cs
+
+The service now queries:
+
+- Students
+- Teachers
+- Classes
+- Attendance
+- Grades
+
+The service creates complete dashboard information
+from actual database records.
+
+
+============================================================
+6. ADMIN DASHBOARD UI UPDATED
+============================================================
+
+Updated:
+
+Views/Home/Index.cshtml
+
+The dashboard UI now contains:
+
+- Summary cards
+- Today's attendance summary
+- Academic performance
+- Class-wise attendance table
+- Subject performance
+- Recent attendance
+- Recent activity
+
+
+============================================================
+7. TEACHER DASHBOARD STARTED
+============================================================
+
+Teacher Dashboard implementation was started.
+
+New ViewModel created:
+
+Application/ViewModels/Teachers/
+TeacherDashboardViewModel.cs
+
+The ViewModel contains:
+
+- Teacher Name
+- Assigned Classes
+- Total Students
+- Attendance Percentage
+- Present Today
+- Absent Today
+- Late Today
+- Attendance Records Today
+- Total Grades
+- Average Grade Percentage
+- Teacher's Classes
+- Recent Attendance
+- Recent Grades
+- Subject Performance
+
+
+============================================================
+8. TEACHER DASHBOARD SERVICE CREATED
+============================================================
+
+Created:
+
+Application/Services/
+TeacherDashboardService.cs
+
+The service is designed to show information only for
+the logged-in teacher.
+
+Teacher dashboard logic:
+
+Logged-in Teacher
+        ↓
+Teacher Entity
+        ↓
+Assigned Classes
+        ↓
+Students in those Classes
+        ↓
+Attendance
+        ↓
+Grades / Performance
+
+
+The dashboard supports multiple classes for one teacher.
+
+Nothing is hard-coded.
+
+
+============================================================
+9. TEACHER DASHBOARD INTERFACE CREATED
+============================================================
+
+Created:
+
+Application/Interfaces/
+ITeacherDashboardService.cs
+
+Interface:
+
+ITeacherDashboardService
+
+Method:
+
+GetDashboardAsync(string applicationUserId)
+
+
+============================================================
+10. TEACHER DASHBOARD CONTROLLER CREATED
+============================================================
+
+Created:
+
+Controllers/TeacherController.cs
+
+The controller uses:
+
+[Authorize(Roles = "Teacher")]
+
+Teacher dashboard route:
+
+/Teacher/Dashboard
+
+
+============================================================
+11. TEACHER DASHBOARD VIEW CREATED
+============================================================
+
+Created:
+
+Views/Teacher/Dashboard.cshtml
+
+The page is designed to display:
+
+- Teacher welcome section
+- Assigned class count
+- Student count
+- Today's attendance
+- Average grades
+- Class-wise attendance
+- Subject performance
+- Recent grades
+- Recent attendance
+
+
+============================================================
+12. HOME CONTROLLER UPDATED
+============================================================
+
+HomeController now redirects users according to role.
+
+Admin:
+
+/Home
+
+Teacher:
+
+/Teacher/Dashboard
+
+Student:
+
+/Student/Dashboard
+
+
+============================================================
+13. PROGRAM.CS UPDATED
+============================================================
+
+Program.cs was updated to register:
+
+IDashboardService
+IStudentService
+ITeacherService
+ITeacherDashboardService
+
+Teacher Dashboard service registration:
+
+ITeacherDashboardService
+        ↓
+TeacherDashboardService
+
+
+============================================================
+14. CURRENT ERROR / ISSUE
+============================================================
+
+Teacher Dashboard currently produced the following error:
+
+InvalidOperationException:
+Unable to resolve service for type
+'SchoolManagementSystem.Application.Interfaces.ITeacherDashboardService'
+while attempting to activate
+'SchoolManagementSystem.Controllers.TeacherController'
+
+The following files were checked:
+
+- ITeacherDashboardService.cs
+- TeacherDashboardService.cs
+- Program.cs
+
+The interface is correct.
+
+The TeacherDashboardService implementation is correct.
+
+Program.cs contains the required service registration.
+
+The remaining issue is likely related to the running project instance,
+stale build files, or a different project copy being executed.
+
+
+============================================================
+15. TROUBLESHOOTING DONE
+============================================================
+
+Recommended steps:
+
+1. Stop the application.
+
+2. Run:
+
+dotnet clean
+
+3. Delete:
+
+bin
+obj
+
+4. Run:
+
+dotnet build
+
+5. Run:
+
+dotnet run
+
+6. Confirm that the same SchoolManagementSystem project is
+   being edited and executed.
+
+Possible cause:
+
+A different or stale copy of the project may be running.
+
+
+============================================================
+16. IMPORTANT FILES WORKED ON TODAY
+============================================================
+
+Application/ViewModels/DashboardViewModel.cs
+
+Application/Interfaces/IDashboardService.cs
+
+Application/Services/DashboardService.cs
+
+Controllers/HomeController.cs
+
+Views/Home/Index.cshtml
+
+Application/ViewModels/Teachers/
+TeacherDashboardViewModel.cs
+
+Application/Interfaces/
+ITeacherDashboardService.cs
+
+Application/Services/
+TeacherDashboardService.cs
+
+Controllers/
+TeacherController.cs
+
+Views/Teacher/
+Dashboard.cshtml
+
+Program.cs
+
+
+============================================================
+17. CURRENT PROJECT STATUS
+============================================================
+
+Admin Dashboard:
+COMPLETED / WORKING
+
+Teacher Dashboard:
+IMPLEMENTED
+REQUIRES FINAL RUNTIME FIX
+
+Student Dashboard:
+NEXT MAJOR TASK
+
+Parent Dashboard:
+PENDING
+
+Attendance Management:
+PENDING
+
+Class Management:
+PENDING
+
+Grade Management:
+PENDING
+
+AI Features:
+PENDING
+
+
+============================================================
+18. NEXT DEVELOPMENT STEP
+============================================================
+
+First:
+
+Fix the Teacher Dashboard runtime/service-resolution issue.
+
+Then:
+
+Complete and verify Teacher Dashboard.
+
+After Teacher Dashboard is working:
+
+Build Student Dashboard.
+
+Student Dashboard should show:
+
+- Student Profile
+- Class
+- Personal Attendance
+- Present
+- Absent
+- Late
+- Attendance Percentage
+- Grades
+- Average Percentage
+- Subject Performance
+- Recent Academic Activity
+
+After Student Dashboard:
+
+Build Parent Dashboard.
+
+
+============================================================
+19. DEVELOPMENT PRINCIPLE
+============================================================
+
+All dashboards must use real database data.
+
+No hard-coded:
+
+- Classes
+- Teachers
+- Students
+- Attendance numbers
+- Grade numbers
+
+The system must automatically work when the number of
+classes, teachers, or students increases.
+
+
+============================================================
+END OF TODAY'S NOTE
+============================================================

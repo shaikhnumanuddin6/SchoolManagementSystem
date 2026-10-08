@@ -1,4 +1,3 @@
-
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SchoolManagementSystem.Application.Interfaces;
@@ -33,22 +32,40 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // APPLICATION SERVICES
 // ============================================================
 
-// Dashboard
-builder.Services.AddScoped<IDashboardService, DashboardService>();
+// ------------------------------------------------------------
+// Admin Dashboard
+// ------------------------------------------------------------
 
-// Students
-builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<
+    IDashboardService,
+    DashboardService>();
 
-//Teacher
-builder.Services.AddScoped<ITeacherService, TeacherService>();
 
-// Future services can be registered here.
-// Example:
-//
-// builder.Services.AddScoped<ITeacherService, TeacherService>();
-// builder.Services.AddScoped<IAttendanceService, AttendanceService>();
-// builder.Services.AddScoped<IGradeService, GradeService>();
-// builder.Services.AddScoped<IAIService, AIService>();
+// ------------------------------------------------------------
+// Student Management
+// ------------------------------------------------------------
+
+builder.Services.AddScoped<
+    IStudentService,
+    StudentService>();
+
+
+// ------------------------------------------------------------
+// Teacher Management
+// ------------------------------------------------------------
+
+builder.Services.AddScoped<
+    ITeacherService,
+    TeacherService>();
+
+
+// ------------------------------------------------------------
+// Teacher Dashboard
+// ------------------------------------------------------------
+
+builder.Services.AddScoped<
+    ITeacherDashboardService,
+    TeacherDashboardService>();
 
 
 // ============================================================
@@ -74,6 +91,7 @@ builder.Services
         // --------------------------------------------------------
 
         options.User.RequireUniqueEmail = true;
+
         options.User.AllowedUserNameCharacters =
             "abcdefghijklmnopqrstuvwxyz" +
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
@@ -85,7 +103,9 @@ builder.Services
         // --------------------------------------------------------
 
         options.Lockout.AllowedForNewUsers = true;
+
         options.Lockout.MaxFailedAccessAttempts = 5;
+
         options.Lockout.DefaultLockoutTimeSpan =
             TimeSpan.FromMinutes(15);
 
@@ -95,6 +115,7 @@ builder.Services
         // --------------------------------------------------------
 
         options.SignIn.RequireConfirmedAccount = false;
+
         options.SignIn.RequireConfirmedEmail = false;
     })
     .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -108,20 +129,28 @@ builder.Services
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Account/Login";
+
     options.LogoutPath = "/Account/Logout";
+
     options.AccessDeniedPath = "/Account/AccessDenied";
 
-    options.ExpireTimeSpan = TimeSpan.FromHours(8);
+    options.ExpireTimeSpan =
+        TimeSpan.FromHours(8);
+
     options.SlidingExpiration = true;
 
     options.Cookie.HttpOnly = true;
-    options.Cookie.SameSite = SameSiteMode.Lax;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+
+    options.Cookie.SameSite =
+        SameSiteMode.Lax;
+
+    options.Cookie.SecurePolicy =
+        CookieSecurePolicy.Always;
 });
 
 
 // ============================================================
-// MVC + REST API
+// MVC
 // ============================================================
 
 builder.Services.AddControllersWithViews();
@@ -130,14 +159,14 @@ builder.Services.AddControllersWithViews();
 // ============================================================
 // HTTP CLIENT
 // ============================================================
-// Required later for:
+//
+// Available for future:
 // - OpenAI
 // - Azure OpenAI
 // - Gemini
-// - Other external APIs
+// - Other AI providers
 //
-// Keeping HttpClient available now makes the application
-// ready for the future AI infrastructure.
+// ============================================================
 
 builder.Services.AddHttpClient();
 
@@ -159,21 +188,23 @@ using (var scope = app.Services.CreateScope())
 
     try
     {
+        // --------------------------------------------------------
+        // Get database context
+        // --------------------------------------------------------
+
         var context =
             services.GetRequiredService<ApplicationDbContext>();
 
+
         // --------------------------------------------------------
-        // Apply pending EF Core migrations
+        // Apply pending migrations
         // --------------------------------------------------------
 
         await context.Database.MigrateAsync();
 
 
         // --------------------------------------------------------
-        // Seed:
-        // - Roles
-        // - Default users
-        // - Sample data
+        // Seed roles, users and sample data
         // --------------------------------------------------------
 
         await DbInitializer.SeedAsync(services);
@@ -199,41 +230,42 @@ using (var scope = app.Services.CreateScope())
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
+
     app.UseHsts();
 }
 
 
-// ------------------------------------------------------------
+// ============================================================
 // HTTPS
-// ------------------------------------------------------------
+// ============================================================
 
 app.UseHttpsRedirection();
 
 
-// ------------------------------------------------------------
-// Static files
-// ------------------------------------------------------------
+// ============================================================
+// STATIC FILES
+// ============================================================
 
 app.UseStaticFiles();
 
 
-// ------------------------------------------------------------
-// Routing
-// ------------------------------------------------------------
+// ============================================================
+// ROUTING
+// ============================================================
 
 app.UseRouting();
 
 
-// ------------------------------------------------------------
-// Authentication
-// ------------------------------------------------------------
+// ============================================================
+// AUTHENTICATION
+// ============================================================
 
 app.UseAuthentication();
 
 
-// ------------------------------------------------------------
-// Authorization
-// ------------------------------------------------------------
+// ============================================================
+// AUTHORIZATION
+// ============================================================
 
 app.UseAuthorization();
 
@@ -241,13 +273,6 @@ app.UseAuthorization();
 // ============================================================
 // MVC ROUTING
 // ============================================================
-
-// Application starts at:
-//
-// /Account/Login
-//
-// After login, controllers can redirect users according
-// to their roles.
 
 app.MapControllerRoute(
     name: "default",
@@ -259,4 +284,3 @@ app.MapControllerRoute(
 // ============================================================
 
 app.Run();
-

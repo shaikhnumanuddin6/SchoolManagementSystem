@@ -1,0 +1,493 @@
+﻿@model SchoolManagementSystem.Application.ViewModels.Teachers.TeacherCreateViewModel
+
+@{
+    ViewData["Title"] = "Add Teacher";
+}
+
+<div class="container-fluid py-4">
+
+    <!-- ============================================================
+         PAGE HEADER
+         ============================================================ -->
+
+    <div class="d-flex flex-column flex-lg-row
+                justify-content-between
+                align-items-lg-center
+                gap-3 mb-4">
+
+        <div>
+
+            <div class="text-muted small mb-1">
+                Administration
+            </div>
+
+            <h1 class="h3 fw-bold mb-1">
+                Add Teacher
+            </h1>
+
+            <p class="text-muted mb-0">
+                Create a teacher profile and login account.
+            </p>
+
+        </div>
+
+        <div>
+
+            <a asp-controller="Teachers"
+               asp-action="Index"
+               class="btn btn-outline-secondary">
+
+                <i class="bi bi-arrow-left me-2"></i>
+                Back to Teachers
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ============================================================
+         VALIDATION / ERRORS
+         ============================================================ -->
+
+    <div asp-validation-summary="ModelOnly"
+         class="alert alert-danger"
+         role="alert">
+    </div>
+
+
+    <!-- ============================================================
+         CREATE TEACHER FORM
+         ============================================================ -->
+
+    <form asp-controller="Teachers"
+          asp-action="Create"
+          method="post">
+
+        @Html.AntiForgeryToken()
+
+        <div class="row g-4">
+
+            <!-- ====================================================
+                 PERSONAL INFORMATION
+                 ==================================================== -->
+
+            <div class="col-12 col-lg-8">
+
+                <div class="card border-0 shadow-sm mb-4">
+
+                    <div class="card-header bg-white border-0 py-3">
+
+                        <h5 class="fw-bold mb-1">
+                            Personal Information
+                        </h5>
+
+                        <p class="text-muted small mb-0">
+                            Enter the teacher's basic information.
+                        </p>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="row g-3">
+
+                            <!-- First Name -->
+
+                            <div class="col-md-6">
+
+                                <label asp-for="FirstName"
+                                       class="form-label fw-semibold">
+                                </label>
+
+                                <input asp-for="FirstName"
+                                       class="form-control"
+                                       placeholder="Enter first name" />
+
+                                <span asp-validation-for="FirstName"
+                                      class="text-danger small">
+                                </span>
+
+                            </div>
+
+
+                            <!-- Last Name -->
+
+                            <div class="col-md-6">
+
+                                <label asp-for="LastName"
+                                       class="form-label fw-semibold">
+                                </label>
+
+                                <input asp-for="LastName"
+                                       class="form-control"
+                                       placeholder="Enter last name" />
+
+                                <span asp-validation-for="LastName"
+                                      class="text-danger small">
+                                </span>
+
+                            </div>
+
+
+                            <!-- Employee Number -->
+
+                            <div class="col-md-6">
+
+                                <label asp-for="EmployeeNumber"
+                                       class="form-label fw-semibold">
+                                </label>
+
+                                <input asp-for="EmployeeNumber"
+                                       class="form-control"
+                                       placeholder="Example: TCH-001" />
+
+                                <span asp-validation-for="EmployeeNumber"
+                                      class="text-danger small">
+                                </span>
+
+                            </div>
+
+
+                            <!-- Phone -->
+
+                            <div class="col-md-6">
+
+                                <label asp-for="Phone"
+                                       class="form-label fw-semibold">
+                                </label>
+
+                                <input asp-for="Phone"
+                                       class="form-control"
+                                       placeholder="Enter phone number" />
+
+                                <span asp-validation-for="Phone"
+                                      class="text-danger small">
+                                </span>
+
+                            </div>
+
+
+                            <!-- Qualification -->
+
+                            <div class="col-md-6">
+
+                                <label asp-for="Qualification"
+                                       class="form-label fw-semibold">
+                                </label>
+
+                                <input asp-for="Qualification"
+                                       class="form-control"
+                                       placeholder="Example: M.Sc, B.Ed" />
+
+                                <span asp-validation-for="Qualification"
+                                      class="text-danger small">
+                                </span>
+
+                            </div>
+
+
+                            <!-- Specialization / Department -->
+
+                            <div class="col-md-6">
+
+                                <label asp-for="SpecializationDepartment"
+                                       class="form-label fw-semibold">
+                                </label>
+
+                                <input asp-for="SpecializationDepartment"
+                                       class="form-control"
+                                       placeholder="Example: Mathematics" />
+
+                                <span asp-validation-for="SpecializationDepartment"
+                                      class="text-danger small">
+                                </span>
+
+                            </div>
+
+
+                            <!-- Hire Date -->
+
+                            <div class="col-md-6">
+
+                                <label asp-for="HireDate"
+                                       class="form-label fw-semibold">
+                                </label>
+
+                                <input asp-for="HireDate"
+                                       type="date"
+                                       class="form-control" />
+
+                                <span asp-validation-for="HireDate"
+                                      class="text-danger small">
+                                </span>
+
+                            </div>
+
+
+                            <!-- Active Status -->
+
+                            <div class="col-md-6">
+
+                                <div class="form-check form-switch mt-4">
+
+                                    <input asp-for="IsActive"
+                                           class="form-check-input"
+                                           role="switch" />
+
+                                    <label asp-for="IsActive"
+                                           class="form-check-label fw-semibold">
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ====================================================
+                     LOGIN INFORMATION
+                     ==================================================== -->
+
+                <div class="card border-0 shadow-sm">
+
+                    <div class="card-header bg-white border-0 py-3">
+
+                        <h5 class="fw-bold mb-1">
+                            Login Information
+                        </h5>
+
+                        <p class="text-muted small mb-0">
+                            These details will be used for the teacher's
+                            school account.
+                        </p>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="row g-3">
+
+                            <!-- Email -->
+
+                            <div class="col-12">
+
+                                <label asp-for="Email"
+                                       class="form-label fw-semibold">
+                                </label>
+
+                                <input asp-for="Email"
+                                       type="email"
+                                       class="form-control"
+                                       placeholder="teacher@school.com"
+                                       autocomplete="email" />
+
+                                <span asp-validation-for="Email"
+                                      class="text-danger small">
+                                </span>
+
+                            </div>
+
+
+                            <!-- Password -->
+
+                            <div class="col-md-6">
+
+                                <label asp-for="Password"
+                                       class="form-label fw-semibold">
+                                </label>
+
+                                <input asp-for="Password"
+                                       class="form-control"
+                                       placeholder="Enter password"
+                                       autocomplete="new-password" />
+
+                                <span asp-validation-for="Password"
+                                      class="text-danger small">
+                                </span>
+
+                            </div>
+
+
+                            <!-- Confirm Password -->
+
+                            <div class="col-md-6">
+
+                                <label asp-for="ConfirmPassword"
+                                       class="form-label fw-semibold">
+                                </label>
+
+                                <input asp-for="ConfirmPassword"
+                                       class="form-control"
+                                       placeholder="Confirm password"
+                                       autocomplete="new-password" />
+
+                                <span asp-validation-for="ConfirmPassword"
+                                      class="text-danger small">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ====================================================
+                 SIDE INFORMATION
+                 ==================================================== -->
+
+            <div class="col-12 col-lg-4">
+
+                <div class="card border-0 shadow-sm mb-4">
+
+                    <div class="card-header bg-white border-0">
+
+                        <h5 class="fw-bold mb-0">
+                            Account Information
+                        </h5>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="d-flex align-items-start mb-3">
+
+                            <div class="rounded-circle
+                                        bg-primary-subtle
+                                        text-primary
+                                        p-2
+                                        me-3">
+
+                                <i class="bi bi-person-check"></i>
+
+                            </div>
+
+                            <div>
+
+                                <div class="fw-semibold">
+                                    Teacher Role
+                                </div>
+
+                                <div class="text-muted small">
+                                    The Teacher role will be assigned
+                                    automatically.
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="d-flex align-items-start mb-3">
+
+                            <div class="rounded-circle
+                                        bg-success-subtle
+                                        text-success
+                                        p-2
+                                        me-3">
+
+                                <i class="bi bi-shield-check"></i>
+
+                            </div>
+
+                            <div>
+
+                                <div class="fw-semibold">
+                                    Secure Account
+                                </div>
+
+                                <div class="text-muted small">
+                                    Password security is handled by
+                                    ASP.NET Core Identity.
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="d-flex align-items-start">
+
+                            <div class="rounded-circle
+                                        bg-info-subtle
+                                        text-info
+                                        p-2
+                                        me-3">
+
+                                <i class="bi bi-person-workspace"></i>
+
+                            </div>
+
+                            <div>
+
+                                <div class="fw-semibold">
+                                    Teacher Profile
+                                </div>
+
+                                <div class="text-muted small">
+                                    The school profile will be linked
+                                    to the teacher's login account.
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ====================================================
+                     FORM ACTIONS
+                     ==================================================== -->
+
+                <div class="card border-0 shadow-sm">
+
+                    <div class="card-body">
+
+                        <button type="submit"
+                                class="btn btn-primary w-100 mb-2">
+
+                            <i class="bi bi-check-circle me-2"></i>
+                            Create Teacher
+
+                        </button>
+
+
+                        <a asp-controller="Teachers"
+                           asp-action="Index"
+                           class="btn btn-outline-secondary w-100">
+
+                            <i class="bi bi-x-circle me-2"></i>
+                            Cancel
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -164,13 +164,11 @@
 
                     </a>
                 }
-
-
-                <!-- ================================================= -->
-                <!-- ADMIN / STAFF -->
-                <!-- ================================================= -->
                 else
-             {
+                {
+                    <!-- ================================================= -->
+                    <!-- ADMIN / STAFF -->
+                    <!-- ================================================= -->
                <!-- MAIN -->
                 <div class="menu-title">
                     MAIN
@@ -199,9 +197,8 @@
                 </div>
 
 
-                <!-- STUDENTS -->
+                <!-- STUDENTS & TEACHERS -->
                 @if (User.IsInRole("Admin"))
-
                 {
                     <a asp-controller="Students"
                        asp-action="Index"
@@ -214,21 +211,19 @@
                         </span>
 
                     </a>
+
+                    <a asp-controller="Teachers"
+                       asp-action="Index"
+                       class="menu-item">
+
+                        <i class="bi bi-person-workspace"></i>
+
+                        <span>
+                            Teachers
+                        </span>
+
+                    </a>
                 }
-
-
-                <!-- TEACHERS -->
-
-                <a href="#"
-                   class="menu-item">
-
-                    <i class="bi bi-person-workspace"></i>
-
-                    <span>
-                        Teachers
-                    </span>
-
-                </a>
 
 
                 <!-- CLASSES -->

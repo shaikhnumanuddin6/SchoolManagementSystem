@@ -28,10 +28,20 @@ public class HomeController : Controller
     {
         if (User.IsInRole("Student"))
         {
-            return RedirectToAction("Dashboard", "Student");
+            return RedirectToAction(
+                "Dashboard",
+                "Student");
         }
 
-        var dashboard = await _dashboardService.GetDashboardAsync();
+        if (User.IsInRole("Teacher"))
+        {
+            return RedirectToAction(
+                "Dashboard",
+                "Teacher");
+        }
+
+        var dashboard =
+            await _dashboardService.GetDashboardAsync();
 
         return View(dashboard);
     }

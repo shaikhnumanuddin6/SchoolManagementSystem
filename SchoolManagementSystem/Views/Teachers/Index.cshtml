@@ -1,0 +1,724 @@
+@model SchoolManagementSystem.Application.ViewModels.Teachers.TeacherListViewModel
+
+@{
+    ViewData["Title"] = "Teachers";
+
+    string GetInitials(string fullName)
+    {
+        if (string.IsNullOrWhiteSpace(fullName))
+        {
+            return "TC";
+        }
+
+        var parts = fullName
+            .Split(
+                ' ',
+                StringSplitOptions.RemoveEmptyEntries);
+
+        if (parts.Length == 1)
+        {
+            return parts[0].Length >= 2
+                ? parts[0][..2].ToUpperInvariant()
+                : parts[0].ToUpperInvariant();
+        }
+
+        return $"{parts[0][0]}{parts[^1][0]}"
+            .ToUpperInvariant();
+    }
+}
+
+<div class="container-fluid py-4">
+
+    <!-- ============================================================
+         PAGE HEADER
+         ============================================================ -->
+
+    <div class="d-flex flex-column flex-lg-row
+                justify-content-between
+                align-items-lg-center
+                gap-3 mb-4">
+
+        <div>
+
+            <div class="text-muted small mb-1">
+                Administration
+            </div>
+
+            <h1 class="h3 fw-bold mb-1">
+                Teacher Management
+            </h1>
+
+            <p class="text-muted mb-0">
+                Manage teacher accounts, profiles and assignments.
+            </p>
+
+        </div>
+
+        <div>
+
+            <a asp-controller="Teachers"
+               asp-action="Create"
+               class="btn btn-primary px-4">
+
+                <i class="bi bi-person-plus me-2"></i>
+                Add Teacher
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ============================================================
+         ALERTS
+         ============================================================ -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show"
+             role="alert">
+
+            <i class="bi bi-check-circle me-2"></i>
+
+            @TempData["SuccessMessage"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show"
+             role="alert">
+
+            <i class="bi bi-exclamation-triangle me-2"></i>
+
+            @TempData["ErrorMessage"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+
+        </div>
+    }
+
+
+    <!-- ============================================================
+         STATISTICS
+         ============================================================ -->
+
+    <div class="row g-3 mb-4">
+
+        <!-- Total Teachers -->
+
+        <div class="col-12 col-md-4">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body p-4">
+
+                    <div class="d-flex
+                                justify-content-between
+                                align-items-start">
+
+                        <div>
+
+                            <div class="text-muted small mb-2">
+                                Total Teachers
+                            </div>
+
+                            <div class="display-6 fw-bold">
+                                @Model.TotalTeachers
+                            </div>
+
+                        </div>
+
+                        <div class="rounded-circle
+                                    bg-primary-subtle
+                                    text-primary
+                                    p-3">
+
+                            <i class="bi bi-person-workspace fs-4"></i>
+
+                        </div>
+
+                    </div>
+
+                    <div class="text-muted small mt-3">
+                        All registered teacher records
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Active Teachers -->
+
+        <div class="col-12 col-md-4">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body p-4">
+
+                    <div class="d-flex
+                                justify-content-between
+                                align-items-start">
+
+                        <div>
+
+                            <div class="text-muted small mb-2">
+                                Active Teachers
+                            </div>
+
+                            <div class="display-6 fw-bold text-success">
+                                @Model.ActiveTeachers
+                            </div>
+
+                        </div>
+
+                        <div class="rounded-circle
+                                    bg-success-subtle
+                                    text-success
+                                    p-3">
+
+                            <i class="bi bi-person-check fs-4"></i>
+
+                        </div>
+
+                    </div>
+
+                    <div class="text-muted small mt-3">
+                        Currently active teacher accounts
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Inactive Teachers -->
+
+        <div class="col-12 col-md-4">
+
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-body p-4">
+
+                    <div class="d-flex
+                                justify-content-between
+                                align-items-start">
+
+                        <div>
+
+                            <div class="text-muted small mb-2">
+                                Inactive Teachers
+                            </div>
+
+                            <div class="display-6 fw-bold text-secondary">
+                                @Model.InactiveTeachers
+                            </div>
+
+                        </div>
+
+                        <div class="rounded-circle
+                                    bg-secondary-subtle
+                                    text-secondary
+                                    p-3">
+
+                            <i class="bi bi-person-dash fs-4"></i>
+
+                        </div>
+
+                    </div>
+
+                    <div class="text-muted small mt-3">
+                        Archived or inactive records
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ============================================================
+         FILTERS
+         ============================================================ -->
+
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-body p-4">
+
+            <form asp-controller="Teachers"
+                  asp-action="Index"
+                  method="get">
+
+                <div class="row g-3 align-items-end">
+
+                    <!-- Search -->
+
+                    <div class="col-12 col-lg-6">
+
+                        <label for="searchTerm"
+                               class="form-label fw-semibold">
+
+                            Search Teachers
+
+                        </label>
+
+                        <div class="input-group">
+
+                            <span class="input-group-text bg-white">
+
+                                <i class="bi bi-search text-muted"></i>
+
+                            </span>
+
+                            <input type="text"
+                                   id="searchTerm"
+                                   name="searchTerm"
+                                   value="@Model.SearchTerm"
+                                   class="form-control"
+                                   placeholder="Name, employee number, email or department..." />
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Status -->
+
+                    <div class="col-12 col-md-6 col-lg-3">
+
+                        <label for="status"
+                               class="form-label fw-semibold">
+
+                            Status
+
+                        </label>
+
+                        <select asp-for="Status"
+                                id="status"
+                                name="status"
+                                class="form-select">
+
+                            <option value="">
+                                All Statuses
+                            </option>
+
+                            <option value="Active">
+                                Active
+                            </option>
+
+                            <option value="Inactive">
+                                Inactive
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Buttons -->
+
+                    <div class="col-12 col-md-6 col-lg-3">
+
+                        <div class="d-flex gap-2">
+
+                            <button type="submit"
+                                    class="btn btn-primary flex-grow-1">
+
+                                <i class="bi bi-funnel me-1"></i>
+                                Filter
+
+                            </button>
+
+                            <a asp-controller="Teachers"
+                               asp-action="Index"
+                               class="btn btn-outline-secondary"
+                               title="Clear filters">
+
+                                <i class="bi bi-arrow-counterclockwise"></i>
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- ============================================================
+         TEACHER TABLE
+         ============================================================ -->
+
+    <div class="card border-0 shadow-sm">
+
+        <div class="card-header bg-white border-0 p-4 pb-3">
+
+            <div class="d-flex
+                        justify-content-between
+                        align-items-center">
+
+                <div>
+
+                    <h2 class="h5 fw-bold mb-1">
+                        Teacher Directory
+                    </h2>
+
+                    <div class="text-muted small">
+                        @Model.Teachers.Count teacher(s) shown
+                    </div>
+
+                </div>
+
+                <div class="text-muted">
+
+                    <i class="bi bi-person-workspace me-1"></i>
+                    Teachers
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="card-body p-0">
+
+            @if (Model.Teachers.Count == 0)
+            {
+                <div class="text-center py-5 px-4">
+
+                    <div class="rounded-circle
+                                bg-light
+                                d-inline-flex
+                                align-items-center
+                                justify-content-center
+                                mb-3"
+                         style="width:72px;height:72px;">
+
+                        <i class="bi bi-person-workspace fs-2 text-muted"></i>
+
+                    </div>
+
+                    <h3 class="h5 fw-bold">
+                        No teachers found
+                    </h3>
+
+                    <p class="text-muted mb-4">
+                        Try changing your search or filter criteria.
+                    </p>
+
+                    <a asp-controller="Teachers"
+                       asp-action="Create"
+                       class="btn btn-primary">
+
+                        <i class="bi bi-person-plus me-2"></i>
+                        Add Teacher
+
+                    </a>
+
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+
+                    <table class="table table-hover
+                                  align-middle
+                                  mb-0">
+
+                        <thead class="table-light">
+
+                            <tr>
+
+                                <th class="ps-4">
+                                    Teacher
+                                </th>
+
+                                <th>
+                                    Employee No.
+                                </th>
+
+                                <th>
+                                    Qualification
+                                </th>
+
+                                <th>
+                                    Department
+                                </th>
+
+                                <th>
+                                    Classes
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th class="text-end pe-4">
+                                    Actions
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            @foreach (var teacher in Model.Teachers)
+                            {
+                                <tr>
+
+                                    <!-- Teacher -->
+
+                                    <td class="ps-4">
+
+                                        <div class="d-flex
+                                                    align-items-center">
+
+                                            <div class="rounded-circle
+                                                        bg-primary-subtle
+                                                        text-primary
+                                                        fw-bold
+                                                        d-flex
+                                                        align-items-center
+                                                        justify-content-center
+                                                        me-3"
+                                                 style="width:42px;height:42px;">
+
+                                                @GetInitials(teacher.FullName)
+
+                                            </div>
+
+                                            <div>
+
+                                                <div class="fw-semibold">
+                                                    @teacher.FullName
+                                                </div>
+
+                                                <div class="text-muted small">
+                                                    @teacher.Email
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- Employee Number -->
+
+                                    <td>
+
+                                        <span class="fw-semibold">
+                                            @teacher.EmployeeNumber
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- Qualification -->
+
+                                    <td>
+
+                                        @if (!string.IsNullOrWhiteSpace(
+                                       teacher.Qualification))
+                                        {
+                                            <span>
+                                                @teacher.Qualification
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">
+                                                Not specified
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- Department -->
+
+                                    <td>
+
+                                        @if (!string.IsNullOrWhiteSpace(
+                                       teacher.SpecializationDepartment))
+                                        {
+                                            <span>
+                                                @teacher.SpecializationDepartment
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">
+                                                Not specified
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- Classes -->
+
+                                    <td>
+
+                                        <span class="badge bg-primary-subtle
+                                                     text-primary">
+
+                                            @teacher.ClassCount
+
+                                            @(teacher.ClassCount == 1
+                                                ? " Class"
+                                                : " Classes")
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- Status -->
+
+                                    <td>
+
+                                        @if (teacher.IsActive)
+                                        {
+                                            <span class="badge bg-success">
+                                                Active
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">
+                                                Archived
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <!-- Actions -->
+
+                                    <td class="text-end pe-4">
+
+                                        <div class="dropdown">
+
+                                            <button type="button"
+                                                    class="btn btn-sm btn-outline-secondary"
+                                                    data-bs-toggle="dropdown"
+                                                    aria-expanded="false">
+
+                                                Actions
+
+                                            </button>
+
+
+                                            <ul class="dropdown-menu
+                                                       dropdown-menu-end">
+
+                                                <li>
+
+                                                    <a class="dropdown-item"
+                                                       asp-controller="Teachers"
+                                                       asp-action="Details"
+                                                       asp-route-id="@teacher.Id">
+
+                                                        <i class="bi bi-eye me-2"></i>
+                                                        View Details
+
+                                                    </a>
+
+                                                </li>
+
+
+                                                <li>
+
+                                                    <a class="dropdown-item"
+                                                       asp-controller="Teachers"
+                                                       asp-action="Edit"
+                                                       asp-route-id="@teacher.Id">
+
+                                                        <i class="bi bi-pencil me-2"></i>
+                                                        Edit Teacher
+
+                                                    </a>
+
+                                                </li>
+
+
+                                                @if (teacher.IsActive)
+                                                {
+                                                    <li>
+
+                                                        <hr class="dropdown-divider" />
+
+                                                    </li>
+
+                                                    <li>
+
+                                                        <form asp-controller="Teachers"
+                                                              asp-action="Archive"
+                                                              asp-route-id="@teacher.Id"
+                                                              method="post"
+                                                              onsubmit="return confirm('Are you sure you want to archive this teacher?');">
+
+                                                            @Html.AntiForgeryToken()
+
+                                                            <button type="submit"
+                                                                    class="dropdown-item text-danger">
+
+                                                                <i class="bi bi-archive me-2"></i>
+                                                                Archive Teacher
+
+                                                            </button>
+
+                                                        </form>
+
+                                                    </li>
+                                                }
+
+                                            </ul>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

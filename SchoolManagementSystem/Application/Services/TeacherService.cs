@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SchoolManagementSystem.Application.Interfaces;
 using SchoolManagementSystem.Application.ViewModels.Teachers;
@@ -34,6 +34,10 @@ public class TeacherService : ITeacherService
             .Include(t => t.Classes)
             .AsQueryable();
 
+        // --------------------------------------------------------
+        // SEARCH
+        // --------------------------------------------------------
+
         if (!string.IsNullOrWhiteSpace(searchTerm))
         {
             searchTerm = searchTerm.Trim();
@@ -50,21 +54,34 @@ public class TeacherService : ITeacherService
                  t.SpecializationDepartment.Contains(searchTerm)));
         }
 
-        if (!string.IsNullOrWhiteSpace(status))
+        // --------------------------------------------------------
+        // STATUS FILTER
+        // Active   = IsActive true
+        // Inactive = IsActive false (or "archived")
+        // --------------------------------------------------------
+
+        string? selectedStatus = null;
+        var normalizedStatus =
+            status?.Trim().ToLowerInvariant();
+
+        if (normalizedStatus == "active")
         {
-            if (status.Equals(
-                "Active",
-                StringComparison.OrdinalIgnoreCase))
-            {
-                query = query.Where(t => t.IsActive);
-            }
-            else if (status.Equals(
-                "Inactive",
-                StringComparison.OrdinalIgnoreCase))
-            {
-                query = query.Where(t => !t.IsActive);
-            }
+            query = query.Where(t => t.IsActive);
+            selectedStatus = "Active";
         }
+        else if (normalizedStatus == "inactive" || normalizedStatus == "archived")
+        {
+            query = query.Where(t => !t.IsActive);
+            selectedStatus = "Inactive";
+        }
+        else if (!string.IsNullOrWhiteSpace(status))
+        {
+            selectedStatus = status.Trim();
+        }
+
+        // --------------------------------------------------------
+        // TEACHER LIST
+        // --------------------------------------------------------
 
         var teachers = await query
             .OrderBy(t => t.FirstName)
@@ -107,6 +124,10 @@ public class TeacherService : ITeacherService
             })
             .ToListAsync();
 
+        // --------------------------------------------------------
+        // COUNTS
+        // --------------------------------------------------------
+
         var totalTeachers =
             await _context.Teachers.CountAsync();
 
@@ -114,20 +135,33 @@ public class TeacherService : ITeacherService
             await _context.Teachers
                 .CountAsync(t => t.IsActive);
 
+        var inactiveTeachers =
+            await _context.Teachers
+                .CountAsync(t => !t.IsActive);
+
+        // --------------------------------------------------------
+        // RETURN VIEW MODEL
+        // --------------------------------------------------------
+
         return new TeacherListViewModel
         {
-            Teachers = teachers,
+            Teachers =
+                teachers,
 
-            SearchTerm = searchTerm,
+            SearchTerm =
+                searchTerm,
 
-            Status = status,
+            Status =
+                selectedStatus,
 
-            TotalTeachers = totalTeachers,
+            TotalTeachers =
+                totalTeachers,
 
-            ActiveTeachers = activeTeachers,
+            ActiveTeachers =
+                activeTeachers,
 
             InactiveTeachers =
-                totalTeachers - activeTeachers
+                inactiveTeachers
         };
     }
 
@@ -169,7 +203,7 @@ public class TeacherService : ITeacherService
                 .ToLowerInvariant();
 
         // --------------------------------------------------------
-        // Validate employee number
+        // EMPLOYEE NUMBER CHECK
         // --------------------------------------------------------
 
         var employeeNumberExists =
@@ -187,7 +221,7 @@ public class TeacherService : ITeacherService
         }
 
         // --------------------------------------------------------
-        // Validate email
+        // EMAIL CHECK
         // --------------------------------------------------------
 
         var existingUser =
@@ -203,8 +237,7 @@ public class TeacherService : ITeacherService
         }
 
         // --------------------------------------------------------
-        // Use EF Core retry strategy because Program.cs
-        // enables EnableRetryOnFailure().
+        // EF CORE RETRY STRATEGY
         // --------------------------------------------------------
 
         var executionStrategy =
@@ -226,7 +259,7 @@ public class TeacherService : ITeacherService
                         model.LastName.Trim();
 
                     // ------------------------------------------------
-                    // Create Identity User
+                    // CREATE IDENTITY USER
                     // ------------------------------------------------
 
                     var user = new ApplicationUser
@@ -244,7 +277,7 @@ public class TeacherService : ITeacherService
                             lastName,
 
                         IsActive =
-                            true,
+                            model.IsActive,
 
                         CreatedAt =
                             DateTime.UtcNow
@@ -271,7 +304,7 @@ public class TeacherService : ITeacherService
                     }
 
                     // ------------------------------------------------
-                    // Assign Teacher Role
+                    // ASSIGN TEACHER ROLE
                     // ------------------------------------------------
 
                     var roleResult =
@@ -295,7 +328,7 @@ public class TeacherService : ITeacherService
                     }
 
                     // ------------------------------------------------
-                    // Create Teacher Entity
+                    // CREATE TEACHER
                     // ------------------------------------------------
 
                     var teacher = new Teacher
@@ -329,7 +362,7 @@ public class TeacherService : ITeacherService
 
                         HireDate =
                             model.HireDate ??
-                            DateTime.UtcNow,
+                            DateTime.Today,
 
                         IsActive =
                             model.IsActive,
@@ -344,13 +377,13 @@ public class TeacherService : ITeacherService
                     _context.Teachers.Add(teacher);
 
                     // ------------------------------------------------
-                    // Save Teacher
+                    // SAVE
                     // ------------------------------------------------
 
                     await _context.SaveChangesAsync();
 
                     // ------------------------------------------------
-                    // Commit
+                    // COMMIT
                     // ------------------------------------------------
 
                     await transaction.CommitAsync();
@@ -368,7 +401,7 @@ public class TeacherService : ITeacherService
                     }
                     catch
                     {
-                        // Preserve the original exception.
+                        // Preserve original error.
                     }
 
                     return (
@@ -459,6 +492,10 @@ public class TeacherService : ITeacherService
                 "Teacher not found.");
         }
 
+        // --------------------------------------------------------
+        // EMPLOYEE NUMBER CHECK
+        // --------------------------------------------------------
+
         var normalizedEmployeeNumber =
             model.EmployeeNumber
                 .Trim()
@@ -478,6 +515,10 @@ public class TeacherService : ITeacherService
                 "Another teacher already uses this employee number.");
         }
 
+        // --------------------------------------------------------
+        // EMAIL CHECK
+        // --------------------------------------------------------
+
         var normalizedEmail =
             model.Email
                 .Trim()
@@ -496,7 +537,7 @@ public class TeacherService : ITeacherService
         }
 
         // --------------------------------------------------------
-        // Update Teacher
+        // UPDATE TEACHER
         // --------------------------------------------------------
 
         teacher.FirstName =
@@ -534,7 +575,7 @@ public class TeacherService : ITeacherService
             model.IsActive;
 
         // --------------------------------------------------------
-        // Update Identity User
+        // UPDATE IDENTITY USER
         // --------------------------------------------------------
 
         teacher.User.FirstName =
@@ -542,6 +583,13 @@ public class TeacherService : ITeacherService
 
         teacher.User.LastName =
             teacher.LastName;
+
+        teacher.User.IsActive =
+            teacher.IsActive;
+
+        // --------------------------------------------------------
+        // UPDATE EMAIL
+        // --------------------------------------------------------
 
         var emailResult =
             await _userManager.SetEmailAsync(
@@ -560,6 +608,10 @@ public class TeacherService : ITeacherService
                 $"Unable to update email: {errors}");
         }
 
+        // --------------------------------------------------------
+        // UPDATE USERNAME
+        // --------------------------------------------------------
+
         var usernameResult =
             await _userManager.SetUserNameAsync(
                 teacher.User,
@@ -576,9 +628,6 @@ public class TeacherService : ITeacherService
                 false,
                 $"Unable to update username: {errors}");
         }
-
-        teacher.User.IsActive =
-            teacher.IsActive;
 
         await _context.SaveChangesAsync();
 

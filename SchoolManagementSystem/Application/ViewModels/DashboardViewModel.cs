@@ -1,5 +1,4 @@
-﻿
-namespace SchoolManagementSystem.Application.ViewModels;
+﻿namespace SchoolManagementSystem.Application.ViewModels;
 
 public class DashboardViewModel
 {
@@ -26,7 +25,7 @@ public class DashboardViewModel
 
 
     // ============================================================
-    // ATTENDANCE
+    // TODAY'S ATTENDANCE
     // ============================================================
 
     public int PresentToday { get; set; }
@@ -34,6 +33,8 @@ public class DashboardViewModel
     public int AbsentToday { get; set; }
 
     public int LateToday { get; set; }
+
+    public int AttendanceRecordsToday { get; set; }
 
 
     // ============================================================
@@ -48,19 +49,85 @@ public class DashboardViewModel
 
 
     // ============================================================
-    // RECENT ACTIVITIES
-    // ============================================================
-
-    public List<DashboardActivityViewModel> RecentActivities { get; set; }
-        = new();
-
-
-    // ============================================================
     // PERFORMANCE DATA
     // ============================================================
 
     public List<PerformanceDataViewModel> PerformanceData { get; set; }
         = new();
+
+
+    // ============================================================
+    // CLASS-WISE ATTENDANCE
+    // ============================================================
+
+    public List<DashboardClassAttendanceViewModel> ClassAttendance { get; set; }
+        = new();
+
+
+    // ============================================================
+    // RECENT ATTENDANCE
+    // ============================================================
+
+    public List<DashboardAttendanceRecordViewModel> RecentAttendance { get; set; }
+        = new();
+
+
+    // ============================================================
+    // RECENT ACTIVITIES
+    // ============================================================
+
+    public List<DashboardActivityViewModel> RecentActivities { get; set; }
+        = new();
+}
+
+
+// ================================================================
+// CLASS ATTENDANCE
+// ================================================================
+
+public class DashboardClassAttendanceViewModel
+{
+    public int ClassId { get; set; }
+
+    public string ClassName { get; set; } = string.Empty;
+
+    public string Section { get; set; } = string.Empty;
+
+    public string AcademicYear { get; set; } = string.Empty;
+
+    public string TeacherName { get; set; } = "Not Assigned";
+
+    public int StudentCount { get; set; }
+
+    public int PresentCount { get; set; }
+
+    public int AbsentCount { get; set; }
+
+    public int LateCount { get; set; }
+
+    public double AttendancePercentage { get; set; }
+}
+
+
+// ================================================================
+// RECENT ATTENDANCE
+// ================================================================
+
+public class DashboardAttendanceRecordViewModel
+{
+    public int Id { get; set; }
+
+    public string StudentName { get; set; } = string.Empty;
+
+    public string ClassName { get; set; } = string.Empty;
+
+    public string Section { get; set; } = string.Empty;
+
+    public DateTime Date { get; set; }
+
+    public string Status { get; set; } = string.Empty;
+
+    public string? Remarks { get; set; }
 }
 
 
@@ -90,4 +157,3 @@ public class PerformanceDataViewModel
 
     public double Value { get; set; }
 }
-

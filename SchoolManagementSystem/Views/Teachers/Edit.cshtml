@@ -1,0 +1,466 @@
+﻿@model SchoolManagementSystem.Application.ViewModels.Teachers.TeacherEditViewModel
+
+@{
+    ViewData["Title"] = "Edit Teacher";
+}
+
+<div class="container-fluid py-4">
+
+    <!-- ============================================================
+         PAGE HEADER
+         ============================================================ -->
+
+    <div class="d-flex flex-column flex-lg-row
+                justify-content-between
+                align-items-lg-center
+                gap-3 mb-4">
+
+        <div>
+
+            <div class="text-muted small mb-1">
+                Administration
+            </div>
+
+            <h1 class="h3 fw-bold mb-1">
+                Edit Teacher
+            </h1>
+
+            <p class="text-muted mb-0">
+                Update teacher profile and account information.
+            </p>
+
+        </div>
+
+        <div>
+
+            <a asp-controller="Teachers"
+               asp-action="Details"
+               asp-route-id="@Model.Id"
+               class="btn btn-outline-secondary">
+
+                <i class="bi bi-arrow-left me-2"></i>
+                Back to Details
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- ============================================================
+         VALIDATION SUMMARY
+         ============================================================ -->
+
+    <div asp-validation-summary="ModelOnly"
+         class="alert alert-danger"
+         role="alert">
+    </div>
+
+
+    <!-- ============================================================
+         EDIT FORM
+         ============================================================ -->
+
+    <form asp-controller="Teachers"
+          asp-action="Edit"
+          asp-route-id="@Model.Id"
+          method="post">
+
+        @Html.AntiForgeryToken()
+
+        <input asp-for="Id" type="hidden" />
+
+        <div class="row g-4">
+
+            <!-- ====================================================
+                 TEACHER INFORMATION
+                 ==================================================== -->
+
+            <div class="col-12 col-lg-8">
+
+                <div class="card border-0 shadow-sm mb-4">
+
+                    <div class="card-header bg-white border-0 py-3">
+
+                        <h5 class="fw-bold mb-1">
+                            Teacher Information
+                        </h5>
+
+                        <p class="text-muted small mb-0">
+                            Update the teacher's professional information.
+                        </p>
+
+                    </div>
+
+
+                    <div class="card-body">
+
+                        <div class="row g-3">
+
+                            <!-- First Name -->
+
+                            <div class="col-md-6">
+
+                                <label asp-for="FirstName"
+                                       class="form-label fw-semibold">
+                                </label>
+
+                                <input asp-for="FirstName"
+                                       class="form-control"
+                                       placeholder="Enter first name" />
+
+                                <span asp-validation-for="FirstName"
+                                      class="text-danger small">
+                                </span>
+
+                            </div>
+
+
+                            <!-- Last Name -->
+
+                            <div class="col-md-6">
+
+                                <label asp-for="LastName"
+                                       class="form-label fw-semibold">
+                                </label>
+
+                                <input asp-for="LastName"
+                                       class="form-control"
+                                       placeholder="Enter last name" />
+
+                                <span asp-validation-for="LastName"
+                                      class="text-danger small">
+                                </span>
+
+                            </div>
+
+
+                            <!-- Employee Number -->
+
+                            <div class="col-md-6">
+
+                                <label asp-for="EmployeeNumber"
+                                       class="form-label fw-semibold">
+                                </label>
+
+                                <input asp-for="EmployeeNumber"
+                                       class="form-control"
+                                       placeholder="Example: TCH-001" />
+
+                                <span asp-validation-for="EmployeeNumber"
+                                      class="text-danger small">
+                                </span>
+
+                            </div>
+
+
+                            <!-- Phone -->
+
+                            <div class="col-md-6">
+
+                                <label asp-for="Phone"
+                                       class="form-label fw-semibold">
+                                </label>
+
+                                <input asp-for="Phone"
+                                       class="form-control"
+                                       placeholder="Enter phone number" />
+
+                                <span asp-validation-for="Phone"
+                                      class="text-danger small">
+                                </span>
+
+                            </div>
+
+
+                            <!-- Qualification -->
+
+                            <div class="col-md-6">
+
+                                <label asp-for="Qualification"
+                                       class="form-label fw-semibold">
+                                </label>
+
+                                <input asp-for="Qualification"
+                                       class="form-control"
+                                       placeholder="Example: M.Sc, B.Ed" />
+
+                                <span asp-validation-for="Qualification"
+                                      class="text-danger small">
+                                </span>
+
+                            </div>
+
+
+                            <!-- Specialization / Department -->
+
+                            <div class="col-md-6">
+
+                                <label asp-for="SpecializationDepartment"
+                                       class="form-label fw-semibold">
+                                </label>
+
+                                <input asp-for="SpecializationDepartment"
+                                       class="form-control"
+                                       placeholder="Example: Mathematics" />
+
+                                <span asp-validation-for="SpecializationDepartment"
+                                      class="text-danger small">
+                                </span>
+
+                            </div>
+
+
+                            <!-- Hire Date -->
+
+                            <div class="col-md-6">
+
+                                <label asp-for="HireDate"
+                                       class="form-label fw-semibold">
+                                </label>
+
+                                <input asp-for="HireDate"
+                                       type="date"
+                                       class="form-control" />
+
+                                <span asp-validation-for="HireDate"
+                                      class="text-danger small">
+                                </span>
+
+                            </div>
+
+
+                            <!-- Active Status -->
+
+                            <div class="col-md-6">
+
+                                <div class="form-check form-switch mt-4">
+
+                                    <input asp-for="IsActive"
+                                           class="form-check-input"
+                                           role="switch" />
+
+                                    <label asp-for="IsActive"
+                                           class="form-check-label fw-semibold">
+                                    </label>
+
+                                </div>
+
+                                <div class="text-muted small mt-1">
+                                    Inactive teachers cannot be treated as
+                                    active staff in the system.
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ====================================================
+                     ACCOUNT INFORMATION
+                     ==================================================== -->
+
+                <div class="card border-0 shadow-sm">
+
+                    <div class="card-header bg-white border-0 py-3">
+
+                        <h5 class="fw-bold mb-1">
+                            Login Account
+                        </h5>
+
+                        <p class="text-muted small mb-0">
+                            Update the email address used by the teacher
+                            to sign in.
+                        </p>
+
+                    </div>
+
+
+                    <div class="card-body">
+
+                        <div class="row g-3">
+
+                            <!-- Email -->
+
+                            <div class="col-12">
+
+                                <label asp-for="Email"
+                                       class="form-label fw-semibold">
+                                </label>
+
+                                <input asp-for="Email"
+                                       type="email"
+                                       class="form-control"
+                                       placeholder="teacher@school.com"
+                                       autocomplete="email" />
+
+                                <span asp-validation-for="Email"
+                                      class="text-danger small">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ====================================================
+                 SIDE PANEL
+                 ==================================================== -->
+
+            <div class="col-12 col-lg-4">
+
+                <div class="card border-0 shadow-sm mb-4">
+
+                    <div class="card-header bg-white border-0">
+
+                        <h5 class="fw-bold mb-0">
+                            Update Information
+                        </h5>
+
+                    </div>
+
+
+                    <div class="card-body">
+
+                        <div class="d-flex align-items-start mb-3">
+
+                            <div class="rounded-circle
+                                        bg-primary-subtle
+                                        text-primary
+                                        p-2
+                                        me-3">
+
+                                <i class="bi bi-person-workspace"></i>
+
+                            </div>
+
+                            <div>
+
+                                <div class="fw-semibold">
+                                    Teacher Profile
+                                </div>
+
+                                <div class="text-muted small">
+                                    Changes will update the teacher's
+                                    school profile.
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="d-flex align-items-start mb-3">
+
+                            <div class="rounded-circle
+                                        bg-info-subtle
+                                        text-info
+                                        p-2
+                                        me-3">
+
+                                <i class="bi bi-envelope"></i>
+
+                            </div>
+
+                            <div>
+
+                                <div class="fw-semibold">
+                                    Login Email
+                                </div>
+
+                                <div class="text-muted small">
+                                    Changing the email also updates the
+                                    teacher's login username.
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="d-flex align-items-start">
+
+                            <div class="rounded-circle
+                                        bg-success-subtle
+                                        text-success
+                                        p-2
+                                        me-3">
+
+                                <i class="bi bi-shield-check"></i>
+
+                            </div>
+
+                            <div>
+
+                                <div class="fw-semibold">
+                                    Teacher Role
+                                </div>
+
+                                <div class="text-muted small">
+                                    The existing Teacher role remains
+                                    assigned to the account.
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ====================================================
+                     ACTIONS
+                     ==================================================== -->
+
+                <div class="card border-0 shadow-sm">
+
+                    <div class="card-body">
+
+                        <button type="submit"
+                                class="btn btn-primary w-100 mb-2">
+
+                            <i class="bi bi-check-circle me-2"></i>
+                            Save Changes
+
+                        </button>
+
+
+                        <a asp-controller="Teachers"
+                           asp-action="Details"
+                           asp-route-id="@Model.Id"
+                           class="btn btn-outline-secondary w-100">
+
+                            <i class="bi bi-x-circle me-2"></i>
+                            Cancel
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}
