@@ -1,0 +1,228 @@
+﻿@model SchoolManagementSystem.Application.ViewModels.Classes.ClassDetailsViewModel
+
+@{
+    ViewData["Title"] = "Class Details";
+}
+
+<div class="container-fluid py-4">
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close"
+                    data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+
+        <div>
+            <a asp-controller="Classes"
+               asp-action="Index"
+               class="text-decoration-none">
+                <i class="bi bi-arrow-left me-1"></i> Back to Classes
+            </a>
+
+            <h2 class="fw-bold mt-3 mb-1">
+                @Model.ClassName - @Model.Section
+            </h2>
+
+            <p class="text-muted mb-0">
+                Academic Year: @Model.AcademicYear
+            </p>
+        </div>
+
+        <div class="d-flex flex-wrap gap-2">
+
+            <a asp-controller="Classes"
+               asp-action="Edit"
+               asp-route-id="@Model.Id"
+               class="btn btn-primary">
+                <i class="bi bi-pencil me-1"></i> Edit Class
+            </a>
+
+            @if (Model.IsActive)
+            {
+                <form asp-controller="Classes"
+                      asp-action="Archive"
+                      asp-route-id="@Model.Id"
+                      method="post"
+                      onsubmit="return confirm('Archive this class? Existing records will be retained.');">
+
+                    <button type="submit" class="btn btn-outline-danger">
+                        <i class="bi bi-archive me-1"></i> Archive
+                    </button>
+                </form>
+            }
+            else
+            {
+                <form asp-controller="Classes"
+                      asp-action="Restore"
+                      asp-route-id="@Model.Id"
+                      method="post"
+                      onsubmit="return confirm('Restore this class?');">
+
+                    <button type="submit" class="btn btn-outline-success">
+                        <i class="bi bi-arrow-counterclockwise me-1"></i> Restore
+                    </button>
+                </form>
+            }
+
+        </div>
+
+    </div>
+
+    <!-- Class summary -->
+    <div class="row g-3 mb-4">
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="text-muted small">Students</div>
+                    <div class="fs-2 fw-bold">@Model.StudentCount</div>
+                    <div class="small text-muted">Active students in this class</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="text-muted small">Assigned Teacher</div>
+                    <div class="fs-5 fw-bold mt-2">@Model.TeacherName</div>
+
+                    @if (!string.IsNullOrWhiteSpace(Model.TeacherEmail))
+                    {
+                        <div class="small text-muted mt-1">
+                            @Model.TeacherEmail
+                        </div>
+                    }
+
+                    @if (Model.TeacherId == null)
+                    {
+                        <div class="small text-warning mt-1">
+                            No teacher assigned
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="text-muted small">Class Status</div>
+
+                    <div class="mt-2">
+                        @if (Model.IsActive)
+                        {
+                            <span class="badge bg-success fs-6">Active</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary fs-6">Archived</span>
+                        }
+                    </div>
+
+                    <div class="small text-muted mt-3">
+                        Created: @Model.CreatedAt.ToString("dd MMM yyyy")
+                    </div>
+
+                    <div class="small text-muted">
+                        Room: @(Model.RoomNumber?.ToString() ?? "Not set")
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Student table -->
+    <div class="card border-0 shadow-sm">
+
+        <div class="card-header bg-white py-3">
+            <h5 class="mb-0">Students in this Class</h5>
+        </div>
+
+        <div class="card-body p-0">
+
+            @if (Model.Students.Count == 0)
+            {
+                <div class="text-center py-5">
+
+                    <i class="bi bi-people display-4 text-muted"></i>
+
+                    <h5 class="mt-3">No students assigned</h5>
+
+                    <p class="text-muted mb-0">
+                        Students assigned to this class will appear here.
+                    </p>
+
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle mb-0">
+
+                        <thead class="table-light">
+                            <tr>
+                                <th>Student</th>
+                                <th>Admission Number</th>
+                                <th>Email</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var student in Model.Students)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="fw-semibold">
+                                            @student.FullName
+                                        </div>
+                                    </td>
+
+                                    <td>@student.AdmissionNumber</td>
+
+                                    <td>
+                                        @(string.IsNullOrWhiteSpace(student.Email)
+                                            ? "-"
+                                            : student.Email)
+                                    </td>
+
+                                    <td>
+                                        @if (!student.IsActive)
+                                        {
+                                            <span class="badge bg-secondary">Inactive</span>
+                                        }
+                                        else if (string.Equals(
+                                        student.Status,
+                                        "Active",
+                                        StringComparison.OrdinalIgnoreCase))
+                                        {
+                                            <span class="badge bg-success">Active</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-info text-dark">
+                                                @student.Status
+                                            </span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+
+        </div>
+    </div>
+
+</div>

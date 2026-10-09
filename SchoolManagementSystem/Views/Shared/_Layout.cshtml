@@ -45,6 +45,7 @@
         "User";
 }
 
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -164,6 +165,45 @@
 
                     </a>
                 }
+                else if (User.IsInRole("Teacher"))
+                {
+                    <div class="menu-title">
+                        TEACHER PORTAL
+                    </div>
+
+                    <a asp-controller="Teacher"
+                       asp-action="Dashboard"
+                       class="menu-item">
+                        <i class="bi bi-speedometer2"></i>
+                        <span>My Dashboard</span>
+                    </a>
+
+                    <div class="menu-title">
+                        ACADEMIC
+                    </div>
+
+                    <a href="#"
+                       class="menu-item">
+                        <i class="bi bi-building"></i>
+                        <span>My Classes</span>
+                    </a>
+
+                    <div class="menu-title">
+                        MANAGEMENT
+                    </div>
+
+                    <a href="#"
+                       class="menu-item">
+                        <i class="bi bi-calendar-check-fill"></i>
+                        <span>Attendance</span>
+                    </a>
+
+                    <a href="#"
+                       class="menu-item">
+                        <i class="bi bi-bar-chart-fill"></i>
+                        <span>Grades</span>
+                    </a>
+                }
                 else
                 {
                     <!-- ================================================= -->
@@ -238,6 +278,14 @@
                     </span>
 
                 </a>
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           asp-controller="Classes"
+                           asp-action="Index">
+                            <i class="bi bi-building me-2"></i>
+                            <span>Classes</span>
+                        </a>
+                    </li>
 
 
                 <!-- SUBJECTS -->
@@ -252,6 +300,15 @@
                     </span>
 
                 </a>
+
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           asp-controller="Subjects"
+                           asp-action="Index">
+                            <i class="bi bi-book me-2"></i>
+                            <span>Subjects</span>
+                        </a>
+                    </li>
 
 
                 <!-- ================================================= -->

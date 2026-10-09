@@ -71,14 +71,16 @@ public class StudentController : Controller
                 userFullName = user.Email ?? "Student";
             }
 
-            return View(new StudentDashboardViewModel
-            {
-                StudentName = userFullName,
-                AdmissionNumber = "Pending Assignment",
-                ClassName = "Not Assigned",
-                Section = "-",
-                TeacherName = "Not Assigned"
-            });
+            return View(
+                "~/Views/Students/Dashboard.cshtml",
+                new StudentDashboardViewModel
+                {
+                    StudentName = userFullName,
+                    AdmissionNumber = "Pending Assignment",
+                    ClassName = "Not Assigned",
+                    Section = "-",
+                    TeacherName = "Not Assigned"
+                });
         }
 
 
@@ -226,7 +228,9 @@ public class StudentController : Controller
         };
 
 
-        return View(viewModel);
+        return View(
+            "~/Views/Students/Dashboard.cshtml",
+            viewModel);
     }
 }
 

@@ -26,6 +26,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
     public DbSet<Grade> Grades => Set<Grade>();
 
+    public DbSet<Subject> Subjects => Set<Subject>();
+
+
+
 
     // ============================================================
     // EF CORE MODEL CONFIGURATION
@@ -63,6 +67,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasForeignKey<Student>(
                 s => s.ApplicationUserId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.Entity<Grade>()
+     .HasOne(g => g.Subject)
+     .WithMany()
+     .HasForeignKey(g => g.SubjectId)
+     .OnDelete(DeleteBehavior.Restrict);
 
 
         // --------------------------------------------------------

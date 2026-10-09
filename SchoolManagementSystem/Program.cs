@@ -66,6 +66,14 @@ builder.Services.AddScoped<
 builder.Services.AddScoped<
     ITeacherDashboardService,
     TeacherDashboardService>();
+//class managment 
+builder.Services.AddScoped<IClassService, ClassService>();
+//subjects
+builder.Services.AddScoped<ISubjectService, SubjectService>();
+
+///Grade
+///
+builder.Services.AddScoped<IGradeService, GradeService>();
 
 
 // ============================================================
@@ -74,6 +82,8 @@ builder.Services.AddScoped<
 
 builder.Services
     .AddIdentity<ApplicationUser, IdentityRole>(options =>
+    //class managment 
+
     {
         // --------------------------------------------------------
         // Password settings

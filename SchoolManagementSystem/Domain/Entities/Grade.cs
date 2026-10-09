@@ -7,17 +7,34 @@ public class Grade
 {
     public int Id { get; set; }
 
+    // ============================================================
+    // SUBJECT INFORMATION
+    // ============================================================
+
     [Required]
     [StringLength(100)]
     public string SubjectName { get; set; } = string.Empty;
 
-    // Helper alias for Subject
+    // Foreign key to the Subjects table.
+    // Nullable to preserve compatibility with existing grades.
+    public int? SubjectId { get; set; }
+
+    [ForeignKey(nameof(SubjectId))]
+    public Subject? Subject { get; set; }
+
+    // Backward-compatible string alias.
+    // Renamed because Subject is now the navigation property.
     [NotMapped]
-    public string Subject
+    public string SubjectDisplayName
     {
         get => SubjectName;
         set => SubjectName = value;
     }
+
+
+    // ============================================================
+    // ASSESSMENT INFORMATION
+    // ============================================================
 
     [Required]
     [StringLength(100)]
@@ -31,7 +48,7 @@ public class Grade
     [Range(1, 1000)]
     public decimal MaxMarks { get; set; }
 
-    // Helper alias for MaximumMarks
+    // Backward-compatible alias for MaximumMarks.
     [NotMapped]
     public decimal MaximumMarks
     {
@@ -45,7 +62,7 @@ public class Grade
     [StringLength(1000)]
     public string? Feedback { get; set; }
 
-    // Helper alias for TeacherFeedback
+    // Backward-compatible alias for TeacherFeedback.
     [NotMapped]
     public string? TeacherFeedback
     {
@@ -56,6 +73,7 @@ public class Grade
     [DataType(DataType.Date)]
     public DateTime ExamDate { get; set; } = DateTime.UtcNow;
 
+    // Backward-compatible alias for AssessmentDate.
     [NotMapped]
     public DateTime AssessmentDate
     {
@@ -65,13 +83,21 @@ public class Grade
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-    // Foreign Keys
+
+    // ============================================================
+    // FOREIGN KEYS
+    // ============================================================
+
     [Required]
     public int StudentId { get; set; }
 
     public int? ClassId { get; set; }
 
-    // Navigation properties
+
+    // ============================================================
+    // NAVIGATION PROPERTIES
+    // ============================================================
+
     [ForeignKey(nameof(StudentId))]
     public Student Student { get; set; } = null!;
 

@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchoolManagementSystem.Application.Interfaces;
@@ -39,7 +39,7 @@ public class TeacherController : Controller
         }
 
         return View(
-            "~/Views/Teacher/Dashboard.cshtml",
+            "~/Views/Teachers/Dashboard.cshtml",
             model);
     }
 }

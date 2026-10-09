@@ -1,0 +1,118 @@
+﻿@model SchoolManagementSystem.Application.ViewModels.Classes.ClassCreateViewModel
+
+@{
+    ViewData["Title"] = "Create Class";
+}
+
+<div class="container py-4">
+
+    <div class="mb-4">
+        <a asp-controller="Classes" asp-action="Index"
+           class="text-decoration-none">
+            <i class="bi bi-arrow-left me-1"></i> Back to Classes
+        </a>
+
+        <h2 class="fw-bold mt-3 mb-1">Create Class</h2>
+        <p class="text-muted">Add a class and configure its teacher assignment.</p>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+
+            <form asp-controller="Classes"
+                  asp-action="Create"
+                  method="post">
+
+                <div asp-validation-summary="ModelOnly"
+                     class="alert alert-danger"></div>
+
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+                        <label asp-for="ClassName" class="form-label"></label>
+                        <input asp-for="ClassName"
+                               class="form-control"
+                               placeholder="e.g. Grade 5" />
+                        <span asp-validation-for="ClassName"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Section" class="form-label"></label>
+                        <input asp-for="Section"
+                               class="form-control"
+                               placeholder="e.g. A" />
+                        <span asp-validation-for="Section"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="AcademicYear" class="form-label"></label>
+                        <input asp-for="AcademicYear"
+                               class="form-control"
+                               placeholder="e.g. 2026-2027" />
+                        <span asp-validation-for="AcademicYear"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="RoomNumber" class="form-label"></label>
+                        <input asp-for="RoomNumber"
+                               type="number"
+                               class="form-control"
+                               min="1"
+                               placeholder="Optional" />
+                        <span asp-validation-for="RoomNumber"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label asp-for="TeacherId" class="form-label"></label>
+
+                        <select asp-for="TeacherId"
+                                asp-items="Model.Teachers"
+                                class="form-select">
+                        </select>
+
+                        <div class="form-text">
+                            Only active teachers are offered for new assignments.
+                        </div>
+
+                        <span asp-validation-for="TeacherId"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-check form-switch">
+                            <input asp-for="IsActive" class="form-check-input" />
+                            <label asp-for="IsActive" class="form-check-label">
+                                Class is active
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <hr class="my-4" />
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle me-1"></i> Create Class
+                    </button>
+
+                    <a asp-controller="Classes"
+                       asp-action="Index"
+                       class="btn btn-outline-secondary">
+                        Cancel
+                    </a>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

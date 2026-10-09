@@ -324,6 +324,9 @@ namespace SchoolManagementSystem.Migrations
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("SubjectId")
+                        .HasColumnType("int");
+
                     b.Property<string>("SubjectName")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -332,6 +335,8 @@ namespace SchoolManagementSystem.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ClassId");
+
+                    b.HasIndex("SubjectId");
 
                     b.HasIndex("StudentId", "SubjectName", "AssessmentName");
 
@@ -454,6 +459,39 @@ namespace SchoolManagementSystem.Migrations
                     b.HasIndex("ClassId");
 
                     b.ToTable("Students");
+                });
+
+            modelBuilder.Entity("SchoolManagementSystem.Domain.Entities.Subject", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SubjectCode")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("SubjectName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Subjects");
                 });
 
             modelBuilder.Entity("SchoolManagementSystem.Domain.Entities.Teacher", b =>
@@ -598,9 +636,16 @@ namespace SchoolManagementSystem.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("SchoolManagementSystem.Domain.Entities.Subject", "Subject")
+                        .WithMany()
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.Navigation("Class");
 
                     b.Navigation("Student");
+
+                    b.Navigation("Subject");
                 });
 
             modelBuilder.Entity("SchoolManagementSystem.Domain.Entities.SchoolClass", b =>
@@ -623,8 +668,7 @@ namespace SchoolManagementSystem.Migrations
 
                     b.HasOne("SchoolManagementSystem.Domain.Entities.SchoolClass", "Class")
                         .WithMany("Students")
-                        .HasForeignKey("ClassId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("ClassId");
 
                     b.Navigation("Class");
 

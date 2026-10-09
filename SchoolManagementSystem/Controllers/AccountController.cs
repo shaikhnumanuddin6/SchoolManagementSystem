@@ -37,6 +37,11 @@ public class AccountController : Controller
                 return RedirectToAction("Dashboard", "Student");
             }
 
+            if (User.IsInRole("Teacher"))
+            {
+                return RedirectToAction("Dashboard", "Teacher");
+            }
+
             return RedirectToAction("Index", "Home");
         }
 
@@ -86,6 +91,11 @@ public class AccountController : Controller
             if (await _userManager.IsInRoleAsync(user, "Student"))
             {
                 return RedirectToAction("Dashboard", "Student");
+            }
+
+            if (await _userManager.IsInRoleAsync(user, "Teacher"))
+            {
+                return RedirectToAction("Dashboard", "Teacher");
             }
 
             if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl) && !returnUrl.Contains("/Student", StringComparison.OrdinalIgnoreCase))

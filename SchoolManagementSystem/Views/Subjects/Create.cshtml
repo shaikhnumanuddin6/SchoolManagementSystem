@@ -1,0 +1,98 @@
+﻿@model SchoolManagementSystem.Application.ViewModels.Subjects.SubjectCreateViewModel
+
+@{
+    ViewData["Title"] = "Create Subject";
+}
+
+<div class="container py-4">
+
+    <div class="mb-4">
+        <a asp-controller="Subjects"
+           asp-action="Index"
+           class="text-decoration-none">
+            <i class="bi bi-arrow-left me-1"></i> Back to Subjects
+        </a>
+
+        <h2 class="fw-bold mt-3 mb-1">Create Subject</h2>
+        <p class="text-muted">Add a new subject to the school catalogue.</p>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+
+            <form asp-controller="Subjects"
+                  asp-action="Create"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly"
+                     class="alert alert-danger"></div>
+
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+                        <label asp-for="SubjectCode" class="form-label"></label>
+                        <input asp-for="SubjectCode"
+                               class="form-control"
+                               placeholder="e.g. MAT001" />
+                        <span asp-validation-for="SubjectCode"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="SubjectName" class="form-label"></label>
+                        <input asp-for="SubjectName"
+                               class="form-control"
+                               placeholder="e.g. Mathematics" />
+                        <span asp-validation-for="SubjectName"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-12">
+                        <label asp-for="Description" class="form-label"></label>
+                        <textarea asp-for="Description"
+                                  class="form-control"
+                                  rows="4"
+                                  placeholder="Optional subject description"></textarea>
+                        <span asp-validation-for="Description"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-check form-switch">
+                            <input asp-for="IsActive"
+                                   class="form-check-input" />
+                            <label asp-for="IsActive"
+                                   class="form-check-label">
+                                Subject is active
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <hr class="my-4" />
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle me-1"></i>
+                        Create Subject
+                    </button>
+
+                    <a asp-controller="Subjects"
+                       asp-action="Index"
+                       class="btn btn-outline-secondary">
+                        Cancel
+                    </a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
