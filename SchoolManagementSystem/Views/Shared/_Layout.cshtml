@@ -205,29 +205,37 @@
                     </a>
                 }
                 else
+
                 {
                     <!-- ================================================= -->
                     <!-- ADMIN / STAFF -->
                     <!-- ================================================= -->
-               <!-- MAIN -->
-                <div class="menu-title">
-                    MAIN
-                </div>
+                    <!-- MAIN -->
+                    <div class="menu-title">
+                        MAIN
+                    </div>
 
+                    <!-- DASHBOARD -->
+                    <a asp-controller="Home"
+                       asp-action="Index"
+                       class="menu-item">
 
-                <a asp-controller="Home"
-                   asp-action="Index"
-                   class="menu-item">
+                        <i class="bi bi-grid-1x2-fill"></i>
 
-                    <i class="bi bi-grid-1x2-fill"></i>
+                        <span>
+                            Dashboard
+                        </span>
+                    </a>
 
-                    <span>
-                        Dashboard
-                    </span>
-
-                </a>
-
-
+                    <!-- GRADE MANAGEMENT -->
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a href="/Grades/Index"
+                           class="menu-item">
+                            <i class="bi bi-journal-check"></i>
+                            <span>Grade Management</span>
+                        </a>
+                    }
                 <!-- ================================================= -->
                 <!-- ACADEMIC -->
                 <!-- ================================================= -->

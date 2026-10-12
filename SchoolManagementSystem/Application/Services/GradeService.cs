@@ -38,7 +38,10 @@ public class GradeService : IGradeService
                  g.Student.LastName).Contains(searchTerm) ||
                 g.Student.AdmissionNumber.Contains(searchTerm) ||
                 g.AssessmentName.Contains(searchTerm) ||
-                g.SubjectName.Contains(searchTerm));
+                g.SubjectName.Contains(searchTerm) ||
+                (g.Subject != null &&
+                    (g.Subject.SubjectName.Contains(searchTerm) ||
+                     g.Subject.SubjectCode.Contains(searchTerm))));
         }
 
         if (filter.ClassId.HasValue)
@@ -110,6 +113,15 @@ public class GradeService : IGradeService
             })
             .ToListAsync();
 
+        // Calculate letters for both new and older records so the
+        // list never shows a missing or outdated grade letter.
+        foreach (var grade in grades)
+        {
+            grade.GradeLetter = CalculateGradeLetter(
+                grade.MarksObtained,
+                grade.MaxMarks);
+        }
+
         var result = new GradeListViewModel
         {
             Grades = grades,
@@ -140,7 +152,7 @@ public class GradeService : IGradeService
     public async Task<GradeDetailsViewModel?> GetDetailsAsync(
         int id)
     {
-        return await _context.Grades
+        var model = await _context.Grades
             .AsNoTracking()
             .Where(g => g.Id == id)
             .Select(g => new GradeDetailsViewModel
@@ -196,6 +208,17 @@ public class GradeService : IGradeService
                     g.CreatedAt
             })
             .FirstOrDefaultAsync();
+
+        if (model != null)
+        {
+            // Also calculate the letter for older records that may
+            // not have a stored GradeLetter value.
+            model.GradeLetter = CalculateGradeLetter(
+                model.MarksObtained,
+                model.MaxMarks);
+        }
+
+        return model;
     }
 
 
@@ -278,6 +301,9 @@ public class GradeService : IGradeService
             AssessmentName = assessmentName,
             MarksObtained = model.MarksObtained,
             MaxMarks = model.MaxMarks,
+            GradeLetter = CalculateGradeLetter(
+                model.MarksObtained,
+                model.MaxMarks),
 
             Feedback = string.IsNullOrWhiteSpace(model.Feedback)
                 ? null
@@ -423,6 +449,9 @@ public class GradeService : IGradeService
         grade.AssessmentName = assessmentName;
         grade.MarksObtained = model.MarksObtained;
         grade.MaxMarks = model.MaxMarks;
+        grade.GradeLetter = CalculateGradeLetter(
+            model.MarksObtained,
+            model.MaxMarks);
 
         grade.Feedback =
             string.IsNullOrWhiteSpace(model.Feedback)
@@ -434,6 +463,36 @@ public class GradeService : IGradeService
         await _context.SaveChangesAsync();
 
         return (true, null);
+    }
+
+
+    // ============================================================
+    // AUTOMATIC GRADE LETTER CALCULATION
+    // ============================================================
+
+    // Grading scale used by this application:
+    // A+ = 90-100, A = 80-<90, B = 70-<80,
+    // C = 60-<70, D = 50-<60, F = below 50.
+    private static string CalculateGradeLetter(
+        decimal marksObtained,
+        decimal maxMarks)
+    {
+        if (maxMarks <= 0)
+        {
+            return "N/A";
+        }
+
+        var percentage = marksObtained / maxMarks * 100m;
+
+        return percentage switch
+        {
+            >= 90m => "A+",
+            >= 80m => "A",
+            >= 70m => "B",
+            >= 60m => "C",
+            >= 50m => "D",
+            _ => "F"
+        };
     }
 
 
@@ -450,9 +509,19 @@ public class GradeService : IGradeService
             return "Maximum marks must be greater than zero.";
         }
 
+        if (maxMarks > 1000)
+        {
+            return "Maximum marks cannot exceed 1000.";
+        }
+
         if (marksObtained < 0)
         {
             return "Marks obtained cannot be negative.";
+        }
+
+        if (marksObtained > 1000)
+        {
+            return "Marks obtained cannot exceed 1000.";
         }
 
         if (marksObtained > maxMarks)

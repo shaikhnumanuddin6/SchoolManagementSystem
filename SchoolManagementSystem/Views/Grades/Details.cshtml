@@ -1,0 +1,230 @@
+﻿@model SchoolManagementSystem.Application.ViewModels.Grades.GradeDetailsViewModel
+
+@{
+    ViewData["Title"] = "Grade Details";
+    var percentage = Math.Clamp(Model.Percentage, 0, 100);
+}
+
+<div class="container-fluid py-4">
+
+    <!-- PAGE HEADER -->
+    <div class="d-flex flex-wrap justify-content-between
+                align-items-center gap-3 mb-4">
+
+        <div>
+            <h2 class="fw-bold mb-1">Grade Details</h2>
+            <p class="text-muted mb-0">
+                View the student's assessment result and feedback.
+            </p>
+        </div>
+
+        <div class="d-flex flex-wrap gap-2">
+            <a asp-controller="Grades"
+               asp-action="Edit"
+               asp-route-id="@Model.Id"
+               class="btn btn-primary">
+                Edit Grade
+            </a>
+
+            <a asp-controller="Grades"
+               asp-action="Index"
+               class="btn btn-outline-secondary">
+                Back to Grades
+            </a>
+        </div>
+    </div>
+
+    <!-- STUDENT AND ASSESSMENT SUMMARY -->
+    <div class="row g-3 mb-4">
+
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <p class="text-muted small mb-2">
+                        Student
+                    </p>
+                    <h5 class="fw-bold mb-1">
+                        @Model.StudentName
+                    </h5>
+                    <div class="text-muted small">
+                        Admission No: @Model.AdmissionNumber
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <p class="text-muted small mb-2">
+                        Subject
+                    </p>
+                    <h5 class="fw-bold mb-1">
+                        @Model.SubjectName
+                    </h5>
+                    <div class="text-muted small">
+                        @(Model.ClassName ?? "Unassigned class")
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <p class="text-muted small mb-2">
+                        Assessment
+                    </p>
+                    <h5 class="fw-bold mb-1">
+                        @Model.AssessmentName
+                    </h5>
+                    <div class="text-muted small">
+                        Exam date: @Model.ExamDate.ToString("dd MMM yyyy")
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- MARKS AND PERFORMANCE -->
+    <div class="row g-3 mb-4">
+
+        <div class="col-12 col-lg-7">
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-header bg-white py-3">
+                    <h5 class="fw-semibold mb-0">
+                        Assessment Performance
+                    </h5>
+                </div>
+
+                <div class="card-body p-4">
+
+                    <div class="d-flex justify-content-between
+                                align-items-center mb-3">
+                        <span class="text-muted">
+                            Marks Obtained
+                        </span>
+
+                        <h4 class="fw-bold mb-0">
+                            @Model.MarksObtained.ToString("0.##")
+                            /
+                            @Model.MaxMarks.ToString("0.##")
+                        </h4>
+                    </div>
+
+                    <div class="progress mb-3"
+                         role="progressbar"
+                         aria-label="Assessment percentage"
+                         aria-valuenow="@percentage"
+                         aria-valuemin="0"
+                         aria-valuemax="100"
+                         style="height: 12px;">
+
+                        <div class="progress-bar"
+                             style="width: @percentage%;">
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-wrap
+                                justify-content-between align-items-center gap-3">
+
+                        <div>
+                            <div class="text-muted small">
+                                Percentage
+                            </div>
+                            <h3 class="fw-bold mb-0">
+                                @Model.Percentage.ToString("0.0")%
+                            </h3>
+                        </div>
+
+                        <div class="text-end">
+                            <div class="text-muted small">
+                                Grade Letter
+                            </div>
+
+                            @if (!string.IsNullOrWhiteSpace(Model.GradeLetter))
+                            {
+                                <span class="badge text-bg-primary fs-6">
+                                    @Model.GradeLetter
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="text-muted">
+                                    Not assigned
+                                </span>
+                            }
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- RECORD INFORMATION -->
+        <div class="col-12 col-lg-5">
+            <div class="card border-0 shadow-sm h-100">
+
+                <div class="card-header bg-white py-3">
+                    <h5 class="fw-semibold mb-0">
+                        Record Information
+                    </h5>
+                </div>
+
+                <div class="card-body p-4">
+
+                    <div class="mb-3">
+                        <div class="text-muted small">
+                            Grade Record ID
+                        </div>
+                        <div class="fw-semibold">
+                            #@Model.Id
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div>
+                        <div class="text-muted small">
+                            Record Created
+                        </div>
+                        <div class="fw-semibold">
+                            @Model.CreatedAt.ToString("dd MMM yyyy, hh:mm tt")
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- TEACHER FEEDBACK -->
+    <div class="card border-0 shadow-sm">
+
+        <div class="card-header bg-white py-3">
+            <h5 class="fw-semibold mb-0">
+                Teacher Feedback
+            </h5>
+        </div>
+
+        <div class="card-body p-4">
+            @if (!string.IsNullOrWhiteSpace(Model.Feedback))
+            {
+                <p class="mb-0"
+                   style="white-space: pre-wrap;">@Model.Feedback</p>
+            }
+            else
+            {
+                <p class="text-muted mb-0">
+                    No feedback has been added for this assessment.
+                </p>
+            }
+        </div>
+
+    </div>
+
+</div>

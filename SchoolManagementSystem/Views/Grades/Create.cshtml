@@ -1,0 +1,225 @@
+﻿@model SchoolManagementSystem.Application.ViewModels.Grades.GradeCreateViewModel
+
+@{
+    ViewData["Title"] = "Add Grade";
+}
+
+<div class="container-fluid py-4">
+
+    <!-- PAGE HEADER -->
+    <div class="d-flex flex-wrap justify-content-between
+                align-items-center gap-3 mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Add Grade</h2>
+            <p class="text-muted mb-0">
+                Record a student's assessment marks and feedback.
+            </p>
+        </div>
+
+        <a asp-controller="Grades"
+           asp-action="Index"
+           class="btn btn-outline-secondary">
+            Back to Grades
+        </a>
+    </div>
+
+    <!-- CREATE FORM -->
+    <div class="row">
+        <div class="col-12 col-xl-9 col-xxl-8">
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-header bg-white py-3">
+                    <h5 class="fw-semibold mb-0">
+                        Assessment Information
+                    </h5>
+                </div>
+
+                <div class="card-body p-4">
+
+                    <form asp-controller="Grades"
+                          asp-action="Create"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="alert alert-danger"
+                             role="alert"></div>
+
+                        <div class="row g-3">
+
+                            <!-- STUDENT -->
+                            <div class="col-12 col-md-6">
+                                <label asp-for="StudentId"
+                                       class="form-label fw-semibold">
+                                    Student
+                                </label>
+
+                                <select asp-for="StudentId"
+                                        asp-items="Model.Students"
+                                        class="form-select">
+                                    <option value="">
+                                        -- Select Student --
+                                    </option>
+                                </select>
+
+                                <span asp-validation-for="StudentId"
+                                      class="text-danger small"></span>
+                            </div>
+
+                            <!-- CLASS -->
+                            <div class="col-12 col-md-6">
+                                <label asp-for="ClassId"
+                                       class="form-label fw-semibold">
+                                    Class
+                                </label>
+
+                                <select asp-for="ClassId"
+                                        asp-items="Model.Classes"
+                                        class="form-select">
+                                    <option value="">
+                                        -- Select Class --
+                                    </option>
+                                </select>
+
+                                <span asp-validation-for="ClassId"
+                                      class="text-danger small"></span>
+                            </div>
+
+                            <!-- SUBJECT -->
+                            <div class="col-12 col-md-6">
+                                <label asp-for="SubjectId"
+                                       class="form-label fw-semibold">
+                                    Subject
+                                </label>
+
+                                <select asp-for="SubjectId"
+                                        asp-items="Model.Subjects"
+                                        class="form-select">
+                                    <option value="">
+                                        -- Select Subject --
+                                    </option>
+                                </select>
+
+                                <span asp-validation-for="SubjectId"
+                                      class="text-danger small"></span>
+                            </div>
+
+                            <!-- ASSESSMENT NAME -->
+                            <div class="col-12 col-md-6">
+                                <label asp-for="AssessmentName"
+                                       class="form-label fw-semibold">
+                                    Assessment Name
+                                </label>
+
+                                <input asp-for="AssessmentName"
+                                       class="form-control"
+                                       placeholder="e.g. Unit Test 1" />
+
+                                <span asp-validation-for="AssessmentName"
+                                      class="text-danger small"></span>
+                            </div>
+
+                            <!-- MARKS OBTAINED -->
+                            <div class="col-12 col-md-6">
+                                <label asp-for="MarksObtained"
+                                       class="form-label fw-semibold">
+                                    Marks Obtained
+                                </label>
+
+                                <input asp-for="MarksObtained"
+                                       type="number"
+                                       min="0"
+                                       max="1000"
+                                       step="0.01"
+                                       class="form-control"
+                                       placeholder="Enter marks obtained" />
+
+                                <span asp-validation-for="MarksObtained"
+                                      class="text-danger small"></span>
+                            </div>
+
+                            <!-- MAXIMUM MARKS -->
+                            <div class="col-12 col-md-6">
+                                <label asp-for="MaxMarks"
+                                       class="form-label fw-semibold">
+                                    Maximum Marks
+                                </label>
+
+                                <input asp-for="MaxMarks"
+                                       type="number"
+                                       min="0.01"
+                                       max="1000"
+                                       step="0.01"
+                                       class="form-control" />
+
+                                <span asp-validation-for="MaxMarks"
+                                      class="text-danger small"></span>
+                            </div>
+
+                            <!-- EXAM DATE -->
+                            <div class="col-12 col-md-6">
+                                <label asp-for="ExamDate"
+                                       class="form-label fw-semibold">
+                                    Exam Date
+                                </label>
+
+                                <input asp-for="ExamDate"
+                                       type="date"
+                                       asp-format="{0:yyyy-MM-dd}"
+                                       class="form-control" />
+
+                                <span asp-validation-for="ExamDate"
+                                      class="text-danger small"></span>
+                            </div>
+
+                            <!-- FEEDBACK -->
+                            <div class="col-12">
+                                <label asp-for="Feedback"
+                                       class="form-label fw-semibold">
+                                    Teacher Feedback
+                                </label>
+
+                                <textarea asp-for="Feedback"
+                                          class="form-control"
+                                          rows="4"
+                                          placeholder="Enter feedback or suggestions for the student..."></textarea>
+
+                                <span asp-validation-for="Feedback"
+                                      class="text-danger small"></span>
+                            </div>
+
+                        </div>
+
+                        <hr class="my-4" />
+
+                        <!-- FORM ACTIONS -->
+                        <div class="d-flex flex-wrap gap-2">
+
+                            <button type="submit"
+                                    class="btn btn-primary px-4">
+                                Save Grade
+                            </button>
+
+                            <a asp-controller="Grades"
+                               asp-action="Index"
+                               class="btn btn-outline-secondary px-4">
+                                Cancel
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
