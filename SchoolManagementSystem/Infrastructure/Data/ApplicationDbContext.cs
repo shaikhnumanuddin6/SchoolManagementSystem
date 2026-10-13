@@ -1,3 +1,4 @@
+
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SchoolManagementSystem.Domain.Entities;
@@ -17,19 +18,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     // ============================================================
 
     public DbSet<Student> Students => Set<Student>();
-
     public DbSet<Teacher> Teachers => Set<Teacher>();
-
     public DbSet<SchoolClass> Classes => Set<SchoolClass>();
-
     public DbSet<Attendance> Attendances => Set<Attendance>();
-
     public DbSet<Grade> Grades => Set<Grade>();
-
     public DbSet<Subject> Subjects => Set<Subject>();
-
-
-
+    public DbSet<Timetable> Timetables { get; set; } = null!;
 
     // ============================================================
     // EF CORE MODEL CONFIGURATION
@@ -45,13 +39,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         ConfigureDecimalProperties(builder);
     }
 
-
     // ============================================================
     // RELATIONSHIPS
     // ============================================================
 
-    private static void ConfigureRelationships(
-        ModelBuilder builder)
+    private static void ConfigureRelationships(ModelBuilder builder)
     {
         // --------------------------------------------------------
         // ApplicationUser -> Student (1:1)
@@ -64,16 +56,18 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         builder.Entity<Student>()
             .HasOne(s => s.User)
             .WithOne(u => u.Student)
-            .HasForeignKey<Student>(
-                s => s.ApplicationUserId)
+            .HasForeignKey<Student>(s => s.ApplicationUserId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.Entity<Grade>()
-     .HasOne(g => g.Subject)
-     .WithMany()
-     .HasForeignKey(g => g.SubjectId)
-     .OnDelete(DeleteBehavior.Restrict);
+        // --------------------------------------------------------
+        // Grade -> Subject
+        // --------------------------------------------------------
 
+        builder.Entity<Grade>()
+            .HasOne(g => g.Subject)
+            .WithMany()
+            .HasForeignKey(g => g.SubjectId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         // --------------------------------------------------------
         // ApplicationUser -> Teacher (1:1)
@@ -86,10 +80,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         builder.Entity<Teacher>()
             .HasOne(t => t.User)
             .WithOne(u => u.Teacher)
-            .HasForeignKey<Teacher>(
-                t => t.ApplicationUserId)
+            .HasForeignKey<Teacher>(t => t.ApplicationUserId)
             .OnDelete(DeleteBehavior.Restrict);
-
 
         // --------------------------------------------------------
         // Teacher -> SchoolClass (1:Many)
@@ -101,18 +93,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasForeignKey(c => c.TeacherId)
             .OnDelete(DeleteBehavior.Restrict);
 
-
-        // --------------------------------------------------------
-        // SchoolClass -> Student (1:Many)
-        // --------------------------------------------------------
-        //
-        // Student.ClassId / Student.Class and
-        // SchoolClass.Students already define this relationship.
-        // The [ForeignKey(nameof(ClassId))] attribute on Student
-        // also explicitly identifies the foreign key.
-        // --------------------------------------------------------
-
-
         // --------------------------------------------------------
         // Student -> Attendance (1:Many)
         // --------------------------------------------------------
@@ -122,7 +102,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .WithMany(s => s.Attendances)
             .HasForeignKey(a => a.StudentId)
             .OnDelete(DeleteBehavior.Cascade);
-
 
         // --------------------------------------------------------
         // SchoolClass -> Attendance (1:Many)
@@ -134,7 +113,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasForeignKey(a => a.ClassId)
             .OnDelete(DeleteBehavior.Restrict);
 
-
         // --------------------------------------------------------
         // Student -> Grade (1:Many)
         // --------------------------------------------------------
@@ -145,7 +123,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasForeignKey(g => g.StudentId)
             .OnDelete(DeleteBehavior.Cascade);
 
-
         // --------------------------------------------------------
         // SchoolClass -> Grade (1:Many)
         // --------------------------------------------------------
@@ -155,19 +132,45 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .WithMany(c => c.Grades)
             .HasForeignKey(g => g.ClassId)
             .OnDelete(DeleteBehavior.Restrict);
-    }
 
+        // --------------------------------------------------------
+        // Timetable -> SchoolClass
+        // --------------------------------------------------------
+
+        builder.Entity<Timetable>()
+            .HasOne(t => t.Class)
+            .WithMany()
+            .HasForeignKey(t => t.ClassId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // --------------------------------------------------------
+        // Timetable -> Subject
+        // --------------------------------------------------------
+
+        builder.Entity<Timetable>()
+            .HasOne(t => t.Subject)
+            .WithMany()
+            .HasForeignKey(t => t.SubjectId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // --------------------------------------------------------
+        // Timetable -> Teacher
+        // --------------------------------------------------------
+
+        builder.Entity<Timetable>()
+            .HasOne(t => t.Teacher)
+            .WithMany()
+            .HasForeignKey(t => t.TeacherId)
+            .OnDelete(DeleteBehavior.Restrict);
+    }
 
     // ============================================================
     // INDEXES
     // ============================================================
 
-    private static void ConfigureIndexes(
-        ModelBuilder builder)
+    private static void ConfigureIndexes(ModelBuilder builder)
     {
-        // --------------------------------------------------------
         // Student Indexes
-        // --------------------------------------------------------
 
         builder.Entity<Student>()
             .HasIndex(s => s.AdmissionNumber)
@@ -177,10 +180,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasIndex(s => s.ApplicationUserId)
             .IsUnique();
 
-
-        // --------------------------------------------------------
         // Teacher Indexes
-        // --------------------------------------------------------
 
         builder.Entity<Teacher>()
             .HasIndex(t => t.EmployeeNumber)
@@ -190,10 +190,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasIndex(t => t.ApplicationUserId)
             .IsUnique();
 
-
-        // --------------------------------------------------------
         // School Class Composite Index
-        // --------------------------------------------------------
 
         builder.Entity<SchoolClass>()
             .HasIndex(c => new
@@ -204,10 +201,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             })
             .IsUnique();
 
-
-        // --------------------------------------------------------
         // Attendance Composite Index
-        // --------------------------------------------------------
 
         builder.Entity<Attendance>()
             .HasIndex(a => new
@@ -217,10 +211,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             })
             .IsUnique();
 
-
-        // --------------------------------------------------------
         // Grade Index
-        // --------------------------------------------------------
 
         builder.Entity<Grade>()
             .HasIndex(g => new
@@ -229,15 +220,23 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                 g.SubjectName,
                 g.AssessmentName
             });
-    }
 
+        // Timetable Lookup Index
+
+        builder.Entity<Timetable>()
+            .HasIndex(t => new
+            {
+                t.ClassId,
+                t.DayOfWeek,
+                t.StartTime
+            });
+    }
 
     // ============================================================
     // DECIMAL PRECISION
     // ============================================================
 
-    private static void ConfigureDecimalProperties(
-        ModelBuilder builder)
+    private static void ConfigureDecimalProperties(ModelBuilder builder)
     {
         builder.Entity<Grade>()
             .Property(g => g.MarksObtained)

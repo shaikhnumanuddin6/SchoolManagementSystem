@@ -1,0 +1,269 @@
+﻿@model SchoolManagementSystem.Application.ViewModels.Attendance.AttendanceMarkViewModel
+
+@{
+    ViewData["Title"] = "Mark Attendance";
+}
+
+<div class="container-fluid py-4">
+
+    <!-- PAGE HEADER -->
+    <div class="d-flex flex-wrap justify-content-between
+                align-items-center gap-3 mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Mark Attendance</h2>
+            <p class="text-muted mb-0">
+                Record attendance for all active students in a class.
+            </p>
+        </div>
+
+        <a asp-controller="Attendance"
+           asp-action="Index"
+           class="btn btn-outline-secondary">
+            Back to Attendance
+        </a>
+    </div>
+
+    <!-- LOAD CLASS REGISTER -->
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-header bg-white py-3">
+            <h5 class="fw-semibold mb-0">
+                Select Class and Date
+            </h5>
+        </div>
+
+        <div class="card-body">
+
+            <form asp-controller="Attendance"
+                  asp-action="Mark"
+                  method="get">
+
+                <div class="row g-3 align-items-end">
+
+                    <div class="col-12 col-md-5">
+                        <label for="classId"
+                               class="form-label fw-semibold">
+                            Class
+                        </label>
+
+                        <select id="classId"
+                                name="classId"
+                                asp-items="Model.Classes"
+                                class="form-select"
+                                required>
+                            <option value="">
+                                -- Select Class --
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-12 col-md-4">
+                        <label for="attendanceDate"
+                               class="form-label fw-semibold">
+                            Attendance Date
+                        </label>
+
+                        <input id="attendanceDate"
+                               name="date"
+                               type="date"
+                               value="@Model.Date.ToString("yyyy-MM-dd")"
+                               class="form-control"
+                               required />
+                    </div>
+
+                    <div class="col-12 col-md-3">
+                        <button type="submit"
+                                class="btn btn-primary w-100">
+                            Load Students
+                        </button>
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+    @if (Model.ClassId.HasValue && Model.Students.Count > 0)
+    {
+        <!-- ATTENDANCE REGISTER -->
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-header bg-white py-3
+                        d-flex flex-wrap justify-content-between
+                        align-items-center gap-2">
+
+                <div>
+                    <h5 class="fw-semibold mb-1">
+                        Class Attendance Register
+                    </h5>
+
+                    <small class="text-muted">
+                        @Model.Date.ToString("dd MMMM yyyy")
+                    </small>
+                </div>
+
+                <span class="badge text-bg-secondary">
+                    @Model.Students.Count students
+                </span>
+
+            </div>
+
+            <div class="card-body">
+
+                <form asp-controller="Attendance"
+                      asp-action="Mark"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="alert alert-danger"
+                         role="alert"></div>
+
+                    <input type="hidden"
+                           name="ClassId"
+                           value="@Model.ClassId" />
+
+                    <input type="hidden"
+                           name="Date"
+                           value="@Model.Date.ToString("yyyy-MM-dd")" />
+
+                    <div class="table-responsive">
+
+                        <table class="table table-hover align-middle">
+
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width: 60px;">#</th>
+                                    <th>Student</th>
+                                    <th>Admission Number</th>
+                                    <th style="min-width: 170px;">
+                                        Attendance Status
+                                    </th>
+                                    <th style="min-width: 220px;">
+                                        Remarks
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @for (var i = 0; i < Model.Students.Count; i++)
+                                {
+                                    <tr>
+                                        <td>@(i + 1)</td>
+
+                                        <td>
+                                            <div class="fw-semibold">
+                                                @Model.Students[i].StudentName
+                                            </div>
+
+                                            <input asp-for="Students[i].StudentId"
+                                                   type="hidden" />
+                                        </td>
+
+                                        <td>
+                                            @Model.Students[i].AdmissionNumber
+                                        </td>
+
+                                        <td>
+                                            <select asp-for="Students[i].Status"
+                                                    class="form-select">
+                                                <option value="Present">
+                                                    Present
+                                                </option>
+                                                <option value="Absent">
+                                                    Absent
+                                                </option>
+                                                <option value="Late">
+                                                    Late
+                                                </option>
+                                                <option value="Excused">
+                                                    Excused
+                                                </option>
+                                            </select>
+
+                                            <span asp-validation-for="Students[i].Status"
+                                                  class="text-danger small"></span>
+                                        </td>
+
+                                        <td>
+                                            <input asp-for="Students[i].Remarks"
+                                                   class="form-control"
+                                                   maxlength="500"
+                                                   placeholder="Optional remarks" />
+
+                                            <span asp-validation-for="Students[i].Remarks"
+                                                  class="text-danger small"></span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    <div class="alert alert-info mt-3 mb-4">
+                        <strong>Note:</strong>
+                        Saving the register creates attendance records
+                        for students who do not have a record for this date
+                        and updates existing records for that date.
+                    </div>
+
+                    <div class="d-flex flex-wrap gap-2">
+
+                        <button type="submit"
+                                class="btn btn-primary px-4">
+                            Save Attendance
+                        </button>
+
+                        <a asp-controller="Attendance"
+                           asp-action="Index"
+                           class="btn btn-outline-secondary px-4">
+                            Cancel
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    }
+    else if (Model.ClassId.HasValue)
+    {
+        <div class="card border-0 shadow-sm">
+            <div class="card-body text-center py-5">
+                <h5 class="text-muted">
+                    No active students found
+                </h5>
+
+                <p class="text-muted mb-0">
+                    The selected class has no active students assigned to it.
+                </p>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="card border-0 shadow-sm">
+            <div class="card-body text-center py-5">
+                <h5 class="text-muted">
+                    Select a class to get started
+                </h5>
+
+                <p class="text-muted mb-0">
+                    Choose a class and attendance date, then click
+                    Load Students to open the register.
+                </p>
+            </div>
+        </div>
+    }
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

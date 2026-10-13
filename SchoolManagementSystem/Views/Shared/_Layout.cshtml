@@ -236,6 +236,20 @@
                             <span>Grade Management</span>
                         </a>
                     }
+
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a href="/Attendance/Index"
+                           class="menu-item">
+
+                            <i class="bi bi-calendar-check"></i>
+
+                            <span>
+                                Attendance Management
+                            </span>
+                        </a>
+                    }
+
                 <!-- ================================================= -->
                 <!-- ACADEMIC -->
                 <!-- ================================================= -->

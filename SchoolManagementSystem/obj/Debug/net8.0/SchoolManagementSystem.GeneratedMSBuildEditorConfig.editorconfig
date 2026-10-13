@@ -50,6 +50,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/AIT/Desktop/SchoolManagementSystem/SchoolManagementSystem/SchoolManagementSystem/Views/Attendance/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXR0ZW5kYW5jZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/AIT/Desktop/SchoolManagementSystem/SchoolManagementSystem/SchoolManagementSystem/Views/Attendance/Mark.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXR0ZW5kYW5jZVxNYXJrLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/AIT/Desktop/SchoolManagementSystem/SchoolManagementSystem/SchoolManagementSystem/Views/Classes/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2xhc3Nlc1xDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -164,6 +172,18 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/AIT/Desktop/SchoolManagementSystem/SchoolManagementSystem/SchoolManagementSystem/Views/Teacher/Dashboard.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGVhY2hlclxEYXNoYm9hcmQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/AIT/Desktop/SchoolManagementSystem/SchoolManagementSystem/SchoolManagementSystem/Views/Timetable/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGltZXRhYmxlXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/AIT/Desktop/SchoolManagementSystem/SchoolManagementSystem/SchoolManagementSystem/Views/Timetable/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGltZXRhYmxlXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/AIT/Desktop/SchoolManagementSystem/SchoolManagementSystem/SchoolManagementSystem/Views/Timetable/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGltZXRhYmxlXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/AIT/Desktop/SchoolManagementSystem/SchoolManagementSystem/SchoolManagementSystem/Views/_ViewImports.cshtml]

@@ -1,0 +1,325 @@
+﻿@model SchoolManagementSystem.Application.ViewModels.Attendance.AttendanceListViewModel
+
+@{
+    ViewData["Title"] = "Attendance Management";
+}
+
+<div class="container-fluid py-4">
+
+    <!-- PAGE HEADER -->
+    <div class="d-flex flex-wrap justify-content-between
+                align-items-center gap-3 mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Attendance Management</h2>
+            <p class="text-muted mb-0">
+                View daily attendance and monitor student presence.
+            </p>
+        </div>
+
+        <a asp-controller="Attendance"
+           asp-action="Mark"
+           asp-route-classId="@Model.ClassId"
+           asp-route-date="@Model.Date.ToString("yyyy-MM-dd")"
+           class="btn btn-primary">
+            Mark Attendance
+        </a>
+    </div>
+
+    <!-- SUCCESS MESSAGE -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show"
+             role="alert">
+            @TempData["SuccessMessage"]
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- SUMMARY CARDS -->
+    <div class="row g-3 mb-4">
+
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="text-muted small mb-2">
+                        Present
+                    </div>
+                    <h3 class="fw-bold text-success mb-0">
+                        @Model.PresentCount
+                    </h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="text-muted small mb-2">
+                        Absent
+                    </div>
+                    <h3 class="fw-bold text-danger mb-0">
+                        @Model.AbsentCount
+                    </h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="text-muted small mb-2">
+                        Late
+                    </div>
+                    <h3 class="fw-bold text-warning mb-0">
+                        @Model.LateCount
+                    </h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="text-muted small mb-2">
+                        Attendance Percentage
+                    </div>
+                    <h3 class="fw-bold mb-0">
+                        @Model.AttendancePercentage.ToString("0.0")%
+                    </h3>
+                    <small class="text-muted">
+                        Excludes excused records
+                    </small>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- FILTERS -->
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-header bg-white py-3">
+            <h5 class="fw-semibold mb-0">
+                Search and Filters
+            </h5>
+        </div>
+
+        <div class="card-body">
+
+            <form asp-controller="Attendance"
+                  asp-action="Index"
+                  method="get">
+
+                <div class="row g-3">
+
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <label asp-for="Date"
+                               class="form-label">
+                            Attendance Date
+                        </label>
+
+                        <input asp-for="Date"
+                               type="date"
+                               asp-format="{0:yyyy-MM-dd}"
+                               class="form-control" />
+                    </div>
+
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <label asp-for="ClassId"
+                               class="form-label">
+                            Class
+                        </label>
+
+                        <select asp-for="ClassId"
+                                asp-items="Model.Classes"
+                                class="form-select">
+                            <option value="">All Classes</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <label asp-for="StudentId"
+                               class="form-label">
+                            Student
+                        </label>
+
+                        <select asp-for="StudentId"
+                                asp-items="Model.Students"
+                                class="form-select">
+                            <option value="">All Students</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <label asp-for="Status"
+                               class="form-label">
+                            Attendance Status
+                        </label>
+
+                        <select asp-for="Status"
+                                asp-items="Model.Statuses"
+                                class="form-select">
+                            <option value="">All Statuses</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="d-flex flex-wrap gap-2 mt-3">
+
+                    <button type="submit"
+                            class="btn btn-primary">
+                        Apply Filters
+                    </button>
+
+                    <a asp-controller="Attendance"
+                       asp-action="Index"
+                       class="btn btn-outline-secondary">
+                        Clear Filters
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+    <!-- ATTENDANCE TABLE -->
+    <div class="card border-0 shadow-sm">
+
+        <div class="card-header bg-white py-3
+                    d-flex flex-wrap justify-content-between
+                    align-items-center gap-2">
+            <div>
+                <h5 class="fw-semibold mb-1">
+                    Daily Attendance Records
+                </h5>
+
+                <small class="text-muted">
+                    @Model.Date.ToString("dd MMMM yyyy")
+                </small>
+            </div>
+
+            <span class="badge text-bg-secondary">
+                @Model.TotalRecords records
+            </span>
+        </div>
+
+        <div class="card-body p-0">
+
+            @if (Model.Records.Count == 0)
+            {
+                <div class="text-center py-5 px-3">
+                    <h5 class="text-muted">
+                        No attendance records found
+                    </h5>
+
+                    <p class="text-muted mb-3">
+                        No records match the selected date and filters.
+                    </p>
+
+                    <a asp-controller="Attendance"
+                       asp-action="Mark"
+                       asp-route-classId="@Model.ClassId"
+                       asp-route-date="@Model.Date.ToString("yyyy-MM-dd")"
+                       class="btn btn-primary">
+                        Mark Attendance
+                    </a>
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle mb-0">
+
+                        <thead class="table-light">
+                            <tr>
+                                <th>Student</th>
+                                <th>Class</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Remarks</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var record in Model.Records)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="fw-semibold">
+                                            @record.StudentName
+                                        </div>
+
+                                        <small class="text-muted">
+                                            @record.AdmissionNumber
+                                        </small>
+                                    </td>
+
+                                    <td>
+                                        @record.ClassName
+                                    </td>
+
+                                    <td class="text-nowrap">
+                                        @record.Date.ToString("dd MMM yyyy")
+                                    </td>
+
+                                    <td>
+                                        @switch (record.Status)
+                                        {
+                                            case "Present":
+                                                <span class="badge text-bg-success">
+                                                    Present
+                                                </span>
+                                                break;
+
+                                            case "Absent":
+                                                <span class="badge text-bg-danger">
+                                                    Absent
+                                                </span>
+                                                break;
+
+                                            case "Late":
+                                                <span class="badge text-bg-warning">
+                                                    Late
+                                                </span>
+                                                break;
+
+                                            case "Excused":
+                                                <span class="badge text-bg-info">
+                                                    Excused
+                                                </span>
+                                                break;
+
+                                            default:
+                                                <span class="badge text-bg-secondary">
+                                                    @record.Status
+                                                </span>
+                                                break;
+                                        }
+                                    </td>
+
+                                    <td>
+                                        @(string.IsNullOrWhiteSpace(record.Remarks)
+                                            ? "—"
+                                            : record.Remarks)
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+
+        </div>
+    </div>
+
+</div>

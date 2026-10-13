@@ -1,0 +1,134 @@
+﻿
+@model SchoolManagementSystem.Application.ViewModels.Timetable.TimetableFormViewModel
+
+@{
+    ViewData["Title"] = "Add Timetable Entry";
+
+    var days = new Dictionary<int, string>
+    {
+        { 1, "Monday" },
+        { 2, "Tuesday" },
+        { 3, "Wednesday" },
+        { 4, "Thursday" },
+        { 5, "Friday" },
+        { 6, "Saturday" },
+        { 7, "Sunday" }
+    };
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-1">Add Timetable Entry</h2>
+            <p class="text-muted mb-0">Schedule a subject for a class.</p>
+        </div>
+
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            Back to Timetable
+        </a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body p-4">
+            <form asp-action="Create" method="post">
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3"></div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="ClassId" class="form-label"></label>
+                        <select asp-for="ClassId"
+                                asp-items="Model.Classes"
+                                class="form-select">
+                            <option value="">-- Select Class --</option>
+                        </select>
+                        <span asp-validation-for="ClassId"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="SubjectId" class="form-label"></label>
+                        <select asp-for="SubjectId"
+                                asp-items="Model.Subjects"
+                                class="form-select">
+                            <option value="">-- Select Subject --</option>
+                        </select>
+                        <span asp-validation-for="SubjectId"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="TeacherId" class="form-label"></label>
+                        <select asp-for="TeacherId"
+                                asp-items="Model.Teachers"
+                                class="form-select">
+                            <option value="">-- Select Teacher --</option>
+                        </select>
+                        <span asp-validation-for="TeacherId"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="DayOfWeek" class="form-label"></label>
+                        <select asp-for="DayOfWeek" class="form-select">
+                            <option value="">-- Select Day --</option>
+                            @foreach (var day in days)
+                            {
+                                <option value="@day.Key">@day.Value</option>
+                            }
+                        </select>
+                        <span asp-validation-for="DayOfWeek"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="StartTime" class="form-label"></label>
+                        <input asp-for="StartTime"
+                               type="time"
+                               class="form-control"
+                               step="60" />
+                        <span asp-validation-for="StartTime"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="EndTime" class="form-label"></label>
+                        <input asp-for="EndTime"
+                               type="time"
+                               class="form-control"
+                               step="60" />
+                        <span asp-validation-for="EndTime"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="RoomNumber" class="form-label"></label>
+                        <input asp-for="RoomNumber"
+                               class="form-control"
+                               placeholder="e.g. Room 101" />
+                        <span asp-validation-for="RoomNumber"
+                              class="text-danger"></span>
+                    </div>
+                </div>
+
+                <hr class="my-4" />
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        Save Timetable Entry
+                    </button>
+
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
