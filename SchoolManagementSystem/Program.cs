@@ -90,13 +90,14 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie.SameSite = SameSiteMode.Lax;
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 });
-
 // ============================================================
 // MVC AND HTTP CLIENT
 // ============================================================
 
 builder.Services.AddControllersWithViews();
-builder.Services.AddHttpClient();
+
+builder.Services.AddHttpClient<IAIService, AIService>();
+
 
 // ============================================================
 // BUILD APPLICATION

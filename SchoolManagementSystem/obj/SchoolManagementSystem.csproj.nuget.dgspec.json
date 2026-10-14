@@ -58,6 +58,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[8.0.20, )"
+            },
+            "OpenAI": {
+              "target": "Package",
+              "version": "[2.14.0, )"
             }
           },
           "imports": [

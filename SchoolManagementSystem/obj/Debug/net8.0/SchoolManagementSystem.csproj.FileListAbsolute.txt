@@ -149,3 +149,15 @@ C:\Users\AIT\Desktop\SchoolManagementSystem\SchoolManagementSystem\SchoolManagem
 C:\Users\AIT\Desktop\SchoolManagementSystem\SchoolManagementSystem\SchoolManagementSystem\obj\Debug\net8.0\SchoolManagementSystem.genruntimeconfig.cache
 C:\Users\AIT\Desktop\SchoolManagementSystem\SchoolManagementSystem\SchoolManagementSystem\obj\Debug\net8.0\ref\SchoolManagementSystem.dll
 C:\Users\AIT\Desktop\SchoolManagementSystem\SchoolManagementSystem\SchoolManagementSystem\obj\Debug\net8.0\SchoolManagementSystem.sourcelink.json
+C:\Users\AIT\Desktop\SchoolManagementSystem\SchoolManagementSystem\SchoolManagementSystem\bin\Debug\net8.0\Microsoft.Extensions.Configuration.Abstractions.dll
+C:\Users\AIT\Desktop\SchoolManagementSystem\SchoolManagementSystem\SchoolManagementSystem\bin\Debug\net8.0\Microsoft.Extensions.Diagnostics.Abstractions.dll
+C:\Users\AIT\Desktop\SchoolManagementSystem\SchoolManagementSystem\SchoolManagementSystem\bin\Debug\net8.0\Microsoft.Extensions.FileProviders.Abstractions.dll
+C:\Users\AIT\Desktop\SchoolManagementSystem\SchoolManagementSystem\SchoolManagementSystem\bin\Debug\net8.0\Microsoft.Extensions.Hosting.Abstractions.dll
+C:\Users\AIT\Desktop\SchoolManagementSystem\SchoolManagementSystem\SchoolManagementSystem\bin\Debug\net8.0\Microsoft.Extensions.Primitives.dll
+C:\Users\AIT\Desktop\SchoolManagementSystem\SchoolManagementSystem\SchoolManagementSystem\bin\Debug\net8.0\OpenAI.dll
+C:\Users\AIT\Desktop\SchoolManagementSystem\SchoolManagementSystem\SchoolManagementSystem\bin\Debug\net8.0\System.Diagnostics.DiagnosticSource.dll
+C:\Users\AIT\Desktop\SchoolManagementSystem\SchoolManagementSystem\SchoolManagementSystem\bin\Debug\net8.0\System.IO.Pipelines.dll
+C:\Users\AIT\Desktop\SchoolManagementSystem\SchoolManagementSystem\SchoolManagementSystem\bin\Debug\net8.0\System.Net.ServerSentEvents.dll
+C:\Users\AIT\Desktop\SchoolManagementSystem\SchoolManagementSystem\SchoolManagementSystem\bin\Debug\net8.0\System.Text.Encodings.Web.dll
+C:\Users\AIT\Desktop\SchoolManagementSystem\SchoolManagementSystem\SchoolManagementSystem\bin\Debug\net8.0\System.Text.Json.dll
+C:\Users\AIT\Desktop\SchoolManagementSystem\SchoolManagementSystem\SchoolManagementSystem\bin\Debug\net8.0\runtimes\browser\lib\net8.0\System.Text.Encodings.Web.dll

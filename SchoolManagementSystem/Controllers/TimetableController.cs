@@ -6,7 +6,7 @@ using SchoolManagementSystem.Application.ViewModels.Timetable;
 
 namespace SchoolManagementSystem.Controllers;
 
-[Authorize(Roles = "Admin")]
+[Authorize(Roles = "Admin,Teacher,Student")]
 public class TimetableController : Controller
 {
     private readonly ITimetableService _timetableService;
@@ -17,6 +17,7 @@ public class TimetableController : Controller
     }
 
     // GET: /Timetable
+    // Admin, Teacher, and Student can view timetables.
     [HttpGet]
     public async Task<IActionResult> Index(int? classId, int? dayOfWeek)
     {
@@ -30,19 +31,27 @@ public class TimetableController : Controller
             classId,
             dayOfWeek);
 
+        // Students can view the timetable but cannot modify it.
+        ViewBag.CanManageTimetable = User.IsInRole("Admin");
+        ViewBag.CanCreateTimetable =
+            User.IsInRole("Admin") || User.IsInRole("Teacher");
+
         return View(model);
     }
 
     // GET: /Timetable/Create
+    // Admin and Teacher only.
+    [Authorize(Roles = "Admin,Teacher")]
     [HttpGet]
     public async Task<IActionResult> Create()
     {
         var model = await _timetableService.GetFormViewModelAsync();
-
         return View(model);
     }
 
     // POST: /Timetable/Create
+    // Admin and Teacher only.
+    [Authorize(Roles = "Admin,Teacher")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(TimetableFormViewModel model)
@@ -53,7 +62,6 @@ public class TimetableController : Controller
                 await _timetableService.GetFormViewModelAsync();
 
             CopyFormValues(model, invalidModel);
-
             return View(invalidModel);
         }
 
@@ -63,13 +71,13 @@ public class TimetableController : Controller
         {
             ModelState.AddModelError(
                 string.Empty,
-                result.ErrorMessage ?? "Unable to save the timetable entry.");
+                result.ErrorMessage ??
+                "Unable to save the timetable entry.");
 
             var invalidModel =
                 await _timetableService.GetFormViewModelAsync();
 
             CopyFormValues(model, invalidModel);
-
             return View(invalidModel);
         }
 
@@ -80,6 +88,8 @@ public class TimetableController : Controller
     }
 
     // GET: /Timetable/Edit/5
+    // Admin only.
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {
@@ -97,6 +107,8 @@ public class TimetableController : Controller
     }
 
     // POST: /Timetable/Edit/5
+    // Admin only.
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(
@@ -114,7 +126,6 @@ public class TimetableController : Controller
                 await _timetableService.GetFormViewModelAsync(id);
 
             CopyFormValues(model, invalidModel);
-
             return View(invalidModel);
         }
 
@@ -124,13 +135,13 @@ public class TimetableController : Controller
         {
             ModelState.AddModelError(
                 string.Empty,
-                result.ErrorMessage ?? "Unable to update the timetable entry.");
+                result.ErrorMessage ??
+                "Unable to update the timetable entry.");
 
             var invalidModel =
                 await _timetableService.GetFormViewModelAsync(id);
 
             CopyFormValues(model, invalidModel);
-
             return View(invalidModel);
         }
 
@@ -141,6 +152,8 @@ public class TimetableController : Controller
     }
 
     // POST: /Timetable/Delete/5
+    // Admin only.
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Delete(int id)

@@ -1,0 +1,332 @@
+﻿@{
+    ViewData["Title"] = "AI Dashboard";
+}
+
+<div class="ai-dashboard">
+
+    <!-- Animated Hero -->
+    <section class="ai-hero">
+        <div class="ai-hero-content">
+            <div class="ai-status">
+                <span class="ai-status-dot"></span>
+                AI ASSISTANT
+            </div>
+
+            <h1>Welcome to your <span>AI Dashboard</span></h1>
+
+            <p>
+                Your intelligent school management companion.
+                Get ideas, explore strategies, and make better decisions.
+            </p>
+
+            <div class="ai-hero-tags">
+                <span><i class="bi bi-lightning-charge-fill"></i> Smart insights</span>
+                <span><i class="bi bi-stars"></i> AI powered</span>
+                <span><i class="bi bi-shield-check"></i> Admin workspace</span>
+            </div>
+        </div>
+
+        <div class="ai-orb-area" aria-hidden="true">
+            <div class="ai-orb-ring ring-one"></div>
+            <div class="ai-orb-ring ring-two"></div>
+            <div class="ai-orb">
+                <i class="bi bi-robot"></i>
+            </div>
+            <span class="orb-spark spark-one">✦</span>
+            <span class="orb-spark spark-two">✧</span>
+            <span class="orb-spark spark-three">✦</span>
+        </div>
+    </section>
+
+    <!-- Feature Cards -->
+    <section class="ai-feature-grid">
+        <div class="ai-feature-card feature-purple">
+            <div class="feature-icon">
+                <i class="bi bi-mortarboard-fill"></i>
+            </div>
+            <div>
+                <h3>Academic Support</h3>
+                <p>Explore teaching methods and learning strategies.</p>
+            </div>
+            <i class="bi bi-arrow-up-right feature-arrow"></i>
+        </div>
+
+        <div class="ai-feature-card feature-blue">
+            <div class="feature-icon">
+                <i class="bi bi-calendar2-check-fill"></i>
+            </div>
+            <div>
+                <h3>Attendance Ideas</h3>
+                <p>Find practical ways to improve student attendance.</p>
+            </div>
+            <i class="bi bi-arrow-up-right feature-arrow"></i>
+        </div>
+
+        <div class="ai-feature-card feature-pink">
+            <div class="feature-icon">
+                <i class="bi bi-graph-up-arrow"></i>
+            </div>
+            <div>
+                <h3>School Planning</h3>
+                <p>Get ideas for organizing school activities and goals.</p>
+            </div>
+            <i class="bi bi-arrow-up-right feature-arrow"></i>
+        </div>
+    </section>
+
+    <div class="ai-main-grid">
+
+        <!-- Chat Area -->
+        <section class="ai-chat-card">
+            <div class="ai-chat-header">
+                <div class="ai-chat-title">
+                    <div class="ai-chat-avatar">
+                        <i class="bi bi-robot"></i>
+                    </div>
+                    <div>
+                        <h2>Ask your AI Assistant</h2>
+                        <p><span class="ai-status-dot"></span> Ready to help you</p>
+                    </div>
+                </div>
+                <span class="ai-powered-label">AI POWERED</span>
+            </div>
+
+            <div class="ai-chat-body">
+                <div class="ai-welcome-message">
+                    <div class="ai-message-icon">
+                        <i class="bi bi-stars"></i>
+                    </div>
+                    <div>
+                        <h3>What can I help you with today?</h3>
+                        <p>
+                            Ask a question below or choose one of the suggestions
+                            to get started.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="ai-suggestions">
+                    <button type="button" class="ai-prompt-chip"
+                            data-prompt="Suggest five practical ways to improve student attendance.">
+                        <i class="bi bi-calendar-check"></i>
+                        Improve attendance
+                    </button>
+
+                    <button type="button" class="ai-prompt-chip"
+                            data-prompt="Suggest five strategies to improve student academic performance.">
+                        <i class="bi bi-book"></i>
+                        Improve academics
+                    </button>
+
+                    <button type="button" class="ai-prompt-chip"
+                            data-prompt="Give me a practical checklist for planning a successful school week.">
+                        <i class="bi bi-list-check"></i>
+                        School planning
+                    </button>
+
+                    <button type="button" class="ai-prompt-chip"
+                            data-prompt="Suggest ways teachers can make classroom learning more engaging.">
+                        <i class="bi bi-lightbulb"></i>
+                        Teaching ideas
+                    </button>
+                </div>
+
+                <form asp-controller="AIDashboard"
+                      asp-action="Ask"
+                      method="post"
+                      id="aiQuestionForm">
+
+                    @Html.AntiForgeryToken()
+
+                    <label for="prompt" class="ai-input-label">
+                        Your question
+                    </label>
+
+                    <div class="ai-input-wrap">
+                        <textarea id="prompt"
+                                  name="prompt"
+                                  rows="4"
+                                  maxlength="4000"
+                                  required
+                                  placeholder="Ask anything about school management..."></textarea>
+
+                        <div class="ai-input-footer">
+                            <span><i class="bi bi-shield-lock"></i> Please avoid confidential data</span>
+                            <span id="aiCharCount">0 / 4000</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="ai-submit-btn" id="aiSubmitBtn">
+                        <span class="ai-submit-text">
+                            Generate Answer <i class="bi bi-arrow-right"></i>
+                        </span>
+                        <span class="ai-loading-text">
+                            <span class="ai-spinner"></span> AI is thinking...
+                        </span>
+                    </button>
+
+                    <div class="ai-loading-panel" id="aiLoadingPanel" role="status" aria-live="polite">
+                        <div class="ai-thinking-dots"><span></span><span></span><span></span></div>
+                        <div>
+                            <strong>Generating your answer</strong>
+                            <p>Our AI assistant is working on your question...</p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Side Panel -->
+        <aside class="ai-side-panel">
+            <div class="ai-side-card">
+                <div class="ai-side-heading">
+                    <div class="ai-side-icon">
+                        <i class="bi bi-stars"></i>
+                    </div>
+                    <h3>What AI can do</h3>
+                </div>
+
+                <div class="ai-capability">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>Attendance improvement strategies</span>
+                </div>
+                <div class="ai-capability">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>Teaching and learning suggestions</span>
+                </div>
+                <div class="ai-capability">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>Academic performance ideas</span>
+                </div>
+                <div class="ai-capability">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>School planning and organization</span>
+                </div>
+            </div>
+
+            <div class="ai-tip-card">
+                <div class="ai-tip-icon">
+                    <i class="bi bi-lightbulb-fill"></i>
+                </div>
+                <h3>Pro tip</h3>
+                <p>
+                    Be specific with your question. Mention your goal and ask
+                    for practical steps to get a more useful answer.
+                </p>
+            </div>
+
+            <div class="ai-privacy-card">
+                <i class="bi bi-shield-lock-fill"></i>
+                <div>
+                    <strong>Keep school data safe</strong>
+                    <p>Do not enter student names, passwords, personal information, or confidential records.</p>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- AI Answer -->
+    @if (TempData["AIAnswer"] is string answer)
+    {
+        <section class="ai-answer-card" id="aiAnswer">
+            <div class="ai-answer-header">
+                <div class="ai-answer-avatar">
+                    <i class="bi bi-robot"></i>
+                </div>
+                <div>
+                    <h2>AI Response</h2>
+                    <p>Your answer is ready</p>
+                </div>
+                <span class="ai-answer-check">
+                    <i class="bi bi-check-circle-fill"></i> Completed
+                </span>
+            </div>
+
+            <div class="ai-answer-content">@answer</div>
+
+            <button type="button" class="ai-copy-btn" id="aiCopyBtn">
+                <i class="bi bi-clipboard"></i> Copy answer
+            </button>
+            <span class="ai-copy-feedback" id="aiCopyFeedback" aria-live="polite"></span>
+        </section>
+    }
+
+    @if (TempData["AIError"] is string error)
+    {
+        <div class="ai-error-card" role="alert">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <div>
+                <strong>We couldn't generate an answer</strong>
+                <p>@error</p>
+            </div>
+        </div>
+    }
+
+    <div class="ai-footer-note">
+        <i class="bi bi-info-circle"></i>
+        AI-generated suggestions can make mistakes. Review important decisions before acting on them.
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (() => {
+            const form = document.getElementById("aiQuestionForm");
+            const prompt = document.getElementById("prompt");
+            const submitBtn = document.getElementById("aiSubmitBtn");
+            const loadingPanel = document.getElementById("aiLoadingPanel");
+            const charCount = document.getElementById("aiCharCount");
+
+            if (!form || !prompt) return;
+
+            document.querySelectorAll(".ai-prompt-chip").forEach(button => {
+                button.addEventListener("click", () => {
+                    prompt.value = button.dataset.prompt || "";
+                    prompt.focus();
+                    updateCount();
+                    prompt.scrollIntoView({ behavior: "smooth", block: "center" });
+                });
+            });
+
+            function updateCount() {
+                charCount.textContent = `${prompt.value.length} / 4000`;
+            }
+
+            prompt.addEventListener("input", updateCount);
+            updateCount();
+
+            form.addEventListener("submit", event => {
+                if (!prompt.value.trim()) {
+                    event.preventDefault();
+                    prompt.focus();
+                    return;
+                }
+
+                submitBtn.disabled = true;
+                submitBtn.classList.add("is-loading");
+                loadingPanel.classList.add("is-visible");
+            });
+
+            const copyBtn = document.getElementById("aiCopyBtn");
+            const answer = document.querySelector(".ai-answer-content");
+            const feedback = document.getElementById("aiCopyFeedback");
+
+            if (copyBtn && answer) {
+                copyBtn.addEventListener("click", async () => {
+                    try {
+                        await navigator.clipboard.writeText(answer.innerText);
+                        feedback.textContent = "Answer copied!";
+                    } catch {
+                        feedback.textContent =
+                            "Copy was blocked by your browser. Please select the answer and copy it manually.";
+                    }
+                });
+            }
+
+            const answerCard = document.getElementById("aiAnswer");
+            if (answerCard) {
+                answerCard.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+        })();
+    </script>
+}
