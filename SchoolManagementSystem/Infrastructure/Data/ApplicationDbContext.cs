@@ -24,6 +24,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Grade> Grades => Set<Grade>();
     public DbSet<Subject> Subjects => Set<Subject>();
     public DbSet<Timetable> Timetables { get; set; } = null!;
+    public DbSet<Announcement> Announcements => Set<Announcement>();
 
     // ============================================================
     // EF CORE MODEL CONFIGURATION

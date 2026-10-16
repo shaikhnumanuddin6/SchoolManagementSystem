@@ -4,90 +4,481 @@
     ViewData["Title"] = "Grade Management";
 }
 
-<div class="container-fluid py-4">
+@section Styles {
+    <style>
+        .grades-page {
+            --grade-primary: #4f46e5;
+            --grade-border: #e8edf4;
+            --grade-muted: #64748b;
+            color: #172033;
+            animation: gradesFadeIn .4s ease-out;
+        }
 
-    <div class="d-flex flex-wrap justify-content-between
-                align-items-center gap-3 mb-4">
+        @@keyframes gradesFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .grades-page .page-eyebrow {
+            color: var(--grade-primary);
+            font-size: .75rem;
+            font-weight: 800;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        .grades-page .page-title {
+            color: #172033;
+            font-size: clamp(1.6rem, 3vw, 2.15rem);
+            font-weight: 800;
+            letter-spacing: -.04em;
+        }
+
+        .grades-page .page-description {
+            color: var(--grade-muted);
+            font-size: .93rem;
+        }
+
+        .grades-page .btn-add-grade {
+            background: var(--grade-primary);
+            color: #fff;
+            border: 0;
+            border-radius: 11px;
+            padding: .8rem 1.15rem;
+            font-weight: 700;
+            box-shadow: 0 5px 14px rgba(79, 70, 229, .18);
+            transition: all .2s ease;
+        }
+
+            .grades-page .btn-add-grade:hover {
+                background: #4338ca;
+                color: #fff;
+                transform: translateY(-2px);
+            }
+
+        .grades-page .stat-card,
+        .grades-page .section-card {
+            background: #fff;
+            border: 1px solid var(--grade-border);
+            border-radius: 17px;
+            box-shadow: 0 4px 18px rgba(15, 23, 42, .035);
+        }
+
+        .grades-page .stat-card {
+            height: 100%;
+            padding: 1.35rem;
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+            .grades-page .stat-card:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 10px 25px rgba(15, 23, 42, .07);
+            }
+
+        .grades-page .stat-label {
+            color: var(--grade-muted);
+            font-size: .84rem;
+            font-weight: 650;
+            margin-bottom: .7rem;
+        }
+
+        .grades-page .stat-value {
+            color: #172033;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -.04em;
+            line-height: 1.15;
+        }
+
+        .grades-page .stat-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            flex-shrink: 0;
+            border-radius: 14px;
+            font-size: 1.3rem;
+        }
+
+        .grades-page .icon-indigo {
+            background: #eef2ff;
+            color: #4f46e5;
+        }
+
+        .grades-page .icon-green {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .grades-page .icon-blue {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .grades-page .stat-footnote {
+            color: #8490a3;
+            font-size: .78rem;
+            margin-top: 1rem;
+        }
+
+        .grades-page .section-heading {
+            color: #172033;
+            font-size: 1rem;
+            font-weight: 800;
+        }
+
+        .grades-page .section-subtitle {
+            color: var(--grade-muted);
+            font-size: .82rem;
+        }
+
+        .grades-page .form-label {
+            color: #344054;
+            font-size: .82rem;
+            font-weight: 700;
+            margin-bottom: .5rem;
+        }
+
+        .grades-page .form-control,
+        .grades-page .form-select {
+            min-height: 44px;
+            border-color: #e2e8f0;
+            border-radius: 10px;
+            font-size: .875rem;
+        }
+
+            .grades-page .form-control:focus,
+            .grades-page .form-select:focus {
+                border-color: #a5b4fc;
+                box-shadow: 0 0 0 .2rem rgba(79, 70, 229, .1);
+            }
+
+        .grades-page .btn-filter {
+            min-height: 44px;
+            background: var(--grade-primary);
+            border-color: var(--grade-primary);
+            color: #fff;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+
+            .grades-page .btn-filter:hover {
+                background: #4338ca;
+                color: #fff;
+            }
+
+        .grades-page .btn-clear {
+            min-height: 44px;
+            border-radius: 10px;
+        }
+
+        .grades-page .directory-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.35rem 1.5rem;
+        }
+
+        .grades-page .record-count {
+            padding: .4rem .75rem;
+            border-radius: 999px;
+            background: #eef2ff;
+            color: #4f46e5;
+            font-size: .78rem;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .grades-page .grade-table {
+            width: 100%;
+            margin: 0;
+        }
+
+            .grades-page .grade-table thead th {
+                padding: .9rem 1rem;
+                background: #f8fafc;
+                color: #64748b;
+                font-size: .71rem;
+                font-weight: 800;
+                letter-spacing: .05em;
+                text-transform: uppercase;
+                white-space: nowrap;
+                border-top: 1px solid var(--grade-border);
+                border-bottom: 1px solid var(--grade-border);
+            }
+
+                .grades-page .grade-table thead th:first-child,
+                .grades-page .grade-table tbody td:first-child {
+                    padding-left: 1.5rem;
+                }
+
+                .grades-page .grade-table thead th:last-child,
+                .grades-page .grade-table tbody td:last-child {
+                    padding-right: 1.5rem;
+                }
+
+            .grades-page .grade-table tbody td {
+                padding: 1rem;
+                border-bottom: 1px solid #eef2f7;
+                vertical-align: middle;
+                font-size: .85rem;
+            }
+
+            .grades-page .grade-table tbody tr {
+                transition: background .18s ease;
+            }
+
+                .grades-page .grade-table tbody tr:hover {
+                    background: #fafbff;
+                }
+
+                .grades-page .grade-table tbody tr:last-child td {
+                    border-bottom: 0;
+                }
+
+        .grades-page .student-name {
+            color: #172033;
+            font-weight: 750;
+            min-width: 125px;
+        }
+
+        .grades-page .student-admission {
+            color: #8490a3;
+            font-size: .77rem;
+            margin-top: .25rem;
+        }
+
+        .grades-page .subject-name {
+            color: #344054;
+            font-weight: 650;
+        }
+
+        .grades-page .assessment-name {
+            color: #475569;
+        }
+
+        .grades-page .marks-value {
+            color: #344054;
+            font-weight: 750;
+            white-space: nowrap;
+        }
+
+        .grades-page .percentage-cell {
+            min-width: 95px;
+        }
+
+        .grades-page .percentage-value {
+            color: #172033;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .grades-page .percentage-track {
+            height: 5px;
+            width: 68px;
+            overflow: hidden;
+            background: #e9edf5;
+            border-radius: 999px;
+            margin-top: 6px;
+        }
+
+        .grades-page .percentage-fill {
+            height: 100%;
+            background: #6366f1;
+            border-radius: 999px;
+        }
+
+        .grades-page .grade-letter {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 37px;
+            padding: .4rem .55rem;
+            border-radius: 9px;
+            background: #eef2ff;
+            color: #4338ca;
+            font-weight: 800;
+            font-size: .8rem;
+        }
+
+        .grades-page .exam-date {
+            color: #64748b;
+            white-space: nowrap;
+        }
+
+        .grades-page .btn-row-action {
+            border-radius: 8px;
+            font-size: .78rem;
+            font-weight: 650;
+            padding: .4rem .65rem;
+            white-space: nowrap;
+        }
+
+        .grades-page .empty-state {
+            padding: 4rem 1.5rem;
+            text-align: center;
+        }
+
+        .grades-page .empty-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 76px;
+            height: 76px;
+            margin: 0 auto 1.25rem;
+            border-radius: 23px;
+            background: #eef2ff;
+            color: #4f46e5;
+            font-size: 2rem;
+        }
+
+        .grades-page .empty-title {
+            color: #172033;
+            font-weight: 800;
+        }
+
+        .grades-page .alert {
+            border: 0;
+            border-radius: 12px;
+        }
+
+        @@media (max-width: 767.98px) {
+            .grades-page .stat-card {
+                padding: 1.1rem;
+            }
+
+            .grades-page .stat-value {
+                font-size: 1.7rem;
+            }
+
+            .grades-page .directory-header {
+                padding: 1.1rem;
+            }
+
+            .grades-page .grade-table thead th:first-child,
+            .grades-page .grade-table tbody td:first-child {
+                padding-left: 1rem;
+            }
+
+            .grades-page .grade-table thead th:last-child,
+            .grades-page .grade-table tbody td:last-child {
+                padding-right: 1rem;
+            }
+        }
+
+        @@media (prefers-reduced-motion: reduce) {
+            .grades-page,
+            .grades-page * {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+    </style>
+}
+
+<div class="container-fluid py-4 grades-page">
+
+    <!-- PAGE HEADER -->
+    <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
         <div>
-            <h2 class="fw-bold mb-1">Grade Management</h2>
-            <p class="text-muted mb-0">
-                Manage student marks, assessment results and performance.
+            <div class="page-eyebrow mb-2">Academic Administration / Grades</div>
+            <h1 class="page-title mb-2">Grade Management</h1>
+            <p class="page-description mb-0">
+                Manage student marks, assessment results and academic performance.
             </p>
         </div>
 
-        <a asp-controller="Grades"
-           asp-action="Create"
-           class="btn btn-primary">
-            <span class="me-1">+</span> Add Grade
-        </a>
+        <div>
+            <a asp-controller="Grades"
+               asp-action="Create"
+               class="btn btn-add-grade">
+                <i class="bi bi-plus-lg me-2"></i>
+                Add Grade
+            </a>
+        </div>
     </div>
 
+    <!-- ALERTS -->
     @if (TempData["SuccessMessage"] != null)
     {
-        <div class="alert alert-success alert-dismissible fade show"
-             role="alert">
+        <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>
             @TempData["SuccessMessage"]
-            <button type="button"
-                    class="btn-close"
-                    data-bs-dismiss="alert"
-                    aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
 
     @if (TempData["ErrorMessage"] != null)
     {
-        <div class="alert alert-danger alert-dismissible fade show"
-             role="alert">
+        <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
             @TempData["ErrorMessage"]
-            <button type="button"
-                    class="btn-close"
-                    data-bs-dismiss="alert"
-                    aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
 
     <!-- SUMMARY CARDS -->
-
     <div class="row g-3 mb-4">
 
         <div class="col-12 col-sm-6 col-xl-4">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body">
-                    <div class="text-muted small mb-2">
-                        Total Grade Records
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start gap-3">
+                    <div>
+                        <div class="stat-label">Total Grade Records</div>
+                        <div class="stat-value">@Model.TotalGrades</div>
                     </div>
-                    <h3 class="fw-bold mb-0">
-                        @Model.TotalGrades
-                    </h3>
+                    <div class="stat-icon icon-indigo">
+                        <i class="bi bi-journal-check"></i>
+                    </div>
+                </div>
+                <div class="stat-footnote">
+                    <i class="bi bi-collection me-1"></i>
+                    All recorded assessment results
                 </div>
             </div>
         </div>
 
         <div class="col-12 col-sm-6 col-xl-4">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body">
-                    <div class="text-muted small mb-2">
-                        Average Percentage
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start gap-3">
+                    <div>
+                        <div class="stat-label">Average Percentage</div>
+                        <div class="stat-value">@Model.AveragePercentage.ToString("0.0")%</div>
                     </div>
-                    <h3 class="fw-bold mb-0">
-                        @Model.AveragePercentage.ToString("0.0")%
-                    </h3>
+                    <div class="stat-icon icon-green">
+                        <i class="bi bi-graph-up-arrow"></i>
+                    </div>
+                </div>
+                <div class="stat-footnote">
+                    <i class="bi bi-bar-chart me-1"></i>
+                    Overall recorded average
                 </div>
             </div>
         </div>
 
         <div class="col-12 col-sm-6 col-xl-4">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body">
-                    <div class="text-muted small mb-2">
-                        Current Results
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start gap-3">
+                    <div>
+                        <div class="stat-label">Current Results</div>
+                        <div class="stat-value">@Model.Grades.Count</div>
                     </div>
-                    <h3 class="fw-bold mb-0">
-                        @Model.Grades.Count
-                    </h3>
-                    <small class="text-muted">
-                        Matching the selected filters
-                    </small>
+                    <div class="stat-icon icon-blue">
+                        <i class="bi bi-funnel"></i>
+                    </div>
+                </div>
+                <div class="stat-footnote">
+                    <i class="bi bi-info-circle me-1"></i>
+                    Matching the selected filters
                 </div>
             </div>
         </div>
@@ -95,34 +486,32 @@
     </div>
 
     <!-- SEARCH AND FILTERS -->
+    <div class="section-card mb-4">
+        <div class="p-4">
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <div class="stat-icon icon-indigo" style="width: 42px; height: 42px;">
+                    <i class="bi bi-sliders"></i>
+                </div>
+                <div>
+                    <h2 class="section-heading mb-1">Search and Filters</h2>
+                    <p class="section-subtitle mb-0">
+                        Find results by student, class or subject.
+                    </p>
+                </div>
+            </div>
 
-    <div class="card border-0 shadow-sm mb-4">
-        <div class="card-header bg-white py-3">
-            <h5 class="mb-0 fw-semibold">Search and Filters</h5>
-        </div>
-
-        <div class="card-body">
-            <form asp-controller="Grades"
-                  asp-action="Index"
-                  method="get">
-
+            <form asp-controller="Grades" asp-action="Index" method="get">
                 <div class="row g-3">
 
                     <div class="col-12 col-lg-3">
-                        <label asp-for="SearchTerm"
-                               class="form-label">
-                            Search
-                        </label>
+                        <label asp-for="SearchTerm" class="form-label">Search</label>
                         <input asp-for="SearchTerm"
                                class="form-control"
                                placeholder="Student, admission no. or assessment" />
                     </div>
 
-                    <div class="col-12 col-md-4 col-lg-3">
-                        <label asp-for="ClassId"
-                               class="form-label">
-                            Class
-                        </label>
+                    <div class="col-12 col-sm-6 col-lg-3">
+                        <label asp-for="ClassId" class="form-label">Class</label>
                         <select asp-for="ClassId"
                                 asp-items="Model.Classes"
                                 class="form-select">
@@ -130,11 +519,8 @@
                         </select>
                     </div>
 
-                    <div class="col-12 col-md-4 col-lg-3">
-                        <label asp-for="StudentId"
-                               class="form-label">
-                            Student
-                        </label>
+                    <div class="col-12 col-sm-6 col-lg-3">
+                        <label asp-for="StudentId" class="form-label">Student</label>
                         <select asp-for="StudentId"
                                 asp-items="Model.Students"
                                 class="form-select">
@@ -142,11 +528,8 @@
                         </select>
                     </div>
 
-                    <div class="col-12 col-md-4 col-lg-3">
-                        <label asp-for="SubjectId"
-                               class="form-label">
-                            Subject
-                        </label>
+                    <div class="col-12 col-sm-6 col-lg-3">
+                        <label asp-for="SubjectId" class="form-label">Subject</label>
                         <select asp-for="SubjectId"
                                 asp-items="Model.Subjects"
                                 class="form-select">
@@ -156,151 +539,177 @@
 
                 </div>
 
-                <div class="d-flex flex-wrap gap-2 mt-3">
-                    <button type="submit" class="btn btn-primary">
+                <div class="d-flex flex-wrap gap-2 mt-4">
+                    <button type="submit" class="btn btn-filter px-4">
+                        <i class="bi bi-funnel me-2"></i>
                         Apply Filters
                     </button>
 
                     <a asp-controller="Grades"
                        asp-action="Index"
-                       class="btn btn-outline-secondary">
+                       class="btn btn-outline-secondary btn-clear px-3 d-flex align-items-center">
+                        <i class="bi bi-arrow-counterclockwise me-2"></i>
                         Clear Filters
                     </a>
                 </div>
-
             </form>
         </div>
     </div>
 
-    <!-- GRADES TABLE -->
+    <!-- GRADE DIRECTORY -->
+    <div class="section-card">
 
-    <div class="card border-0 shadow-sm">
+        <div class="directory-header">
+            <div>
+                <h2 class="section-heading mb-1">Grade Records</h2>
+                <p class="section-subtitle mb-0">
+                    Assessment scores and student performance.
+                </p>
+            </div>
 
-        <div class="card-header bg-white py-3
-                    d-flex justify-content-between
-                    align-items-center">
-            <h5 class="fw-semibold mb-0">Grade Records</h5>
-
-            <span class="badge text-bg-secondary">
+            <span class="record-count">
+                <i class="bi bi-journal-text me-1"></i>
                 @Model.TotalGrades records
             </span>
         </div>
 
-        <div class="card-body p-0">
-
-            @if (Model.Grades.Count == 0)
-            {
-                <div class="text-center py-5 px-3">
-                    <h5 class="text-muted">No grades found</h5>
-                    <p class="text-muted mb-3">
-                        There are no grade records matching your filters.
-                    </p>
-
-                    <a asp-controller="Grades"
-                       asp-action="Create"
-                       class="btn btn-primary">
-                        Add First Grade
-                    </a>
+        @if (Model.Grades.Count == 0)
+        {
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <i class="bi bi-journal-x"></i>
                 </div>
-            }
-            else
-            {
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
 
-                        <thead class="table-light">
+                <h3 class="empty-title h5">No grades found</h3>
+
+                <p class="text-muted mb-4">
+                    There are no grade records matching your filters.
+                    Try adjusting your search or add a new grade.
+                </p>
+
+                <a asp-controller="Grades"
+                   asp-action="Create"
+                   class="btn btn-add-grade">
+                    <i class="bi bi-plus-lg me-2"></i>
+                    Add First Grade
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-hover grade-table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Class</th>
+                            <th>Subject</th>
+                            <th>Assessment</th>
+                            <th>Marks</th>
+                            <th>Percentage</th>
+                            <th>Grade</th>
+                            <th>Exam Date</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var grade in Model.Grades)
+                        {
                             <tr>
-                                <th>Student</th>
-                                <th>Class</th>
-                                <th>Subject</th>
-                                <th>Assessment</th>
-                                <th>Marks</th>
-                                <th>Percentage</th>
-                                <th>Grade</th>
-                                <th>Exam Date</th>
-                                <th class="text-end">Actions</th>
-                            </tr>
-                        </thead>
+                                <td>
+                                    <div class="student-name">@grade.StudentName</div>
+                                    <div class="student-admission">
+                                        <i class="bi bi-person-vcard me-1"></i>
+                                        @grade.AdmissionNumber
+                                    </div>
+                                </td>
 
-                        <tbody>
-                            @foreach (var grade in Model.Grades)
-                            {
-                                <tr>
-                                    <td>
-                                        <div class="fw-semibold">
-                                            @grade.StudentName
-                                        </div>
-                                        <small class="text-muted">
-                                            @grade.AdmissionNumber
-                                        </small>
-                                    </td>
-
-                                    <td>
+                                <td>
+                                    <span class="text-nowrap">
                                         @(grade.ClassName ?? "Unassigned")
-                                    </td>
+                                    </span>
+                                </td>
 
-                                    <td>
-                                        @grade.SubjectName
-                                    </td>
+                                <td>
+                                    <div class="subject-name">@grade.SubjectName</div>
+                                </td>
 
-                                    <td>
-                                        @grade.AssessmentName
-                                    </td>
+                                <td>
+                                    <span class="assessment-name">@grade.AssessmentName</span>
+                                </td>
 
-                                    <td class="text-nowrap">
+                                <td>
+                                    <span class="marks-value">
                                         @grade.MarksObtained.ToString("0.##")
-                                        /
+                                        <span class="text-muted fw-normal">/</span>
                                         @grade.MaxMarks.ToString("0.##")
-                                    </td>
+                                    </span>
+                                </td>
 
-                                    <td>
-                                        <span class="fw-semibold">
+                                <td>
+                                    <div class="percentage-cell">
+                                        <div class="percentage-value">
                                             @grade.Percentage.ToString("0.0")%
-                                        </span>
-                                    </td>
+                                        </div>
+                                        <div class="percentage-track"
+                                             role="progressbar"
+                                             aria-label="Percentage score"
+                                             aria-valuenow="@Math.Clamp(grade.Percentage, 0, 100)"
+                                             aria-valuemin="0"
+                                             aria-valuemax="100">
+                                            <div class="percentage-fill"
+                                                 style="width: @(Math.Clamp(grade.Percentage, 0, 100).ToString("0.##", System.Globalization.CultureInfo.InvariantCulture))%">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
 
-                                    <td>
-                                        @if (!string.IsNullOrWhiteSpace(
-                                       grade.GradeLetter))
-                                        {
-                                            <span class="badge text-bg-primary">
-                                                @grade.GradeLetter
-                                            </span>
-                                        }
-                                        else
-                                        {
-                                            <span class="text-muted">—</span>
-                                        }
-                                    </td>
+                                <td>
+                                    @if (!string.IsNullOrWhiteSpace(grade.GradeLetter))
+                                    {
+                                        <span class="grade-letter">@grade.GradeLetter</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">—</span>
+                                    }
+                                </td>
 
-                                    <td class="text-nowrap">
+                                <td>
+                                    <span class="exam-date">
+                                        <i class="bi bi-calendar3 me-1"></i>
                                         @grade.ExamDate.ToString("dd MMM yyyy")
-                                    </td>
+                                    </span>
+                                </td>
 
-                                    <td class="text-end text-nowrap">
+                                <td class="text-end text-nowrap">
+                                    <div class="d-inline-flex gap-1">
                                         <a asp-controller="Grades"
                                            asp-action="Details"
                                            asp-route-id="@grade.Id"
-                                           class="btn btn-sm btn-outline-primary">
+                                           class="btn btn-sm btn-outline-primary btn-row-action"
+                                           title="View grade details">
+                                            <i class="bi bi-eye me-1"></i>
                                             Details
                                         </a>
 
                                         <a asp-controller="Grades"
                                            asp-action="Edit"
                                            asp-route-id="@grade.Id"
-                                           class="btn btn-sm btn-outline-secondary">
+                                           class="btn btn-sm btn-outline-secondary btn-row-action"
+                                           title="Edit grade">
+                                            <i class="bi bi-pencil me-1"></i>
                                             Edit
                                         </a>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-
-                    </table>
-                </div>
-            }
-
-        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
     </div>
 
 </div>

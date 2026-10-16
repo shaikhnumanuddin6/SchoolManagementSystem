@@ -2,6 +2,7 @@
 using SchoolManagementSystem.Application.Interfaces;
 using SchoolManagementSystem.Application.ViewModels.Teachers;
 using SchoolManagementSystem.Infrastructure.Data;
+using SchoolManagementSystem.Domain.Entities;
 
 namespace SchoolManagementSystem.Application.Services;
 
@@ -114,7 +115,21 @@ public class TeacherDashboardService : ITeacherDashboardService
                     attendanceRecordsToday *
                     100,
                     1);
-
+        var announcements =
+    await _context.Announcements
+        .AsNoTracking()
+        .Where(a => a.IsPublished)
+        .Where(a =>
+            a.TargetAudience == "Everyone" ||
+            a.TargetAudience == "Teachers")
+        .Where(a =>
+            a.PublishAt == null ||
+            a.PublishAt <= DateTime.UtcNow)
+        .Where(a =>
+            a.ExpiresAt == null ||
+            a.ExpiresAt > DateTime.UtcNow)
+        .OrderByDescending(a => a.CreatedAt)
+        .ToListAsync();
 
         // ========================================================
         // CLASS-WISE ATTENDANCE

@@ -1,3 +1,4 @@
+
 :root {
     --sidebar-width: 260px;
     --topbar-height: 64px;
@@ -9,9 +10,17 @@
     --sidebar-text-active: #ffffff;
     --bg-body: #f8fafc;
     --card-border: #e2e8f0;
+    /* Dashboard theme variables */
+    --primary: #2563eb;
+    --primary-light: #eff6ff;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #e2e8f0;
+    /* AI theme */
     --ai-purple: #8b5cf6;
     --ai-glow: rgba(139, 92, 246, 0.15);
 }
+
 
 * {
     box-sizing: border-box;

@@ -54,6 +54,18 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQUlEYXNoYm9hcmRcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/AIT/Desktop/SchoolManagementSystem/SchoolManagementSystem/SchoolManagementSystem/Views/Announcements/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQW5ub3VuY2VtZW50c1xDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/AIT/Desktop/SchoolManagementSystem/SchoolManagementSystem/SchoolManagementSystem/Views/Announcements/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQW5ub3VuY2VtZW50c1xFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/AIT/Desktop/SchoolManagementSystem/SchoolManagementSystem/SchoolManagementSystem/Views/Announcements/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQW5ub3VuY2VtZW50c1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/AIT/Desktop/SchoolManagementSystem/SchoolManagementSystem/SchoolManagementSystem/Views/Attendance/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXR0ZW5kYW5jZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -152,6 +164,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/AIT/Desktop/SchoolManagementSystem/SchoolManagementSystem/SchoolManagementSystem/Views/Subjects/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU3ViamVjdHNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/AIT/Desktop/SchoolManagementSystem/SchoolManagementSystem/SchoolManagementSystem/Views/Teachers/Announcements.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGVhY2hlcnNcQW5ub3VuY2VtZW50cy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/AIT/Desktop/SchoolManagementSystem/SchoolManagementSystem/SchoolManagementSystem/Views/Teachers/Create.cshtml]

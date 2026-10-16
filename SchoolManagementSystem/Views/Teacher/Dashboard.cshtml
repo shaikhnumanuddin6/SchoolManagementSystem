@@ -29,7 +29,70 @@
 
     </div>
 
+    
+    <!-- =======================================================
+         SCHOOL ANNOUNCEMENTS
+         ======================================================= -->
 
+    <div class="dashboard-card mb-4">
+
+        <div class="card-header-custom">
+            <div>
+                <h5 class="mb-1">
+                    <i class="bi bi-megaphone-fill text-primary me-2"></i>
+                    School Announcements
+                </h5>
+                <p class="text-muted mb-0">
+                    Important updates from the school administration
+                </p>
+            </div>
+
+            <span class="badge bg-primary">
+                @(Model.Announcements?.Count ?? 0) updates
+            </span>
+        </div>
+
+        <div class="mt-3">
+
+            @if (Model.Announcements != null && Model.Announcements.Any())
+            {
+                foreach (var announcement in Model.Announcements)
+                {
+                    <div class="border rounded-3 p-3 mb-3">
+
+                        <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
+                            <h6 class="fw-bold mb-2">
+                                @announcement.Title
+                            </h6>
+
+                            <span class="badge bg-light text-dark border">
+                                @announcement.TargetAudience
+                            </span>
+                        </div>
+
+                        <p class="mb-2" style="white-space: pre-line;">@announcement.Content</p>
+
+                        <div class="small text-muted">
+                            <i class="bi bi-clock me-1"></i>
+                            Posted @announcement.CreatedAt.ToLocalTime().ToString("dd MMM yyyy, hh:mm tt")
+                        </div>
+
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="text-center py-4 text-muted">
+                    <i class="bi bi-megaphone fs-2"></i>
+                    <p class="mt-2 mb-0">
+                        There are no announcements available right now.
+                    </p>
+                </div>
+            }
+
+        </div>
+    </div>
+    
     <!-- =======================================================
          SUMMARY CARDS
          ======================================================= -->

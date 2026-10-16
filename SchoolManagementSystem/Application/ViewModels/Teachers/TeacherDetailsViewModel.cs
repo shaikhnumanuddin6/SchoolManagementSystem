@@ -1,4 +1,6 @@
-﻿namespace SchoolManagementSystem.Application.ViewModels.Teachers;
+﻿using SchoolManagementSystem.Domain.Entities;
+
+namespace SchoolManagementSystem.Application.ViewModels.Teachers;
 
 public class TeacherDetailsViewModel
 {
@@ -25,6 +27,7 @@ public class TeacherDetailsViewModel
     public int ClassCount { get; set; }
 
     public List<TeacherClassViewModel> Classes { get; set; } = new();
+    public List<Announcement> Announcements { get; set; } = new();
 }
 
 

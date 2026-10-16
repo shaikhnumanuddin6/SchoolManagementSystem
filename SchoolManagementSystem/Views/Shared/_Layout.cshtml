@@ -1,4 +1,3 @@
-
 @using Microsoft.AspNetCore.Identity
 @using SchoolManagementSystem.Domain.Entities
 
@@ -45,18 +44,14 @@
         "User";
 }
 
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="utf-8" />
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0" />
-    <title>
-        @ViewData["Title"] - School Management System
-    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - School Management System</title>
+
     <!-- Bootstrap -->
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
@@ -70,99 +65,86 @@
           href="~/css/site.css"
           asp-append-version="true" />
 
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 
-
 <body>
-
     <div class="app-wrapper">
 
-
-        <!-- ===================================================== -->
         <!-- SIDEBAR -->
-        <!-- ===================================================== -->
-
         <aside class="sidebar" id="sidebar">
 
             <!-- School Header -->
-
             <div class="sidebar-header">
-
                 <div class="school-logo">
                     <i class="bi bi-mortarboard-fill"></i>
                 </div>
 
                 <div class="school-info">
-
-                    <h5>
-                        EduManage
-                    </h5>
-
-                    <span>
-                        School System
-                    </span>
-
+                    <h5>EduManage</h5>
+                    <span>School System</span>
                 </div>
-
             </div>
 
-
             <!-- Sidebar Menu -->
-
             <div class="sidebar-menu">
 
-
-                <!-- ================================================= -->
-                <!-- STUDENT PORTAL -->
-                <!-- ================================================= -->
                 @if (User.IsInRole("Student"))
 
                 {
-                    <div class="menu-title">
-                        STUDENT PORTAL
-                    </div>
-
+                    <!-- STUDENT PORTAL -->
+                    <div class="menu-title">STUDENT PORTAL</div>
 
                     <a asp-controller="Student"
                        asp-action="Dashboard"
                        class="menu-item">
-
                         <i class="bi bi-speedometer2"></i>
-
-                        <span>
-                            My Dashboard
-                        </span>
-
+                        <span>My Dashboard</span>
                     </a>
 
-                    <div class="menu-title">
-                        ACADEMICS
-                    </div>
-
+                    <div class="menu-title">ACADEMICS</div>
 
                     <a asp-controller="Student"
                        asp-action="Dashboard"
                        class="menu-item">
-
                         <i class="bi bi-bar-chart-line-fill"></i>
-
-                        <span>
-                            My Grades
-                        </span>
-
+                        <span>My Grades</span>
                     </a>
-
 
                     <a asp-controller="Student"
                        asp-action="Dashboard"
                        class="menu-item">
-
                         <i class="bi bi-calendar-check-fill"></i>
+                        <span>My Attendance</span>
+                    </a>
 
-                        <span>
-                            My Attendance
-                        </span>
+                    <a asp-controller="Timetable"
+                       asp-action="Index"
+                       class="menu-item">
+                        <i class="bi bi-calendar-week"></i>
+                        <span>Timetable</span>
+                    </a>
+                }
 
+                else if (User.IsInRole("Teacher"))
+
+                {
+                    <!-- TEACHER PORTAL -->
+                    <div class="menu-title">TEACHER PORTAL</div>
+
+                    <a asp-controller="Teacher"
+                       asp-action="Dashboard"
+                       class="menu-item">
+                        <i class="bi bi-speedometer2"></i>
+                        <span>My Dashboard</span>
+                    </a>
+
+                    <div class="menu-title">ACADEMIC</div>
+
+                    <a href="#"
+                       class="menu-item">
+                        <i class="bi bi-building"></i>
+                        <span>My Classes</span>
                     </a>
 
                     <a asp-controller="Timetable"
@@ -172,33 +154,7 @@
                         <span>Timetable</span>
                     </a>
 
-                }
-                else if (User.IsInRole("Teacher"))
-                {
-                    <div class="menu-title">
-                        TEACHER PORTAL
-                    </div>
-
-                    <a asp-controller="Teacher"
-                       asp-action="Dashboard"
-                       class="menu-item">
-                        <i class="bi bi-speedometer2"></i>
-                        <span>My Dashboard</span>
-                    </a>
-
-                    <div class="menu-title">
-                        ACADEMIC
-                    </div>
-
-                    <a href="#"
-                       class="menu-item">
-                        <i class="bi bi-building"></i>
-                        <span>My Classes</span>
-                    </a>
-
-                    <div class="menu-title">
-                        MANAGEMENT
-                    </div>
+                    <div class="menu-title">MANAGEMENT</div>
 
                     <a href="#"
                        class="menu-item">
@@ -211,68 +167,24 @@
                         <i class="bi bi-bar-chart-fill"></i>
                         <span>Grades</span>
                     </a>
-
-                    <a asp-controller="Timetable"
-                       asp-action="Index"
-                       class="menu-item">
-                        <i class="bi bi-calendar-week"></i>
-                        <span>Timetable</span>
-                    </a>
-
                 }
+
                 else
 
                 {
-                    <!-- ================================================= -->
                     <!-- ADMIN / STAFF -->
-                    <!-- ================================================= -->
                     <!-- MAIN -->
-                    <div class="menu-title">
-                        MAIN
-                    </div>
+                    <div class="menu-title">MAIN</div>
 
-                    <!-- DASHBOARD -->
                     <a asp-controller="Home"
                        asp-action="Index"
                        class="menu-item">
-
                         <i class="bi bi-grid-1x2-fill"></i>
-
-                        <span>
-                            Dashboard
-                        </span>
+                        <span>Dashboard</span>
                     </a>
 
-                    <!-- GRADE MANAGEMENT -->
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <a href="/Grades/Index"
-                           class="menu-item">
-                            <i class="bi bi-journal-check"></i>
-                            <span>Grade Management</span>
-                        </a>
-                    }
-
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <a href="/Attendance/Index"
-                           class="menu-item">
-
-                            <i class="bi bi-calendar-check"></i>
-
-                            <span>
-                                Attendance Management
-                            </span>
-                        </a>
-                    }
-
-                <!-- ================================================= -->
-                <!-- ACADEMIC -->
-                <!-- ================================================= -->
-
-                <div class="menu-title">
-                    ACADEMIC
-                </div>
+                    <!-- ACADEMIC -->
+                    <div class="menu-title">ACADEMIC</div>
 
                     <a asp-controller="Timetable"
                        asp-action="Index"
@@ -281,192 +193,92 @@
                         <span>Timetable</span>
                     </a>
 
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-controller="Students"
+                           asp-action="Index"
+                           class="menu-item">
+                            <i class="bi bi-people-fill"></i>
+                            <span>Students</span>
+                        </a>
 
+                        <a asp-controller="Teachers"
+                           asp-action="Index"
+                           class="menu-item">
+                            <i class="bi bi-person-workspace"></i>
+                            <span>Teachers</span>
+                        </a>
 
-
-                <!-- STUDENTS & TEACHERS -->
-                @if (User.IsInRole("Admin"))
-                {
-                    <a asp-controller="Students"
-                       asp-action="Index"
-                       class="menu-item">
-
-                        <i class="bi bi-people-fill"></i>
-
-                        <span>
-                            Students
-                        </span>
-
-                    </a>
-
-                    <a asp-controller="Teachers"
-                       asp-action="Index"
-                       class="menu-item">
-
-                        <i class="bi bi-person-workspace"></i>
-
-                        <span>
-                            Teachers
-                        </span>
-
-                    </a>
-                }
-
-
-                <!-- CLASSES -->
-
-                <a href="#"
-                   class="menu-item">
-
-                    <i class="bi bi-building"></i>
-
-                    <span>
-                        Classes
-                    </span>
-
-                </a>
-                    <li class="nav-item">
-                        <a class="nav-link"
-                           asp-controller="Classes"
-                           asp-action="Index">
-                            <i class="bi bi-building me-2"></i>
+                        <a asp-controller="Classes"
+                           asp-action="Index"
+                           class="menu-item">
+                            <i class="bi bi-building"></i>
                             <span>Classes</span>
                         </a>
-                    </li>
 
-
-                <!-- SUBJECTS -->
-
-                <a href="#"
-                   class="menu-item">
-
-                    <i class="bi bi-journal-text"></i>
-
-                    <span>
-                        Subjects
-                    </span>
-
-                </a>
-
-                    <li class="nav-item">
-                        <a class="nav-link"
-                           asp-controller="Subjects"
-                           asp-action="Index">
-                            <i class="bi bi-book me-2"></i>
+                        <a asp-controller="Subjects"
+                           asp-action="Index"
+                           class="menu-item">
+                            <i class="bi bi-journal-text"></i>
                             <span>Subjects</span>
                         </a>
-                    </li>
+                    }
 
+                    <!-- MANAGEMENT -->
+                    <div class="menu-title">MANAGEMENT</div>
 
-                <!-- ================================================= -->
-                <!-- MANAGEMENT -->
-                <!-- ================================================= -->
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-controller="Attendance"
+                           asp-action="Index"
+                           class="menu-item">
+                            <i class="bi bi-calendar-check-fill"></i>
+                            <span>Attendance</span>
+                        </a>
 
-                <div class="menu-title">
-                    MANAGEMENT
-                </div>
+                        <a asp-controller="Grades"
+                           asp-action="Index"
+                           class="menu-item">
+                            <i class="bi bi-bar-chart-fill"></i>
+                            <span>Grades</span>
+                        </a>
 
+                        <!-- Kept from your original layout.
+                             This remains a placeholder until an
+                             Announcements page/action is available. -->
+                        <a asp-controller="Announcements" asp-action="Index" class="menu-item">
+                          
+                            <i class="bi bi-megaphone-fill"></i>
+                            <span>Announcements</span>
+                        </a>
 
-                <!-- ATTENDANCE -->
+                        <!-- AI FEATURES -->
+                        <div class="menu-title">AI FEATURES</div>
 
-                <a href="#"
-                   class="menu-item">
+                        <a asp-controller="AIDashboard"
+                           asp-action="Index"
+                           class="menu-item ai-menu-item">
+                            <i class="bi bi-stars"></i>
+                            <span>AI Dashboard</span>
+                            <span class="ai-badge">AI</span>
+                        </a>
 
-                    <i class="bi bi-calendar-check-fill"></i>
+                        <a href="#"
+                           class="menu-item">
+                            <i class="bi bi-robot"></i>
+                            <span>AI Insights</span>
+                        </a>
 
-                    <span>
-                        Attendance
-                    </span>
-
-                </a>
-
-
-                <!-- GRADES -->
-
-                <a href="#"
-                   class="menu-item">
-
-                    <i class="bi bi-bar-chart-fill"></i>
-
-                    <span>
-                        Grades
-                    </span>
-
-                </a>
-
-
-                <!-- ANNOUNCEMENTS -->
-
-                <a href="#"
-                   class="menu-item">
-
-                    <i class="bi bi-megaphone-fill"></i>
-
-                    <span>
-                        Announcements
-                    </span>
-
-                </a>
-
-
-                <!-- ================================================= -->
-                <!-- AI FEATURES -->
-                <!-- ================================================= -->
-
-                <div class="menu-title">
-                    AI FEATURES
-                </div>
-
-
-                    <a asp-controller="AIDashboard"
-                       asp-action="Index"
-                       class="menu-item ai-menu-item">
-
-                        <i class="bi bi-stars"></i>
-
-                        <span>
-                            AI Dashboard
-                        </span>
-
-                        <span class="ai-badge">
-                            AI
-                        </span>
-
-                    </a>
-
-
-                <a href="#"
-                   class="menu-item">
-
-                    <i class="bi bi-robot"></i>
-
-                    <span>
-                        AI Insights
-                    </span>
-
-                </a>
-
-
-                <a href="#"
-                   class="menu-item">
-
-                    <i class="bi bi-graph-up-arrow"></i>
-
-                    <span>
-                        Risk Predictor
-                    </span>
-
-                </a>
-
+                        <a href="#"
+                           class="menu-item">
+                            <i class="bi bi-graph-up-arrow"></i>
+                            <span>Risk Predictor</span>
+                        </a>
+                    }
                 }
-               <!-- ================================================= -->
+
                 <!-- SYSTEM -->
-                <!-- ================================================= -->
-
-                <div class="menu-title">
-                    SYSTEM
-                </div>
-
+                <div class="menu-title">SYSTEM</div>
 
                 <form asp-controller="Account"
                       asp-action="Logout"
@@ -477,53 +289,28 @@
 
                     <button type="submit"
                             class="menu-item text-danger border-0 bg-transparent w-100 text-start">
-
                         <i class="bi bi-box-arrow-right"></i>
-
-                        <span>
-                            Sign Out
-                        </span>
-
+                        <span>Sign Out</span>
                     </button>
-
                 </form>
-
             </div>
 
-
-            <!-- ================================================= -->
             <!-- SIDEBAR USER -->
-            <!-- ================================================= -->
-
             <div class="sidebar-footer">
-
                 @if (SignInManager.IsSignedIn(User))
 
                 {
                     <div class="sidebar-user">
-
-
                         <div class="user-avatar">
-
                             @(string.IsNullOrWhiteSpace(displayName)
                                 ? "U"
                                 : displayName.Substring(0, 1).ToUpper())
-
                         </div>
-
 
                         <div class="user-info">
-
-                            <strong>
-                                @displayName
-                            </strong>
-
-                            <small>
-                                @displayRole
-                            </small>
-
+                            <strong>@displayName</strong>
+                            <small>@displayRole</small>
                         </div>
-
 
                         <form asp-controller="Account"
                               asp-action="Logout"
@@ -535,156 +322,88 @@
                             <button type="submit"
                                     class="btn btn-sm btn-link text-muted p-0"
                                     title="Logout">
-
                                 <i class="bi bi-box-arrow-right"></i>
-
                             </button>
-
                         </form>
-
                     </div>
                 }
-
             </div>
-
         </aside>
 
-
-        <!-- ===================================================== -->
         <!-- MAIN CONTENT -->
-        <!-- ===================================================== -->
-
         <div class="main-content">
-
-
-            <!-- ================================================= -->
             <!-- TOP NAVBAR -->
-            <!-- ================================================= -->
-
             <header class="top-navbar">
 
-
                 <div class="navbar-left">
-
-
                     <button class="sidebar-toggle"
-                            id="sidebarToggle">
-
+                            id="sidebarToggle"
+                            type="button"
+                            aria-label="Toggle sidebar">
                         <i class="bi bi-list"></i>
-
                     </button>
-
 
                     <div class="breadcrumb-area">
-
-                        <span class="breadcrumb-label">
-                            EduManage
-                        </span>
-
-                        <span class="breadcrumb-separator">
-                            /
-                        </span>
-
-                        <span class="breadcrumb-current">
-                            @ViewData["Title"]
-                        </span>
-
+                        <span class="breadcrumb-label">EduManage</span>
+                        <span class="breadcrumb-separator">/</span>
+                        <span class="breadcrumb-current">@ViewData["Title"]</span>
                     </div>
-
                 </div>
 
-
-                <!-- ================================================= -->
                 <!-- NAVBAR RIGHT -->
-                <!-- ================================================= -->
-
                 <div class="navbar-right">
 
-
                     <!-- Search -->
-
                     <div class="top-search">
-
                         <i class="bi bi-search"></i>
-
-                        <input type="text"
-                               placeholder="Search..." />
-
-                        <span class="search-shortcut">
-                            ⌘K
-                        </span>
-
+                        <input type="text" placeholder="Search..." />
+                        <span class="search-shortcut">⌘K</span>
                     </div>
 
-
                     <!-- Notifications -->
-
-                    <button class="navbar-icon-btn">
-
+                    <button class="navbar-icon-btn"
+                            type="button"
+                            aria-label="Notifications">
                         <i class="bi bi-bell"></i>
-
                         <span class="notification-dot"></span>
-
                     </button>
-
 
                     <!-- Messages -->
-
-                    <button class="navbar-icon-btn">
-
+                    <button class="navbar-icon-btn"
+                            type="button"
+                            aria-label="Messages">
                         <i class="bi bi-chat-left-text"></i>
-
                     </button>
 
-
-                    <!-- ================================================= -->
                     <!-- USER DROPDOWN -->
-                    <!-- ================================================= -->
                     @if (SignInManager.IsSignedIn(User))
 
                     {
                         <div class="dropdown">
-
 
                             <div class="top-user cursor-pointer"
                                  data-bs-toggle="dropdown"
                                  aria-expanded="false"
                                  style="cursor: pointer;">
 
-
                                 <div class="top-user-avatar">
-
                                     @(string.IsNullOrWhiteSpace(displayName)
                                         ? "U"
                                         : displayName.Substring(0, 1).ToUpper())
-
                                 </div>
-
 
                                 <div class="top-user-info">
-
-                                    <strong>
-                                        @displayName
-                                    </strong>
-
-                                    <span>
-                                        @displayRole
-                                    </span>
-
+                                    <strong>@displayName</strong>
+                                    <span>@displayRole</span>
                                 </div>
 
-
                                 <i class="bi bi-chevron-down"></i>
-
                             </div>
-
 
                             <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2 p-2"
                                 style="border-radius: 12px; min-width: 210px;">
 
-
                                 <li class="px-3 py-2 border-bottom mb-2">
-
                                     <div class="fw-bold text-dark">
                                         @displayName
                                     </div>
@@ -696,26 +415,19 @@
                                     <span class="badge bg-primary-subtle text-primary mt-1">
                                         @displayRole
                                     </span>
-
                                 </li>
-
 
                                 <!-- Student Portal -->
                                 @if (User.IsInRole("Student"))
 
                                 {
                                     <li>
-
                                         <a class="dropdown-item rounded py-2"
                                            asp-controller="Student"
                                            asp-action="Dashboard">
-
                                             <i class="bi bi-person-badge me-2 text-primary"></i>
-
                                             Student Portal
-
                                         </a>
-
                                     </li>
                                 }
 
@@ -723,52 +435,36 @@
 
                                 {
                                     <!-- Main Dashboard -->
-
                                     <li>
-
                                         <a class="dropdown-item rounded py-2"
                                            asp-controller="Home"
                                            asp-action="Index">
-
                                             <i class="bi bi-grid-1x2-fill me-2 text-primary"></i>
-
                                             Main Dashboard
-
                                         </a>
-
                                     </li>
-
 
                                     <!-- Student Management -->
                                     @if (User.IsInRole("Admin"))
 
                                     {
                                         <li>
-
                                             <a class="dropdown-item rounded py-2"
                                                asp-controller="Students"
                                                asp-action="Index">
-
                                                 <i class="bi bi-people-fill me-2 text-primary"></i>
-
                                                 Students
-
                                             </a>
-
                                         </li>
                                     }
                                 }
-
 
                                 <li>
                                     <hr class="dropdown-divider my-1" />
                                 </li>
 
-
                                 <!-- Sign Out -->
-
                                 <li>
-
                                     <form asp-controller="Account"
                                           asp-action="Logout"
                                           method="post">
@@ -777,19 +473,12 @@
 
                                         <button type="submit"
                                                 class="dropdown-item text-danger rounded py-2">
-
                                             <i class="bi bi-box-arrow-right me-2"></i>
-
                                             Sign Out
-
                                         </button>
-
                                     </form>
-
                                 </li>
-
                             </ul>
-
                         </div>
                     }
 
@@ -799,55 +488,28 @@
                         <a asp-controller="Account"
                            asp-action="Login"
                            class="btn btn-sm btn-primary">
-
                             <i class="bi bi-box-arrow-in-right me-1"></i>
-
                             Sign In
-
                         </a>
                     }
-
                 </div>
-
             </header>
 
-
-            <!-- ================================================= -->
             <!-- PAGE CONTENT -->
-            <!-- ================================================= -->
-
             <main class="page-content">
-
                 @RenderBody()
-
             </main>
 
-
-            <!-- ================================================= -->
             <!-- FOOTER -->
-            <!-- ================================================= -->
-
             <footer class="app-footer">
-
-                <span>
-                    © @DateTime.Now.Year EduManage
-                </span>
-
-                <span>
-                    School Management System
-                </span>
-
+                <span>© @DateTime.Now.Year EduManage</span>
+                <span>School Management System</span>
             </footer>
 
         </div>
-
     </div>
 
-
-    <!-- ========================================================= -->
     <!-- JAVASCRIPT -->
-    <!-- ========================================================= -->
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script src="~/js/site.js"
@@ -856,6 +518,4 @@
     @await RenderSectionAsync("Scripts", required: false)
 
 </body>
-
 </html>
-

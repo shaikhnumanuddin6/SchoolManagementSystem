@@ -1,18 +1,269 @@
-﻿@model SchoolManagementSystem.Application.ViewModels.Attendance.AttendanceListViewModel
+﻿ @model SchoolManagementSystem.Application.ViewModels.Attendance.AttendanceListViewModel
 
 @{
     ViewData["Title"] = "Attendance Management";
 }
 
-<div class="container-fluid py-4">
+@section Styles {
+    <style>
+        .attendance-page {
+            --attendance-primary: #4f46e5;
+            --attendance-border: #e8ebf2;
+            --attendance-muted: #778198;
+            color: #202942;
+        }
 
-    <!-- PAGE HEADER -->
-    <div class="d-flex flex-wrap justify-content-between
-                align-items-center gap-3 mb-4">
+            .attendance-page .page-subtitle {
+                color: var(--attendance-muted);
+                font-size: .94rem;
+            }
+
+            .attendance-page .attendance-card {
+                background: #fff;
+                border: 1px solid var(--attendance-border);
+                border-radius: 16px;
+                box-shadow: 0 4px 18px rgba(31, 41, 55, .045);
+            }
+
+            .attendance-page .stat-card {
+                padding: 21px;
+                height: 100%;
+                transition: transform .2s ease, box-shadow .2s ease;
+            }
+
+                .attendance-page .stat-card:hover {
+                    transform: translateY(-3px);
+                    box-shadow: 0 9px 24px rgba(31, 41, 55, .08);
+                }
+
+            .attendance-page .stat-icon {
+                width: 46px;
+                height: 46px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 13px;
+                font-size: 1.25rem;
+                font-weight: 700;
+            }
+
+            .attendance-page .stat-label {
+                color: var(--attendance-muted);
+                font-size: .85rem;
+                font-weight: 500;
+            }
+
+            .attendance-page .stat-value {
+                font-size: 1.85rem;
+                font-weight: 750;
+                letter-spacing: -.7px;
+                line-height: 1.25;
+            }
+
+            .attendance-page .stat-present .stat-icon {
+                background: #e7f8ef;
+                color: #16834a;
+            }
+
+            .attendance-page .stat-absent .stat-icon {
+                background: #fff0f0;
+                color: #d93645;
+            }
+
+            .attendance-page .stat-late .stat-icon {
+                background: #fff5df;
+                color: #a66a00;
+            }
+
+            .attendance-page .stat-rate .stat-icon {
+                background: #eeecff;
+                color: #5145cd;
+            }
+
+            .attendance-page .section-heading {
+                font-size: 1rem;
+                font-weight: 700;
+                margin: 0;
+            }
+
+            .attendance-page .form-label {
+                font-size: .84rem;
+                font-weight: 600;
+                color: #48536b;
+                margin-bottom: 8px;
+            }
+
+            .attendance-page .form-control,
+            .attendance-page .form-select {
+                min-height: 43px;
+                border-color: #dfe4ed;
+                border-radius: 9px;
+                font-size: .9rem;
+            }
+
+                .attendance-page .form-control:focus,
+                .attendance-page .form-select:focus {
+                    border-color: #a5a0f5;
+                    box-shadow: 0 0 0 .2rem rgba(79, 70, 229, .1);
+                }
+
+            .attendance-page .btn {
+                border-radius: 9px;
+                font-weight: 600;
+                padding: 10px 16px;
+            }
+
+            .attendance-page .btn-primary {
+                background: var(--attendance-primary);
+                border-color: var(--attendance-primary);
+            }
+
+            .attendance-page .panel-header {
+                padding: 19px 22px;
+                border-bottom: 1px solid var(--attendance-border);
+            }
+
+            .attendance-page .panel-body {
+                padding: 22px;
+            }
+
+            .attendance-page .records-table {
+                font-size: .9rem;
+            }
+
+                .attendance-page .records-table thead th {
+                    background: #f7f8fc;
+                    color: #69748a;
+                    font-size: .75rem;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    letter-spacing: .45px;
+                    padding: 15px 18px;
+                    border-bottom: 1px solid var(--attendance-border);
+                    white-space: nowrap;
+                }
+
+                .attendance-page .records-table tbody td {
+                    padding: 16px 18px;
+                    border-color: #edf0f5;
+                }
+
+                .attendance-page .records-table tbody tr:last-child td {
+                    border-bottom: 0;
+                }
+
+            .attendance-page .student-avatar {
+                width: 39px;
+                height: 39px;
+                flex: 0 0 39px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 11px;
+                background: #eeecff;
+                color: #5145cd;
+                font-weight: 750;
+                font-size: .85rem;
+            }
+
+            .attendance-page .student-name {
+                color: #27324a;
+                font-weight: 650;
+            }
+
+            .attendance-page .student-admission {
+                color: var(--attendance-muted);
+                font-size: .79rem;
+                margin-top: 3px;
+            }
+
+            .attendance-page .status-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                border-radius: 7px;
+                padding: 7px 10px;
+                font-size: .77rem;
+                font-weight: 700;
+                white-space: nowrap;
+            }
+
+            .attendance-page .status-present {
+                background: #e6f7ed;
+                color: #167744;
+            }
+
+            .attendance-page .status-absent {
+                background: #ffebed;
+                color: #c52e3b;
+            }
+
+            .attendance-page .status-late {
+                background: #fff2d8;
+                color: #946000;
+            }
+
+            .attendance-page .status-excused {
+                background: #e5f5fc;
+                color: #08749a;
+            }
+
+            .attendance-page .status-other {
+                background: #eef0f5;
+                color: #596579;
+            }
+
+            .attendance-page .empty-state {
+                padding: 56px 20px;
+                text-align: center;
+            }
+
+            .attendance-page .empty-icon {
+                width: 65px;
+                height: 65px;
+                margin: 0 auto 16px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 18px;
+                background: #f0efff;
+                color: #5145cd;
+                font-size: 1.8rem;
+            }
+
+        @@media (max-width: 767.98px) {
+            .attendance-page .page-header {
+                align-items: stretch !important;
+            }
+
+                .attendance-page .page-header .btn {
+                    width: 100%;
+                }
+
+            .attendance-page .panel-header,
+            .attendance-page .panel-body {
+                padding: 16px;
+            }
+
+            .attendance-page .stat-card {
+                padding: 16px;
+            }
+
+            .attendance-page .stat-value {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+}
+
+<div class="container-fluid py-4 attendance-page">
+
+    <!-- Page header -->
+    <div class="page-header d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
         <div>
-            <h2 class="fw-bold mb-1">Attendance Management</h2>
-            <p class="text-muted mb-0">
-                View daily attendance and monitor student presence.
+            <h2 class="fw-bold mb-2">Attendance Management</h2>
+            <p class="page-subtitle mb-0">
+                Track student attendance and review daily records.
             </p>
         </div>
 
@@ -21,17 +272,16 @@
            asp-route-classId="@Model.ClassId"
            asp-route-date="@Model.Date.ToString("yyyy-MM-dd")"
            class="btn btn-primary">
-            Mark Attendance
+            <span class="me-2" aria-hidden="true">+</span> Mark Attendance
         </a>
     </div>
 
-    <!-- SUCCESS MESSAGE -->
+    <!-- Success message -->
     @if (TempData["SuccessMessage"] != null)
     {
-        <div class="alert alert-success alert-dismissible fade show"
+        <div class="alert alert-success alert-dismissible fade show rounded-3 mb-4"
              role="alert">
             @TempData["SuccessMessage"]
-
             <button type="button"
                     class="btn-close"
                     data-bs-dismiss="alert"
@@ -39,101 +289,91 @@
         </div>
     }
 
-    <!-- SUMMARY CARDS -->
+    <!-- Summary cards -->
     <div class="row g-3 mb-4">
 
         <div class="col-12 col-sm-6 col-xl-3">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body">
-                    <div class="text-muted small mb-2">
-                        Present
+            <div class="attendance-card stat-card stat-present">
+                <div class="d-flex justify-content-between align-items-start gap-2">
+                    <div>
+                        <div class="stat-label mb-2">Present Students</div>
+                        <div class="stat-value text-success">@Model.PresentCount</div>
                     </div>
-                    <h3 class="fw-bold text-success mb-0">
-                        @Model.PresentCount
-                    </h3>
+                    <div class="stat-icon" aria-hidden="true">✓</div>
                 </div>
+                <div class="text-muted small mt-3">Marked present for the selected date</div>
             </div>
         </div>
 
         <div class="col-12 col-sm-6 col-xl-3">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body">
-                    <div class="text-muted small mb-2">
-                        Absent
+            <div class="attendance-card stat-card stat-absent">
+                <div class="d-flex justify-content-between align-items-start gap-2">
+                    <div>
+                        <div class="stat-label mb-2">Absent Students</div>
+                        <div class="stat-value text-danger">@Model.AbsentCount</div>
                     </div>
-                    <h3 class="fw-bold text-danger mb-0">
-                        @Model.AbsentCount
-                    </h3>
+                    <div class="stat-icon" aria-hidden="true">×</div>
                 </div>
+                <div class="text-muted small mt-3">Marked absent for the selected date</div>
             </div>
         </div>
 
         <div class="col-12 col-sm-6 col-xl-3">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body">
-                    <div class="text-muted small mb-2">
-                        Late
+            <div class="attendance-card stat-card stat-late">
+                <div class="d-flex justify-content-between align-items-start gap-2">
+                    <div>
+                        <div class="stat-label mb-2">Late Students</div>
+                        <div class="stat-value" style="color:#a66a00">@Model.LateCount</div>
                     </div>
-                    <h3 class="fw-bold text-warning mb-0">
-                        @Model.LateCount
-                    </h3>
+                    <div class="stat-icon" aria-hidden="true">◷</div>
                 </div>
+                <div class="text-muted small mt-3">Arrived after the expected time</div>
             </div>
         </div>
 
         <div class="col-12 col-sm-6 col-xl-3">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body">
-                    <div class="text-muted small mb-2">
-                        Attendance Percentage
+            <div class="attendance-card stat-card stat-rate">
+                <div class="d-flex justify-content-between align-items-start gap-2">
+                    <div>
+                        <div class="stat-label mb-2">Attendance Rate</div>
+                        <div class="stat-value" style="color:#5145cd">
+                            @Model.AttendancePercentage.ToString("0.0")%
+                        </div>
                     </div>
-                    <h3 class="fw-bold mb-0">
-                        @Model.AttendancePercentage.ToString("0.0")%
-                    </h3>
-                    <small class="text-muted">
-                        Excludes excused records
-                    </small>
+                    <div class="stat-icon" aria-hidden="true">%</div>
                 </div>
+                <div class="text-muted small mt-3">Excludes excused records</div>
             </div>
         </div>
 
     </div>
 
-    <!-- FILTERS -->
-    <div class="card border-0 shadow-sm mb-4">
-
-        <div class="card-header bg-white py-3">
-            <h5 class="fw-semibold mb-0">
-                Search and Filters
-            </h5>
+    <!-- Filters -->
+    <div class="attendance-card mb-4">
+        <div class="panel-header d-flex align-items-center gap-3">
+            <div class="stat-icon" style="background:#eeecff;color:#5145cd" aria-hidden="true">
+                <span>⌕</span>
+            </div>
+            <div>
+                <h5 class="section-heading">Search and Filters</h5>
+                <div class="text-muted small mt-1">Choose a date, class, student, or status.</div>
+            </div>
         </div>
 
-        <div class="card-body">
-
-            <form asp-controller="Attendance"
-                  asp-action="Index"
-                  method="get">
-
+        <div class="panel-body">
+            <form asp-controller="Attendance" asp-action="Index" method="get">
                 <div class="row g-3">
 
-                    <div class="col-12 col-md-6 col-lg-3">
-                        <label asp-for="Date"
-                               class="form-label">
-                            Attendance Date
-                        </label>
-
+                    <div class="col-12 col-md-6 col-xl-3">
+                        <label asp-for="Date" class="form-label">Attendance Date</label>
                         <input asp-for="Date"
                                type="date"
                                asp-format="{0:yyyy-MM-dd}"
                                class="form-control" />
                     </div>
 
-                    <div class="col-12 col-md-6 col-lg-3">
-                        <label asp-for="ClassId"
-                               class="form-label">
-                            Class
-                        </label>
-
+                    <div class="col-12 col-md-6 col-xl-3">
+                        <label asp-for="ClassId" class="form-label">Class</label>
                         <select asp-for="ClassId"
                                 asp-items="Model.Classes"
                                 class="form-select">
@@ -141,12 +381,8 @@
                         </select>
                     </div>
 
-                    <div class="col-12 col-md-6 col-lg-3">
-                        <label asp-for="StudentId"
-                               class="form-label">
-                            Student
-                        </label>
-
+                    <div class="col-12 col-md-6 col-xl-3">
+                        <label asp-for="StudentId" class="form-label">Student</label>
                         <select asp-for="StudentId"
                                 asp-items="Model.Students"
                                 class="form-select">
@@ -154,12 +390,8 @@
                         </select>
                     </div>
 
-                    <div class="col-12 col-md-6 col-lg-3">
-                        <label asp-for="Status"
-                               class="form-label">
-                            Attendance Status
-                        </label>
-
+                    <div class="col-12 col-md-6 col-xl-3">
+                        <label asp-for="Status" class="form-label">Attendance Status</label>
                         <select asp-for="Status"
                                 asp-items="Model.Statuses"
                                 class="form-select">
@@ -169,10 +401,8 @@
 
                 </div>
 
-                <div class="d-flex flex-wrap gap-2 mt-3">
-
-                    <button type="submit"
-                            class="btn btn-primary">
+                <div class="d-flex flex-wrap gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary">
                         Apply Filters
                     </button>
 
@@ -181,145 +411,114 @@
                        class="btn btn-outline-secondary">
                         Clear Filters
                     </a>
-
                 </div>
-
             </form>
-
         </div>
     </div>
 
-    <!-- ATTENDANCE TABLE -->
-    <div class="card border-0 shadow-sm">
-
-        <div class="card-header bg-white py-3
-                    d-flex flex-wrap justify-content-between
-                    align-items-center gap-2">
+    <!-- Attendance records -->
+    <div class="attendance-card overflow-hidden">
+        <div class="panel-header d-flex flex-wrap justify-content-between align-items-center gap-3">
             <div>
-                <h5 class="fw-semibold mb-1">
-                    Daily Attendance Records
-                </h5>
-
-                <small class="text-muted">
-                    @Model.Date.ToString("dd MMMM yyyy")
-                </small>
+                <h5 class="section-heading mb-1">Daily Attendance Records</h5>
+                <div class="text-muted small">
+                    Records for @Model.Date.ToString("dd MMMM yyyy")
+                </div>
             </div>
 
-            <span class="badge text-bg-secondary">
+            <span class="badge rounded-pill text-bg-light border px-3 py-2">
                 @Model.TotalRecords records
             </span>
         </div>
 
-        <div class="card-body p-0">
+        @if (Model.Records.Count == 0)
+        {
+            <div class="empty-state">
+                <div class="empty-icon" aria-hidden="true">▤</div>
+                <h5 class="fw-bold mb-2">No attendance records found</h5>
+                <p class="text-muted mb-4">
+                    No records match the selected date and filters.
+                </p>
 
-            @if (Model.Records.Count == 0)
-            {
-                <div class="text-center py-5 px-3">
-                    <h5 class="text-muted">
-                        No attendance records found
-                    </h5>
+                <a asp-controller="Attendance"
+                   asp-action="Mark"
+                   asp-route-classId="@Model.ClassId"
+                   asp-route-date="@Model.Date.ToString("yyyy-MM-dd")"
+                   class="btn btn-primary">
+                    Mark Attendance
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-hover align-middle records-table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Class</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var record in Model.Records)
+                        {
+                            var initials = string.IsNullOrWhiteSpace(record.StudentName)
+                            ? "?"
+                            : string.Join("", record.StudentName
+                            .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                            .Take(2)
+                            .Select(part => part.Substring(0, 1).ToUpperInvariant()));
 
-                    <p class="text-muted mb-3">
-                        No records match the selected date and filters.
-                    </p>
-
-                    <a asp-controller="Attendance"
-                       asp-action="Mark"
-                       asp-route-classId="@Model.ClassId"
-                       asp-route-date="@Model.Date.ToString("yyyy-MM-dd")"
-                       class="btn btn-primary">
-                        Mark Attendance
-                    </a>
-                </div>
-            }
-            else
-            {
-                <div class="table-responsive">
-
-                    <table class="table table-hover align-middle mb-0">
-
-                        <thead class="table-light">
-                            <tr>
-                                <th>Student</th>
-                                <th>Class</th>
-                                <th>Date</th>
-                                <th>Status</th>
-                                <th>Remarks</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            @foreach (var record in Model.Records)
+                            var statusClass = record.Status switch
                             {
-                                <tr>
-                                    <td>
-                                        <div class="fw-semibold">
-                                            @record.StudentName
+                                "Present" => "status-present",
+                                "Absent" => "status-absent",
+                                "Late" => "status-late",
+                                "Excused" => "status-excused",
+                                _ => "status-other"
+                            };
+
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="student-avatar" aria-hidden="true">
+                                            @initials
                                         </div>
+                                        <div>
+                                            <div class="student-name">@record.StudentName</div>
+                                            <div class="student-admission">@record.AdmissionNumber</div>
+                                        </div>
+                                    </div>
+                                </td>
 
-                                        <small class="text-muted">
-                                            @record.AdmissionNumber
-                                        </small>
-                                    </td>
+                                <td>@record.ClassName</td>
 
-                                    <td>
-                                        @record.ClassName
-                                    </td>
+                                <td class="text-nowrap">
+                                    @record.Date.ToString("dd MMM yyyy")
+                                </td>
 
-                                    <td class="text-nowrap">
-                                        @record.Date.ToString("dd MMM yyyy")
-                                    </td>
+                                <td>
+                                    <span class="status-badge @statusClass">
+                                        @record.Status
+                                    </span>
+                                </td>
 
-                                    <td>
-                                        @switch (record.Status)
-                                        {
-                                            case "Present":
-                                                <span class="badge text-bg-success">
-                                                    Present
-                                                </span>
-                                                break;
-
-                                            case "Absent":
-                                                <span class="badge text-bg-danger">
-                                                    Absent
-                                                </span>
-                                                break;
-
-                                            case "Late":
-                                                <span class="badge text-bg-warning">
-                                                    Late
-                                                </span>
-                                                break;
-
-                                            case "Excused":
-                                                <span class="badge text-bg-info">
-                                                    Excused
-                                                </span>
-                                                break;
-
-                                            default:
-                                                <span class="badge text-bg-secondary">
-                                                    @record.Status
-                                                </span>
-                                                break;
-                                        }
-                                    </td>
-
-                                    <td>
+                                <td>
+                                    <span class="text-muted">
                                         @(string.IsNullOrWhiteSpace(record.Remarks)
                                             ? "—"
                                             : record.Remarks)
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-
-                    </table>
-
-                </div>
-            }
-
-        </div>
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
     </div>
 
 </div>

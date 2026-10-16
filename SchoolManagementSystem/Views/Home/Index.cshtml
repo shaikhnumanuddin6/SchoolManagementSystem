@@ -1,330 +1,194 @@
-﻿@model SchoolManagementSystem.Application.ViewModels.DashboardViewModel
+﻿ @model SchoolManagementSystem.Application.ViewModels.DashboardViewModel
 
 @{
     ViewData["Title"] = "Dashboard";
 }
 
-<div class="container-fluid py-4">
+<div class="container-fluid py-4 admin-dashboard">
 
-    <!-- =========================================================
-         HEADER
-         ========================================================= -->
-
-    <div class="dashboard-header mb-4">
-
-        <div>
-            <h1 class="fw-bold mb-1">
-                Welcome back! 👋
-            </h1>
-
-            <p class="text-muted mb-0">
-                Here's what's happening at your school today.
-            </p>
+    <!-- Welcome header -->
+    <section class="dashboard-welcome mb-4">
+        <div class="welcome-content">
+            <span class="welcome-eyebrow">
+                <i class="bi bi-stars me-2"></i>ADMIN OVERVIEW
+            </span>
+            <h1>Welcome back! <span class="welcome-wave">👋</span></h1>
+            <p>Here's what's happening at your school today.</p>
+            <div class="welcome-date">
+                <i class="bi bi-calendar3"></i>
+                @DateTime.Now.ToString("dddd, dd MMMM yyyy")
+            </div>
         </div>
-
-        <div class="dashboard-date">
-            <i class="bi bi-calendar3 me-1"></i>
-            @DateTime.Now.ToString("dddd, dd MMMM yyyy")
+        <div class="welcome-decoration" aria-hidden="true">
+            <i class="bi bi-mortarboard-fill"></i>
         </div>
+    </section>
 
-    </div>
+    <!-- Statistics -->
+    <div class="row g-3 g-xl-4 mb-4">
 
-
-    <!-- =========================================================
-         SUMMARY CARDS
-         ========================================================= -->
-
-    <div class="row g-4 mb-4">
-
-        <div class="col-xl-3 col-md-6">
-
-            <div class="dashboard-card stat-card h-100">
-
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="dashboard-card stat-card stat-students h-100">
                 <div class="stat-card-content">
-
                     <div>
-                        <span class="stat-label">
-                            Total Students
-                        </span>
-
-                        <h2>
-                            @Model.TotalStudents.ToString("N0")
-                        </h2>
-
+                        <span class="stat-label">Total Students</span>
+                        <h2>@Model.TotalStudents.ToString("N0")</h2>
                         <span class="stat-description">
-                            <i class="bi bi-people-fill"></i>
-                            Students
+                            <i class="bi bi-people-fill"></i> Enrolled students
                         </span>
                     </div>
-
                     <div class="stat-icon students-icon">
                         <i class="bi bi-people-fill"></i>
                     </div>
-
                 </div>
-
+                <div class="stat-bottom-line"></div>
             </div>
-
         </div>
 
-
-        <div class="col-xl-3 col-md-6">
-
-            <div class="dashboard-card stat-card h-100">
-
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="dashboard-card stat-card stat-teachers h-100">
                 <div class="stat-card-content">
-
                     <div>
-                        <span class="stat-label">
-                            Total Teachers
-                        </span>
-
-                        <h2>
-                            @Model.TotalTeachers.ToString("N0")
-                        </h2>
-
+                        <span class="stat-label">Total Teachers</span>
+                        <h2>@Model.TotalTeachers.ToString("N0")</h2>
                         <span class="stat-description">
-                            <i class="bi bi-person-workspace"></i>
-                            Teaching staff
+                            <i class="bi bi-person-workspace"></i> Teaching staff
                         </span>
                     </div>
-
                     <div class="stat-icon teachers-icon">
                         <i class="bi bi-person-workspace"></i>
                     </div>
-
                 </div>
-
+                <div class="stat-bottom-line"></div>
             </div>
-
         </div>
 
-
-        <div class="col-xl-3 col-md-6">
-
-            <div class="dashboard-card stat-card h-100">
-
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="dashboard-card stat-card stat-classes h-100">
                 <div class="stat-card-content">
-
                     <div>
-                        <span class="stat-label">
-                            Total Classes
-                        </span>
-
-                        <h2>
-                            @Model.TotalClasses.ToString("N0")
-                        </h2>
-
+                        <span class="stat-label">Total Classes</span>
+                        <h2>@Model.TotalClasses.ToString("N0")</h2>
                         <span class="stat-description">
-                            <i class="bi bi-building"></i>
-                            School classes
+                            <i class="bi bi-building"></i> School classes
                         </span>
                     </div>
-
                     <div class="stat-icon classes-icon">
                         <i class="bi bi-building"></i>
                     </div>
-
                 </div>
-
+                <div class="stat-bottom-line"></div>
             </div>
-
         </div>
 
-
-        <div class="col-xl-3 col-md-6">
-
-            <div class="dashboard-card stat-card h-100">
-
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="dashboard-card stat-card stat-attendance h-100">
                 <div class="stat-card-content">
-
                     <div>
-                        <span class="stat-label">
-                            Today's Attendance
-                        </span>
-
-                        <h2>
-                            @Model.AttendancePercentage.ToString("0.0")%
-                        </h2>
-
+                        <span class="stat-label">Today's Attendance</span>
+                        <h2>@Model.AttendancePercentage.ToString("0.0")%</h2>
                         <span class="stat-description">
-                            @Model.AttendanceRecordsToday attendance records
+                            <i class="bi bi-calendar-check"></i>
+                            @Model.AttendanceRecordsToday records
                         </span>
                     </div>
-
                     <div class="stat-icon attendance-icon">
                         <i class="bi bi-calendar-check-fill"></i>
                     </div>
-
                 </div>
-
+                <div class="stat-bottom-line"></div>
             </div>
-
         </div>
 
     </div>
 
+    <!-- Attendance and academic performance -->
+    <div class="row g-3 g-xl-4 mb-4">
 
-    <!-- =========================================================
-         ATTENDANCE SUMMARY
-         ========================================================= -->
-
-    <div class="row g-4 mb-4">
-
-        <div class="col-xl-8">
-
-            <div class="dashboard-card h-100">
-
+        <div class="col-12 col-xl-8">
+            <section class="dashboard-card dashboard-panel h-100">
                 <div class="card-header-custom">
-
                     <div>
-                        <h5 class="mb-1">
-                            Today's Attendance
-                        </h5>
-
-                        <p class="text-muted mb-0">
-                            School-wide attendance overview
-                        </p>
+                        <h5><i class="bi bi-calendar2-check me-2 text-primary"></i>Today's Attendance</h5>
+                        <p>School-wide attendance overview</p>
                     </div>
-
-                    <i class="bi bi-calendar-check dashboard-header-icon"></i>
-
+                    <span class="panel-chip">Today</span>
                 </div>
 
                 <div class="row g-3 mt-2">
-
-                    <div class="col-md-4">
-
-                        <div class="p-3 rounded bg-success-subtle">
-
-                            <div class="text-muted small">
-                                Present
-                            </div>
-
-                            <div class="fs-3 fw-bold text-success">
-                                @Model.PresentToday
-                            </div>
-
+                    <div class="col-12 col-sm-4">
+                        <div class="attendance-metric metric-present">
+                            <div class="metric-icon"><i class="bi bi-check-circle-fill"></i></div>
+                            <div class="text-muted small">Present</div>
+                            <div class="metric-value">@Model.PresentToday</div>
+                            <div class="metric-caption">Students present</div>
                         </div>
-
                     </div>
-
-                    <div class="col-md-4">
-
-                        <div class="p-3 rounded bg-danger-subtle">
-
-                            <div class="text-muted small">
-                                Absent
-                            </div>
-
-                            <div class="fs-3 fw-bold text-danger">
-                                @Model.AbsentToday
-                            </div>
-
+                    <div class="col-12 col-sm-4">
+                        <div class="attendance-metric metric-absent">
+                            <div class="metric-icon"><i class="bi bi-x-circle-fill"></i></div>
+                            <div class="text-muted small">Absent</div>
+                            <div class="metric-value">@Model.AbsentToday</div>
+                            <div class="metric-caption">Students absent</div>
                         </div>
-
                     </div>
-
-                    <div class="col-md-4">
-
-                        <div class="p-3 rounded bg-warning-subtle">
-
-                            <div class="text-muted small">
-                                Late
-                            </div>
-
-                            <div class="fs-3 fw-bold text-warning-emphasis">
-                                @Model.LateToday
-                            </div>
-
+                    <div class="col-12 col-sm-4">
+                        <div class="attendance-metric metric-late">
+                            <div class="metric-icon"><i class="bi bi-clock-fill"></i></div>
+                            <div class="text-muted small">Late</div>
+                            <div class="metric-value">@Model.LateToday</div>
+                            <div class="metric-caption">Arrived late</div>
                         </div>
-
                     </div>
-
                 </div>
-
-            </div>
-
+            </section>
         </div>
 
-
-        <div class="col-xl-4">
-
-            <div class="dashboard-card h-100">
-
+        <div class="col-12 col-xl-4">
+            <section class="dashboard-card dashboard-panel performance-highlight h-100">
                 <div class="card-header-custom">
-
                     <div>
-                        <h5 class="mb-1">
-                            Academic Performance
-                        </h5>
-
-                        <p class="text-muted mb-0">
-                            Overall grade average
-                        </p>
+                        <h5><i class="bi bi-graph-up-arrow me-2 text-primary"></i>Academic Performance</h5>
+                        <p>Overall grade average</p>
                     </div>
-
-                    <i class="bi bi-bar-chart dashboard-header-icon"></i>
-
                 </div>
 
-                <div class="text-center py-4">
-
-                    <div class="display-5 fw-bold">
-                        @Model.AverageGradePercentage.ToString("0.0")%
+                <div class="performance-summary">
+                    <div class="performance-ring"
+                         style="--performance-value: @Math.Clamp(Model.AverageGradePercentage, 0, 100).ToString("0.0", System.Globalization.CultureInfo.InvariantCulture)%">
+                        <div class="performance-ring-inner">
+                            <strong>@Model.AverageGradePercentage.ToString("0.0")%</strong>
+                            <span>Average</span>
+                        </div>
                     </div>
-
-                    <div class="text-muted">
-                        Average performance
-                    </div>
-
-                    <div class="mt-2">
-                        <span class="badge bg-primary">
-                            @Model.TotalGrades grades recorded
-                        </span>
-                    </div>
-
+                    <p class="text-muted small mb-3">Overall student performance</p>
+                    <span class="dashboard-pill">
+                        <i class="bi bi-journal-check me-1"></i>
+                        @Model.TotalGrades grades recorded
+                    </span>
                 </div>
-
-            </div>
-
+            </section>
         </div>
 
     </div>
 
-
-    <!-- =========================================================
-         CLASS-WISE ATTENDANCE
-         ========================================================= -->
-
-    <div class="dashboard-card mb-4">
-
+    <!-- Class-wise attendance -->
+    <section class="dashboard-card dashboard-panel mb-4">
         <div class="card-header-custom">
-
             <div>
-                <h5 class="mb-1">
-                    Class-wise Attendance
-                </h5>
-
-                <p class="text-muted mb-0">
-                    Attendance for every class in the school
-                </p>
+                <h5><i class="bi bi-buildings me-2 text-primary"></i>Class-wise Attendance</h5>
+                <p>Attendance overview for every class</p>
             </div>
-
-            <span class="badge bg-primary">
+            <span class="dashboard-pill">
                 @Model.ClassAttendance.Count Classes
             </span>
-
         </div>
 
-        <div class="table-responsive mt-3">
-
+        <div class="table-responsive dashboard-table-wrap mt-3">
             @if (Model.ClassAttendance.Any())
             {
-                <table class="table table-hover align-middle">
-
-                    <thead class="table-light">
-
+                <table class="table table-hover align-middle dashboard-table">
+                    <thead>
                         <tr>
                             <th>Class</th>
                             <th>Teacher</th>
@@ -334,442 +198,725 @@
                             <th>Late</th>
                             <th>Attendance</th>
                         </tr>
-
                     </thead>
-
                     <tbody>
-
                         @foreach (var item in Model.ClassAttendance)
                         {
+                            var attendanceValue = Math.Clamp(item.AttendancePercentage, 0, 100);
+
                             <tr>
-
                                 <td>
-                                    <div class="fw-semibold">
-                                        @item.ClassName - @item.Section
+                                    <div class="fw-semibold">@item.ClassName - @item.Section</div>
+                                    <div class="small text-muted">@item.AcademicYear</div>
+                                </td>
+                                <td>@item.TeacherName</td>
+                                <td><span class="count-pill count-blue">@item.StudentCount</span></td>
+                                <td><span class="status-number text-success">@item.PresentCount</span></td>
+                                <td><span class="status-number text-danger">@item.AbsentCount</span></td>
+                                <td><span class="status-number text-warning">@item.LateCount</span></td>
+                                <td style="min-width: 175px;">
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <small class="fw-semibold">@item.AttendancePercentage.ToString("0.0")%</small>
                                     </div>
-
-                                    <div class="small text-muted">
-                                        @item.AcademicYear
-                                    </div>
-                                </td>
-
-                                <td>
-                                    @item.TeacherName
-                                </td>
-
-                                <td>
-                                    <span class="badge bg-info text-dark">
-                                        @item.StudentCount
-                                    </span>
-                                </td>
-
-                                <td>
-                                    <span class="text-success fw-semibold">
-                                        @item.PresentCount
-                                    </span>
-                                </td>
-
-                                <td>
-                                    <span class="text-danger fw-semibold">
-                                        @item.AbsentCount
-                                    </span>
-                                </td>
-
-                                <td>
-                                    <span class="text-warning fw-semibold">
-                                        @item.LateCount
-                                    </span>
-                                </td>
-
-                                <td style="min-width: 180px;">
-
-                                    <div class="d-flex justify-content-between mb-1">
-
-                                        <small>
-                                            @item.AttendancePercentage.ToString("0.0")%
-                                        </small>
-
-                                    </div>
-
-                                    <div class="progress"
-                                         style="height: 8px;">
-
-                                        <div class="progress-bar"
-                                             role="progressbar"
-                                             style="width: @item.AttendancePercentage%;">
+                                    <div class="progress dashboard-progress" role="progressbar"
+                                         aria-label="Class attendance"
+                                         aria-valuenow="@attendanceValue"
+                                         aria-valuemin="0"
+                                         aria-valuemax="100">
+                                        <div class="progress-bar attendance-progress"
+                                             style="width: @attendanceValue.ToString("0.0", System.Globalization.CultureInfo.InvariantCulture)%">
                                         </div>
-
                                     </div>
-
                                 </td>
-
                             </tr>
                         }
-
                     </tbody>
-
                 </table>
             }
             else
             {
-                <div class="text-center py-5 text-muted">
-
-                    <i class="bi bi-building fs-1"></i>
-
-                    <h6 class="mt-3">
-                        No classes found
-                    </h6>
-
-                    <p class="mb-0">
-                        Create classes to see class-wise attendance.
-                    </p>
-
+                <div class="dashboard-empty">
+                    <div class="empty-icon"><i class="bi bi-building"></i></div>
+                    <h6>No classes found</h6>
+                    <p>Create classes to see class-wise attendance.</p>
                 </div>
             }
-
         </div>
+    </section>
 
-    </div>
+    <!-- Subject performance and attendance summary -->
+    <div class="row g-3 g-xl-4 mb-4">
 
-
-    <!-- =========================================================
-         PERFORMANCE BY SUBJECT
-         ========================================================= -->
-
-    <div class="row g-4 mb-4">
-
-        <div class="col-xl-8">
-
-            <div class="dashboard-card h-100">
-
+        <div class="col-12 col-xl-8">
+            <section class="dashboard-card dashboard-panel h-100">
                 <div class="card-header-custom">
-
                     <div>
-                        <h5 class="mb-1">
-                            Student Performance
-                        </h5>
-
-                        <p class="text-muted mb-0">
-                            Average performance by subject
-                        </p>
+                        <h5><i class="bi bi-bar-chart-line me-2 text-primary"></i>Student Performance</h5>
+                        <p>Average performance by subject</p>
                     </div>
-
-                    <i class="bi bi-bar-chart-line dashboard-header-icon"></i>
-
                 </div>
 
-                <div class="mt-3">
-
+                <div class="subject-performance mt-4">
                     @if (Model.PerformanceData.Any())
                     {
                         foreach (var item in Model.PerformanceData)
                         {
-                            <div class="mb-3">
+                            var performanceValue = Math.Clamp(item.Value, 0, 100);
 
-                                <div class="d-flex justify-content-between mb-1">
-
-                                    <span class="fw-semibold">
-                                        @item.Label
-                                    </span>
-
-                                    <span>
-                                        @item.Value.ToString("0.0")%
-                                    </span>
-
+                            <div class="subject-row">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="fw-semibold subject-name">@item.Label</span>
+                                    <span class="subject-score">@item.Value.ToString("0.0")%</span>
                                 </div>
-
-                                <div class="progress"
-                                     style="height: 10px;">
-
-                                    <div class="progress-bar"
-                                         role="progressbar"
-                                         style="width: @item.Value%;">
+                                <div class="progress dashboard-progress" role="progressbar"
+                                     aria-label="@item.Label performance"
+                                     aria-valuenow="@performanceValue"
+                                     aria-valuemin="0"
+                                     aria-valuemax="100">
+                                    <div class="progress-bar subject-progress"
+                                         style="width: @performanceValue.ToString("0.0", System.Globalization.CultureInfo.InvariantCulture)%">
                                     </div>
-
                                 </div>
-
                             </div>
                         }
                     }
                     else
                     {
-                        <div class="text-center py-4 text-muted">
-
-                            <i class="bi bi-bar-chart fs-2"></i>
-
-                            <p class="mt-2 mb-0">
-                                No grade data available yet.
-                            </p>
-
+                        <div class="dashboard-empty">
+                            <div class="empty-icon"><i class="bi bi-bar-chart-line"></i></div>
+                            <h6>No performance data yet</h6>
+                            <p>Grade data will appear here when available.</p>
                         </div>
                     }
-
                 </div>
-
-            </div>
-
+            </section>
         </div>
 
-
-        <!-- Attendance quick stats -->
-
-        <div class="col-xl-4">
-
-            <div class="dashboard-card h-100">
-
+        <div class="col-12 col-xl-4">
+            <section class="dashboard-card dashboard-panel h-100">
                 <div class="card-header-custom">
-
                     <div>
-                        <h5 class="mb-1">
-                            Attendance Summary
-                        </h5>
-
-                        <p class="text-muted mb-0">
-                            Today's figures
-                        </p>
+                        <h5><i class="bi bi-clipboard-data me-2 text-primary"></i>Attendance Summary</h5>
+                        <p>Today's figures</p>
                     </div>
-
                 </div>
 
-                <div class="mt-3">
-
-                    <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
-
-                        <span>
-                            <i class="bi bi-check-circle text-success me-2"></i>
-                            Present
-                        </span>
-
-                        <strong>
-                            @Model.PresentToday
-                        </strong>
-
+                <div class="attendance-summary-list mt-3">
+                    <div class="summary-row">
+                        <span><i class="bi bi-check-circle-fill text-success"></i>Present</span>
+                        <strong>@Model.PresentToday</strong>
                     </div>
-
-                    <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
-
-                        <span>
-                            <i class="bi bi-x-circle text-danger me-2"></i>
-                            Absent
-                        </span>
-
-                        <strong>
-                            @Model.AbsentToday
-                        </strong>
-
+                    <div class="summary-row">
+                        <span><i class="bi bi-x-circle-fill text-danger"></i>Absent</span>
+                        <strong>@Model.AbsentToday</strong>
                     </div>
-
-                    <div class="d-flex justify-content-between align-items-center py-3">
-
-                        <span>
-                            <i class="bi bi-clock text-warning me-2"></i>
-                            Late
-                        </span>
-
-                        <strong>
-                            @Model.LateToday
-                        </strong>
-
+                    <div class="summary-row">
+                        <span><i class="bi bi-clock-fill text-warning"></i>Late</span>
+                        <strong>@Model.LateToday</strong>
                     </div>
-
                 </div>
-
-            </div>
-
+            </section>
         </div>
 
     </div>
 
+    <!-- Recent attendance and activity -->
+    <div class="row g-3 g-xl-4">
 
-    <!-- =========================================================
-         RECENT ATTENDANCE
-         ========================================================= -->
-
-    <div class="row g-4">
-
-        <div class="col-xl-7">
-
-            <div class="dashboard-card h-100">
-
+        <div class="col-12 col-xl-7">
+            <section class="dashboard-card dashboard-panel h-100">
                 <div class="card-header-custom">
-
                     <div>
-                        <h5 class="mb-1">
-                            Recent Attendance
-                        </h5>
-
-                        <p class="text-muted mb-0">
-                            Latest attendance records
-                        </p>
+                        <h5><i class="bi bi-clock-history me-2 text-primary"></i>Recent Attendance</h5>
+                        <p>Latest attendance records</p>
                     </div>
-
                 </div>
 
-                <div class="table-responsive mt-3">
-
+                <div class="table-responsive dashboard-table-wrap mt-3">
                     @if (Model.RecentAttendance.Any())
                     {
-                        <table class="table table-hover align-middle">
-
-                            <thead class="table-light">
-
+                        <table class="table table-hover align-middle dashboard-table">
+                            <thead>
                                 <tr>
                                     <th>Student</th>
                                     <th>Class</th>
                                     <th>Status</th>
                                     <th>Date</th>
                                 </tr>
-
                             </thead>
-
                             <tbody>
-
                                 @foreach (var item in Model.RecentAttendance)
                                 {
                                     <tr>
-
-                                        <td>
-                                            @item.StudentName
-                                        </td>
-
+                                        <td class="fw-semibold">@item.StudentName</td>
                                         <td>
                                             @item.ClassName
-                                            <span class="text-muted">
-                                                @item.Section
-                                            </span>
+                                            <span class="text-muted">@item.Section</span>
                                         </td>
-
                                         <td>
-
                                             @if (item.Status == "Present")
                                             {
-                                                <span class="badge bg-success">
-                                                    Present
+                                                <span class="status-badge badge-present">
+                                                    <i class="bi bi-check-circle-fill"></i> Present
                                                 </span>
                                             }
                                             else if (item.Status == "Absent")
                                             {
-                                                <span class="badge bg-danger">
-                                                    Absent
+                                                <span class="status-badge badge-absent">
+                                                    <i class="bi bi-x-circle-fill"></i> Absent
                                                 </span>
                                             }
                                             else if (item.Status == "Late")
                                             {
-                                                <span class="badge bg-warning text-dark">
-                                                    Late
+                                                <span class="status-badge badge-late">
+                                                    <i class="bi bi-clock-fill"></i> Late
                                                 </span>
                                             }
                                             else
                                             {
-                                                <span class="badge bg-secondary">
-                                                    @item.Status
-                                                </span>
+                                                <span class="status-badge badge-other">@item.Status</span>
                                             }
-
                                         </td>
-
-                                        <td>
-                                            @item.Date.ToString("dd MMM yyyy")
-                                        </td>
-
+                                        <td class="text-nowrap">@item.Date.ToString("dd MMM yyyy")</td>
                                     </tr>
                                 }
-
                             </tbody>
-
                         </table>
                     }
                     else
                     {
-                        <div class="text-center py-4 text-muted">
-
-                            <i class="bi bi-calendar-x fs-2"></i>
-
-                            <p class="mt-2 mb-0">
-                                No attendance records yet.
-                            </p>
-
+                        <div class="dashboard-empty">
+                            <div class="empty-icon"><i class="bi bi-calendar-x"></i></div>
+                            <h6>No attendance records yet</h6>
+                            <p>Recent attendance entries will appear here.</p>
                         </div>
                     }
-
                 </div>
-
-            </div>
-
+            </section>
         </div>
 
-
-        <!-- Recent activity -->
-
-        <div class="col-xl-5">
-
-            <div class="dashboard-card h-100">
-
+        <div class="col-12 col-xl-5">
+            <section class="dashboard-card dashboard-panel h-100">
                 <div class="card-header-custom">
-
                     <div>
-                        <h5 class="mb-1">
-                            Recent Activity
-                        </h5>
-
-                        <p class="text-muted mb-0">
-                            Latest school activity
-                        </p>
+                        <h5><i class="bi bi-activity me-2 text-primary"></i>Recent Activity</h5>
+                        <p>Latest school activity</p>
                     </div>
-
                 </div>
 
-                <div class="mt-3">
-
+                <div class="activity-feed mt-3">
                     @if (Model.RecentActivities.Any())
                     {
                         foreach (var activity in Model.RecentActivities)
                         {
-                            <div class="d-flex gap-3 py-3 border-bottom">
-
-                                <div>
-                                    <i class="bi @activity.Icon fs-5"></i>
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="bi @activity.Icon"></i>
                                 </div>
-
-                                <div class="flex-grow-1">
-
-                                    <div class="fw-semibold">
-                                        @activity.Title
+                                <div class="activity-content">
+                                    <div class="fw-semibold">@activity.Title</div>
+                                    <div class="small text-muted">@activity.Description</div>
+                                    <div class="activity-time">
+                                        <i class="bi bi-clock me-1"></i>
+                                        @activity.CreatedAt.ToLocalTime().ToString("dd MMM yyyy, HH:mm")
                                     </div>
-
-                                    <div class="small text-muted">
-                                        @activity.Description
-                                    </div>
-
-                                    <div class="small text-muted mt-1">
-                                        @activity.CreatedAt.ToLocalTime()
-                                            .ToString("dd MMM yyyy HH:mm")
-                                    </div>
-
                                 </div>
-
                             </div>
                         }
                     }
                     else
                     {
-                        <div class="text-center py-4 text-muted">
-
-                            <i class="bi bi-clock-history fs-2"></i>
-
-                            <p class="mt-2 mb-0">
-                                No recent activity.
-                            </p>
-
+                        <div class="dashboard-empty">
+                            <div class="empty-icon"><i class="bi bi-clock-history"></i></div>
+                            <h6>No recent activity</h6>
+                            <p>New school activity will appear here.</p>
                         </div>
                     }
-
                 </div>
-
-            </div>
-
+            </section>
         </div>
 
     </div>
 
 </div>
+
+@section Styles {
+    <style>
+        .admin-dashboard {
+            --dash-blue: #2563eb;
+            --dash-ink: #172033;
+            --dash-muted: #718096;
+            --dash-border: #e8edf5;
+            --dash-surface: #ffffff;
+            color: var(--dash-ink);
+        }
+
+        .dashboard-welcome {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            min-height: 205px;
+            padding: clamp(24px, 4vw, 40px);
+            overflow: hidden;
+            border-radius: 24px;
+            color: #fff;
+            background: linear-gradient(115deg, #172554 0%, #1d4ed8 55%, #6366f1 100%);
+            box-shadow: 0 14px 35px rgba(37, 99, 235, .17);
+            animation: dashboard-enter .55s ease both;
+        }
+
+        .welcome-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            margin-bottom: 14px;
+            padding: 7px 11px;
+            border: 1px solid rgba(255,255,255,.25);
+            border-radius: 999px;
+            background: rgba(255,255,255,.10);
+            font-size: .72rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+        }
+
+        .dashboard-welcome h1 {
+            margin: 0 0 9px;
+            color: #fff;
+            font-size: clamp(1.7rem, 3vw, 2.35rem);
+            font-weight: 800;
+            letter-spacing: -.8px;
+        }
+
+        .dashboard-welcome p {
+            margin-bottom: 18px;
+            color: rgba(255,255,255,.82);
+        }
+
+        .welcome-date {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            color: #fff;
+            font-size: .88rem;
+            font-weight: 500;
+        }
+
+        .welcome-decoration {
+            position: absolute;
+            top: 50%;
+            right: 7%;
+            display: grid;
+            width: 155px;
+            height: 155px;
+            place-items: center;
+            border: 1px solid rgba(255,255,255,.2);
+            border-radius: 36px;
+            background: rgba(255,255,255,.09);
+            transform: translateY(-50%) rotate(-10deg);
+            animation: welcome-float 5s ease-in-out infinite;
+        }
+
+        .welcome-decoration i {
+            color: rgba(255,255,255,.92);
+            font-size: 5rem;
+        }
+
+        .dashboard-card {
+            min-width: 0;
+            overflow: hidden;
+            border: 1px solid var(--dash-border);
+            border-radius: 18px;
+            background: var(--dash-surface);
+            box-shadow: 0 4px 18px rgba(15,23,42,.035);
+            transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+        }
+
+        .dashboard-card:hover {
+            border-color: #d7e3f7;
+            box-shadow: 0 12px 28px rgba(15,23,42,.075);
+        }
+
+        .stat-card {
+            position: relative;
+            padding: 24px;
+            animation: dashboard-enter .5s ease both;
+        }
+
+        .stat-card:nth-child(2) { animation-delay: .06s; }
+
+        .stat-card-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .stat-label {
+            display: block;
+            margin-bottom: 12px;
+            color: var(--dash-muted);
+            font-size: .84rem;
+            font-weight: 600;
+        }
+
+        .stat-card h2 {
+            margin: 0 0 10px;
+            color: var(--dash-ink);
+            font-size: clamp(1.8rem, 2.5vw, 2.25rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .stat-description {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--dash-muted);
+            font-size: .78rem;
+        }
+
+        .stat-icon {
+            display: grid;
+            flex: 0 0 auto;
+            width: 55px;
+            height: 55px;
+            place-items: center;
+            border-radius: 16px;
+            font-size: 1.45rem;
+            transition: transform .25s ease;
+        }
+
+        .stat-card:hover .stat-icon {
+            transform: scale(1.08) rotate(-5deg);
+        }
+
+        .students-icon { color: #2563eb; background: #eaf1ff; }
+        .teachers-icon { color: #7c3aed; background: #f1eaff; }
+        .classes-icon { color: #0891b2; background: #e4faff; }
+        .attendance-icon { color: #059669; background: #e3fbf1; }
+
+        .stat-bottom-line {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #2563eb, #818cf8);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform .3s ease;
+        }
+
+        .stat-card:hover .stat-bottom-line { transform: scaleX(1); }
+
+        .dashboard-panel { padding: 25px; }
+
+        .card-header-custom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+        }
+
+        .card-header-custom h5 {
+            margin: 0 0 6px;
+            color: var(--dash-ink);
+            font-size: 1.02rem;
+            font-weight: 750;
+        }
+
+        .card-header-custom p {
+            margin: 0;
+            color: var(--dash-muted);
+            font-size: .83rem;
+        }
+
+        .panel-chip, .dashboard-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 7px 11px;
+            border: 1px solid #dbeafe;
+            border-radius: 999px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            font-size: .76rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .attendance-metric {
+            height: 100%;
+            padding: 18px;
+            border: 1px solid transparent;
+            border-radius: 15px;
+            transition: transform .2s ease;
+        }
+
+        .attendance-metric:hover { transform: translateY(-3px); }
+        .metric-present { background: #ecfdf5; border-color: #d1fae5; }
+        .metric-absent { background: #fff1f2; border-color: #ffe4e6; }
+        .metric-late { background: #fffbeb; border-color: #fef3c7; }
+
+        .metric-icon { margin-bottom: 12px; font-size: 1.2rem; }
+        .metric-present .metric-icon { color: #059669; }
+        .metric-absent .metric-icon { color: #e11d48; }
+        .metric-late .metric-icon { color: #d97706; }
+
+        .metric-value {
+            margin: 3px 0;
+            color: var(--dash-ink);
+            font-size: 2rem;
+            font-weight: 800;
+            line-height: 1.25;
+        }
+
+        .metric-caption { color: var(--dash-muted); font-size: .76rem; }
+
+        .performance-summary {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            padding: 22px 0 8px;
+        }
+
+        .performance-ring {
+            display: grid;
+            width: 150px;
+            height: 150px;
+            margin-bottom: 16px;
+            place-items: center;
+            border-radius: 50%;
+            background: conic-gradient(#2563eb calc(var(--performance-value) * 1%), #eaf0fb 0);
+            position: relative;
+        }
+
+        .performance-ring::before {
+            position: absolute;
+            inset: 9px;
+            border-radius: 50%;
+            background: #fff;
+            content: "";
+        }
+
+        .performance-ring-inner {
+            position: relative;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .performance-ring-inner strong {
+            color: var(--dash-ink);
+            font-size: 1.7rem;
+            font-weight: 800;
+        }
+
+        .performance-ring-inner span { color: var(--dash-muted); font-size: .78rem; }
+
+        .dashboard-table-wrap { border-radius: 12px; }
+
+        .dashboard-table {
+            margin-bottom: 0;
+            font-size: .86rem;
+            white-space: nowrap;
+        }
+
+        .dashboard-table thead th {
+            padding: 14px 15px;
+            border-bottom: 1px solid var(--dash-border);
+            background: #f8faff;
+            color: #64748b;
+            font-size: .72rem;
+            font-weight: 750;
+            letter-spacing: .45px;
+            text-transform: uppercase;
+        }
+
+        .dashboard-table tbody td {
+            padding: 15px;
+            border-color: #eef2f7;
+            color: #334155;
+        }
+
+        .dashboard-table tbody tr:last-child td { border-bottom: 0; }
+
+        .dashboard-table tbody tr { transition: background .2s ease; }
+        .dashboard-table tbody tr:hover { background: #f8faff; }
+
+        .count-pill {
+            display: inline-block;
+            min-width: 32px;
+            padding: 5px 9px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: .78rem;
+            font-weight: 750;
+        }
+
+        .count-blue { background: #eff6ff; color: #1d4ed8; }
+        .status-number { font-weight: 750; }
+
+        .dashboard-progress {
+            height: 8px;
+            overflow: hidden;
+            border-radius: 999px;
+            background: #edf1f7;
+        }
+
+        .dashboard-progress .progress-bar {
+            border-radius: 999px;
+            animation: progress-enter .9s ease both;
+        }
+
+        .attendance-progress { background: linear-gradient(90deg, #2563eb, #60a5fa); }
+        .subject-progress { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
+
+        .subject-row { margin-bottom: 25px; }
+        .subject-row:last-child { margin-bottom: 0; }
+        .subject-name { color: #334155; font-size: .88rem; }
+        .subject-score { color: #475569; font-size: .84rem; font-weight: 750; }
+
+        .attendance-summary-list .summary-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 19px 2px;
+            border-bottom: 1px solid #eef2f7;
+        }
+
+        .attendance-summary-list .summary-row:last-child { border-bottom: 0; }
+        .summary-row span { color: #475569; font-size: .9rem; }
+        .summary-row span i { margin-right: 9px; }
+        .summary-row strong { color: var(--dash-ink); font-size: 1.05rem; }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 9px;
+            border-radius: 7px;
+            font-size: .73rem;
+            font-weight: 700;
+        }
+
+        .badge-present { color: #047857; background: #d1fae5; }
+        .badge-absent { color: #be123c; background: #ffe4e6; }
+        .badge-late { color: #92400e; background: #fef3c7; }
+        .badge-other { color: #475569; background: #e2e8f0; }
+
+        .activity-item {
+            display: flex;
+            gap: 14px;
+            padding: 17px 0;
+            border-bottom: 1px solid #eef2f7;
+        }
+
+        .activity-item:first-child { padding-top: 5px; }
+        .activity-item:last-child { border-bottom: 0; }
+
+        .activity-icon {
+            display: grid;
+            flex: 0 0 42px;
+            width: 42px;
+            height: 42px;
+            place-items: center;
+            border-radius: 13px;
+            background: #eff6ff;
+            color: #2563eb;
+            font-size: 1.1rem;
+        }
+
+        .activity-content { min-width: 0; overflow-wrap: anywhere; }
+        .activity-content .fw-semibold { margin-bottom: 4px; color: #273449; }
+        .activity-time { margin-top: 7px; color: #94a3b8; font-size: .74rem; }
+
+        .dashboard-empty {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            padding: 42px 16px;
+            text-align: center;
+        }
+
+        .empty-icon {
+            display: grid;
+            width: 58px;
+            height: 58px;
+            margin-bottom: 14px;
+            place-items: center;
+            border-radius: 18px;
+            background: #f1f5f9;
+            color: #64748b;
+            font-size: 1.6rem;
+        }
+
+        .dashboard-empty h6 { margin-bottom: 7px; color: #334155; font-weight: 750; }
+        .dashboard-empty p { margin: 0; color: var(--dash-muted); font-size: .85rem; }
+
+        @@keyframes dashboard-enter {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @@keyframes welcome-float {
+            0%, 100% { transform: translateY(-50%) rotate(-10deg); }
+            50% { transform: translateY(calc(-50% - 8px)) rotate(-6deg); }
+        }
+
+        @@keyframes progress-enter {
+            from { width: 0; }
+        }
+
+        @@media (max-width: 767.98px) {
+            .dashboard-welcome {
+                min-height: auto;
+                padding: 26px 22px;
+                border-radius: 18px;
+            }
+
+            .dashboard-welcome h1 { font-size: 1.65rem; }
+            .welcome-decoration { right: -35px; width: 115px; height: 115px; opacity: .35; }
+            .welcome-decoration i { font-size: 3.5rem; }
+            .dashboard-panel { padding: 18px; }
+            .stat-card { padding: 20px; }
+            .stat-icon { width: 46px; height: 46px; border-radius: 13px; font-size: 1.2rem; }
+            .attendance-metric { padding: 15px; }
+            .metric-value { font-size: 1.7rem; }
+            .card-header-custom { align-items: flex-start; }
+            .dashboard-table { font-size: .82rem; }
+            .dashboard-table thead th,
+            .dashboard-table tbody td { padding: 12px; }
+        }
+
+        @@media (max-width: 420px) {
+            .dashboard-welcome { padding: 22px 18px; }
+            .dashboard-welcome h1 { font-size: 1.45rem; }
+            .welcome-date { font-size: .78rem; }
+            .dashboard-panel { padding: 15px; }
+            .stat-card { padding: 17px; }
+            .stat-card h2 { font-size: 1.8rem; }
+            .dashboard-pill, .panel-chip { padding: 6px 8px; font-size: .69rem; }
+        }
+
+        @@media (prefers-reduced-motion: reduce) {
+            .admin-dashboard *,
+            .admin-dashboard *::before,
+            .admin-dashboard *::after {
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+}

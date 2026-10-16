@@ -1,4 +1,4 @@
-﻿@model SchoolManagementSystem.Application.ViewModels.Timetable.TimetableListViewModel
+﻿ @model SchoolManagementSystem.Application.ViewModels.Timetable.TimetableListViewModel
 
 @{
     ViewData["Title"] = "Timetable Management";
@@ -18,12 +18,218 @@
     var canManage = ViewBag.CanManageTimetable == true;
 }
 
-<div class="container-fluid py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+@section Styles {
+    <style>
+        .timetable-page {
+            --tt-primary: #4f46e5;
+            --tt-muted: #778198;
+            --tt-border: #e8ebf2;
+            color: #202942;
+        }
+
+            .timetable-page .tt-card {
+                background: #fff;
+                border: 1px solid var(--tt-border);
+                border-radius: 16px;
+                box-shadow: 0 4px 18px rgba(31, 41, 55, .045);
+            }
+
+            .timetable-page .tt-subtitle {
+                color: var(--tt-muted);
+                font-size: .94rem;
+            }
+
+            .timetable-page .tt-heading {
+                font-size: 1rem;
+                font-weight: 700;
+                margin: 0;
+            }
+
+            .timetable-page .tt-icon {
+                width: 46px;
+                height: 46px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                flex: 0 0 46px;
+                border-radius: 13px;
+                background: #eeecff;
+                color: var(--tt-primary);
+                font-size: 1.25rem;
+            }
+
+            .timetable-page .tt-panel-header {
+                padding: 19px 22px;
+                border-bottom: 1px solid var(--tt-border);
+            }
+
+            .timetable-page .tt-panel-body {
+                padding: 22px;
+            }
+
+            .timetable-page .form-label {
+                color: #48536b;
+                font-size: .84rem;
+                font-weight: 600;
+                margin-bottom: 8px;
+            }
+
+            .timetable-page .form-select {
+                min-height: 44px;
+                border-color: #dfe4ed;
+                border-radius: 9px;
+                font-size: .9rem;
+            }
+
+                .timetable-page .form-select:focus {
+                    border-color: #a5a0f5;
+                    box-shadow: 0 0 0 .2rem rgba(79, 70, 229, .1);
+                }
+
+            .timetable-page .btn {
+                border-radius: 9px;
+                font-weight: 600;
+                padding: 9px 15px;
+            }
+
+            .timetable-page .btn-primary {
+                background: var(--tt-primary);
+                border-color: var(--tt-primary);
+            }
+
+            .timetable-page .tt-table {
+                font-size: .9rem;
+            }
+
+                .timetable-page .tt-table thead th {
+                    background: #f7f8fc;
+                    color: #69748a;
+                    font-size: .74rem;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    letter-spacing: .45px;
+                    padding: 15px 17px;
+                    border-bottom: 1px solid var(--tt-border);
+                    white-space: nowrap;
+                }
+
+                .timetable-page .tt-table tbody td {
+                    padding: 16px 17px;
+                    border-color: #edf0f5;
+                    vertical-align: middle;
+                }
+
+                .timetable-page .tt-table tbody tr:last-child td {
+                    border-bottom: 0;
+                }
+
+            .timetable-page .tt-class {
+                font-weight: 700;
+                color: #27324a;
+            }
+
+            .timetable-page .tt-day {
+                display: inline-block;
+                padding: 6px 10px;
+                border-radius: 8px;
+                background: #eeecff;
+                color: #5145cd;
+                font-size: .78rem;
+                font-weight: 700;
+                white-space: nowrap;
+            }
+
+            .timetable-page .tt-time {
+                display: inline-flex;
+                align-items: center;
+                gap: 7px;
+                color: #34415b;
+                font-weight: 600;
+                white-space: nowrap;
+            }
+
+            .timetable-page .tt-subject {
+                font-weight: 650;
+                color: #27324a;
+            }
+
+            .timetable-page .tt-teacher {
+                color: #48536b;
+            }
+
+            .timetable-page .tt-room {
+                display: inline-block;
+                padding: 5px 9px;
+                border: 1px solid #e5e9f1;
+                border-radius: 7px;
+                background: #fafbfe;
+                color: #596579;
+                font-size: .82rem;
+                white-space: nowrap;
+            }
+
+            .timetable-page .tt-empty {
+                padding: 58px 20px;
+                text-align: center;
+            }
+
+            .timetable-page .tt-empty-icon {
+                width: 68px;
+                height: 68px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto 17px;
+                border-radius: 19px;
+                background: #eeecff;
+                color: #5145cd;
+                font-size: 1.9rem;
+            }
+
+            .timetable-page .tt-count {
+                padding: 8px 13px;
+                border: 1px solid #e5e9f1;
+                border-radius: 999px;
+                background: #fafbfe;
+                color: #596579;
+                font-size: .8rem;
+                font-weight: 700;
+                white-space: nowrap;
+            }
+
+        @@media (max-width: 767.98px) {
+            .timetable-page .tt-page-header {
+                align-items: stretch !important;
+            }
+
+                .timetable-page .tt-page-header > a {
+                    width: 100%;
+                }
+
+            .timetable-page .tt-panel-header,
+            .timetable-page .tt-panel-body {
+                padding: 16px;
+            }
+
+            .timetable-page .tt-filter-actions {
+                align-items: stretch;
+            }
+
+                .timetable-page .tt-filter-actions .btn {
+                    flex: 1;
+                }
+        }
+    </style>
+}
+
+<div class="container-fluid py-4 timetable-page">
+
+    <!-- Page header -->
+    <div class="tt-page-header d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
         <div>
-            <h2 class="mb-1">Timetable</h2>
-            <p class="text-muted mb-0">
-                View class schedules and teacher assignments.
+            <h2 class="fw-bold mb-2">Timetable Management</h2>
+            <p class="tt-subtitle mb-0">
+                Organize class schedules, subjects, teachers, and rooms.
             </p>
         </div>
 
@@ -32,34 +238,59 @@
             <a asp-controller="Timetable"
                asp-action="Create"
                class="btn btn-primary">
-                <i class="bi bi-plus-circle me-1"></i> Add Timetable Entry
+                <i class="bi bi-plus-circle me-2"></i>
+                Add Timetable Entry
             </a>
         }
     </div>
 
+    <!-- Success message -->
     @if (TempData["SuccessMessage"] != null)
     {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div class="alert alert-success alert-dismissible fade show rounded-3 mb-4"
+             role="alert">
             @TempData["SuccessMessage"]
-            <button type="button" class="btn-close"
-                    data-bs-dismiss="alert" aria-label="Close"></button>
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close"></button>
         </div>
     }
 
+    <!-- Error message -->
     @if (TempData["ErrorMessage"] != null)
     {
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <div class="alert alert-danger alert-dismissible fade show rounded-3 mb-4"
+             role="alert">
             @TempData["ErrorMessage"]
-            <button type="button" class="btn-close"
-                    data-bs-dismiss="alert" aria-label="Close"></button>
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close"></button>
         </div>
     }
 
-    <div class="card shadow-sm mb-4">
-        <div class="card-body">
-            <form asp-controller="Timetable" asp-action="Index" method="get">
+    <!-- Filters -->
+    <div class="tt-card mb-4">
+        <div class="tt-panel-header d-flex align-items-center gap-3">
+            <div class="tt-icon" aria-hidden="true">
+                <i class="bi bi-funnel"></i>
+            </div>
+            <div>
+                <h5 class="tt-heading">Search and Filters</h5>
+                <p class="text-muted small mb-0 mt-1">
+                    Narrow the timetable by class or day of the week.
+                </p>
+            </div>
+        </div>
+
+        <div class="tt-panel-body">
+            <form asp-controller="Timetable"
+                  asp-action="Index"
+                  method="get">
+
                 <div class="row g-3 align-items-end">
-                    <div class="col-md-5">
+                    <div class="col-12 col-md-5">
                         <label asp-for="ClassId" class="form-label">Class</label>
                         <select asp-for="ClassId"
                                 asp-items="Model.Classes"
@@ -68,8 +299,8 @@
                         </select>
                     </div>
 
-                    <div class="col-md-5">
-                        <label asp-for="DayOfWeek" class="form-label">Day</label>
+                    <div class="col-12 col-md-5">
+                        <label asp-for="DayOfWeek" class="form-label">Day of the Week</label>
                         <select asp-for="DayOfWeek" class="form-select">
                             <option value="">All Days</option>
                             @foreach (var day in days)
@@ -79,114 +310,166 @@
                         </select>
                     </div>
 
-                    <div class="col-md-2 d-flex gap-2">
-                        <button type="submit" class="btn btn-primary w-100">
-                            Filter
-                        </button>
-                        <a asp-action="Index"
-                           class="btn btn-outline-secondary">
-                            Reset
-                        </a>
+                    <div class="col-12 col-md-2">
+                        <div class="tt-filter-actions d-flex gap-2">
+                            <button type="submit" class="btn btn-primary flex-grow-1">
+                                <i class="bi bi-search me-1"></i> Filter
+                            </button>
+
+                            <a asp-controller="Timetable"
+                               asp-action="Index"
+                               class="btn btn-outline-secondary">
+                                Reset
+                            </a>
+                        </div>
                     </div>
                 </div>
             </form>
         </div>
     </div>
 
-    <div class="card shadow-sm">
-        <div class="card-header bg-white py-3">
-            <h5 class="mb-0">Scheduled Lessons</h5>
+    <!-- Scheduled lessons -->
+    <div class="tt-card overflow-hidden">
+        <div class="tt-panel-header d-flex flex-wrap justify-content-between align-items-center gap-3">
+            <div class="d-flex align-items-center gap-3">
+                <div class="tt-icon" aria-hidden="true">
+                    <i class="bi bi-calendar-week"></i>
+                </div>
+                <div>
+                    <h5 class="tt-heading">Scheduled Lessons</h5>
+                    <p class="text-muted small mb-0 mt-1">
+                        Review lesson times and assigned staff.
+                    </p>
+                </div>
+            </div>
+
+            <span class="tt-count">
+                @Model.Timetables.Count entries
+            </span>
         </div>
 
-        <div class="card-body p-0">
-            @if (Model.Timetables.Count == 0)
-            {
-                <div class="text-center py-5">
-                    <h5>No timetable entries found</h5>
-                    <p class="text-muted mb-3">
-                        No lessons are currently scheduled for this selection.
-                    </p>
-
-                    @if (canCreate)
-                    {
-                        <a asp-action="Create" class="btn btn-primary">
-                            Add First Entry
-                        </a>
-                    }
+        @if (Model.Timetables.Count == 0)
+        {
+            <div class="tt-empty">
+                <div class="tt-empty-icon" aria-hidden="true">
+                    <i class="bi bi-calendar-x"></i>
                 </div>
-            }
-            else
-            {
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="table-light">
+
+                <h5 class="fw-bold mb-2">No timetable entries found</h5>
+                <p class="text-muted mb-4">
+                    There are no lessons scheduled for the selected filters.
+                    Try another class or day.
+                </p>
+
+                @if (canCreate)
+                {
+                    <a asp-controller="Timetable"
+                       asp-action="Create"
+                       class="btn btn-primary">
+                        <i class="bi bi-plus-circle me-2"></i>
+                        Add First Entry
+                    </a>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-hover align-middle tt-table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Class</th>
+                            <th>Day</th>
+                            <th>Lesson Time</th>
+                            <th>Subject</th>
+                            <th>Teacher</th>
+                            <th>Room</th>
+
+                            @if (canManage)
+                            {
+                                <th class="text-end">Actions</th>
+                            }
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model.Timetables)
+                        {
                             <tr>
-                                <th>Class</th>
-                                <th>Day</th>
-                                <th>Time</th>
-                                <th>Subject</th>
-                                <th>Teacher</th>
-                                <th>Room</th>
+                                <td>
+                                    <div class="tt-class">@item.ClassName</div>
+                                </td>
+
+                                <td>
+                                    <span class="tt-day">@item.DayName</span>
+                                </td>
+
+                                <td>
+                                    <span class="tt-time">
+                                        <i class="bi bi-clock text-muted" aria-hidden="true"></i>
+                                        @item.StartTime.ToString(@"hh\:mm")
+                                        <span class="text-muted">–</span>
+                                        @item.EndTime.ToString(@"hh\:mm")
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="tt-subject">@item.SubjectName</span>
+                                </td>
+
+                                <td>
+                                    <span class="tt-teacher">
+                                        <i class="bi bi-person me-1 text-muted" aria-hidden="true"></i>
+                                        @item.TeacherName
+                                    </span>
+                                </td>
+
+                                <td>
+                                    @if (string.IsNullOrWhiteSpace(item.RoomNumber))
+                                    {
+                                        <span class="text-muted">—</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="tt-room">
+                                            <i class="bi bi-door-open me-1" aria-hidden="true"></i>
+                                            @item.RoomNumber
+                                        </span>
+                                    }
+                                </td>
 
                                 @if (canManage)
                                 {
-                                    <th class="text-end">Actions</th>
+                                    <td class="text-end text-nowrap">
+                                        <a asp-controller="Timetable"
+                                           asp-action="Edit"
+                                           asp-route-id="@item.Id"
+                                           class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-pencil me-1" aria-hidden="true"></i>
+                                            Edit
+                                        </a>
+
+                                        <form asp-controller="Timetable"
+                                              asp-action="Delete"
+                                              asp-route-id="@item.Id"
+                                              method="post"
+                                              class="d-inline"
+                                              onsubmit="return confirm('Are you sure you want to delete this timetable entry?');">
+                                            @Html.AntiForgeryToken()
+
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-outline-danger">
+                                                <i class="bi bi-trash me-1" aria-hidden="true"></i>
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </td>
                                 }
                             </tr>
-                        </thead>
-
-                        <tbody>
-                            @foreach (var item in Model.Timetables)
-                            {
-                                <tr>
-                                    <td>
-                                        <span class="fw-semibold">
-                                            @item.ClassName
-                                        </span>
-                                    </td>
-                                    <td>@item.DayName</td>
-                                    <td>
-                                        @item.StartTime.ToString(@"hh\:mm")
-                                        -
-                                        @item.EndTime.ToString(@"hh\:mm")
-                                    </td>
-                                    <td>@item.SubjectName</td>
-                                    <td>@item.TeacherName</td>
-                                    <td>
-                                        @(string.IsNullOrWhiteSpace(item.RoomNumber)
-                                            ? "—"
-                                            : item.RoomNumber)
-                                    </td>
-
-                                    @if (canManage)
-                                    {
-                                        <td class="text-end text-nowrap">
-                                            <a asp-action="Edit"
-                                               asp-route-id="@item.Id"
-                                               class="btn btn-sm btn-outline-primary">
-                                                Edit
-                                            </a>
-
-                                            <form asp-action="Delete"
-                                                  asp-route-id="@item.Id"
-                                                  method="post"
-                                                  class="d-inline"
-                                                  onsubmit="return confirm('Are you sure you want to delete this timetable entry?');">
-                                                @Html.AntiForgeryToken()
-
-                                                <button type="submit"
-                                                        class="btn btn-sm btn-outline-danger">
-                                                    Delete
-                                                </button>
-                                            </form>
-                                        </td>
-                                    }
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            }
-        </div>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
     </div>
 </div>

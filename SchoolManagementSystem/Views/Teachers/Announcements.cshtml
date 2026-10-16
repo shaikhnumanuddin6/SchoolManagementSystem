@@ -1,0 +1,89 @@
+﻿@model List<SchoolManagementSystem.Domain.Entities.Announcement>
+
+@{
+    ViewData["Title"] = "School Announcements";
+}
+
+<div class="container-fluid py-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">
+                <i class="bi bi-megaphone-fill text-primary me-2"></i>
+                School Announcements
+            </h2>
+            <p class="text-muted mb-0">
+                View important messages published by your school administration.
+            </p>
+        </div>
+
+        <a asp-controller="Teacher"
+           asp-action="Dashboard"
+           class="btn btn-outline-secondary rounded-3">
+            <i class="bi bi-arrow-left me-1"></i>
+            Back to Dashboard
+        </a>
+    </div>
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body text-center py-5">
+                <i class="bi bi-bell-slash text-muted"
+                   style="font-size: 3rem;"></i>
+
+                <h5 class="fw-bold mt-3">No announcements yet</h5>
+
+                <p class="text-muted mb-0">
+                    Published school announcements will appear here.
+                </p>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var announcement in Model)
+            {
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm rounded-4">
+                        <div class="card-body p-4">
+                            <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-3">
+                                <div>
+                                    <span class="badge bg-primary-subtle text-primary rounded-pill mb-2">
+                                        <i class="bi bi-megaphone me-1"></i>
+                                        School Notice
+                                    </span>
+
+                                    <h4 class="fw-bold mb-1">
+                                        @announcement.Title
+                                    </h4>
+                                </div>
+
+                                <small class="text-muted">
+                                    <i class="bi bi-calendar3 me-1"></i>
+                                    @announcement.CreatedAt.ToLocalTime().ToString("dd MMM yyyy")
+                                </small>
+                            </div>
+
+                            <div class="text-secondary"
+                                 style="white-space: pre-line; overflow-wrap: anywhere;">
+                                @announcement.Content
+                            </div>
+
+                            @if (announcement.ExpiresAt.HasValue)
+                            {
+                                <div class="border-top mt-3 pt-3">
+                                    <small class="text-muted">
+                                        <i class="bi bi-clock me-1"></i>
+                                        Valid until
+                                        @announcement.ExpiresAt.Value.ToLocalTime().ToString("dd MMM yyyy, hh:mm tt")
+                                    </small>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
